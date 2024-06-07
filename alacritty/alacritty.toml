@@ -1,0 +1,48 @@
+[shell]
+args = ['--login']
+program = "/usr/bin/fish"
+
+[cursor]
+style = "Beam"
+
+[font]
+size = 13.0
+
+[font.normal]
+family = "CaskaydiaCove Nerd Font"
+
+[window]
+startup_mode = "Windowed"
+dynamic_padding = true
+opacity = 0.85
+
+[window.padding]
+x = 6
+y = 0
+
+[window.dimensions]
+columns = 90
+lines = 25
+
+[colors.normal]
+black = "#21222c"
+red = "#ff5555"
+green = "#50fa7b"
+yellow = "#f1fa8c"
+blue = "#bd93f9"
+magenta = "#ff79c6"
+cyan = "#8be9fd"
+white = "#f8f8f2"
+
+[colors.primary]
+background = "#282a36"
+foreground = "#f8f8f2"
+
+[colors.cursor]
+text = "CellBackground"
+cursor = "CellForeground"
+# import = ["~/.config/alacritty/alacritty-master/dracula.toml"]
+[keyboard]
+bindings = [
+    { key = "Return", mods = "Control|Shift", action = "SpawnNewInstance" },
+]
