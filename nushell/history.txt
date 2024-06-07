@@ -1,0 +1,270 @@
+ls
+z
+cd
+ls
+cd Documents\code\luogu\
+ls
+time ls
+ls
+nvim
+ls
+z 
+pwd
+neofetch
+ls
+dir
+ll
+ls
+scoop
+ls
+gcc -v
+gdb
+ls
+z
+cd
+ls
+cd Documents\code\python\
+ls
+cd pathfinding\
+ls
+scoop update
+nvim
+ls
+time ls
+ls
+z luogu
+l
+ll
+exit
+dir
+ls.exe 
+ls
+zoxide.exe path
+zoxide.exe 
+zoxide.exe init
+sudo scoop
+fd
+nu.config-path
+$nu.config-path
+cd C:\Users\Simon\AppData\Roaming\nushell\config.nu
+cd C:\Users\Simon\AppData\Roaming\nushell
+ls
+nvim config.nu
+clear
+neofetch
+zoxide.exe init
+zoxide.exe init nu
+zoxide.exe init nushell
+z
+ls
+nvim config.nu
+vi
+vim
+nvim
+ls 
+timeit ls
+ls
+z luogu
+zi
+ls
+zoxide.exe init nushell
+$nu.env-path
+nvim config.nu
+ls
+nvim env.nu
+zi
+z
+$nu.config-path
+ls
+cd C:\Users\Simon\AppData\Roaming\nushell\
+ls
+zoxide.exe init nushell
+nvim config.nu
+zi
+z
+nvim .zoxide.nu
+scoop list | grep nu
+nvim env.nu
+nvim .zoxide.nu
+cowsay
+cowsay fuck
+$nu.config-path
+cd C:\Users\Simon\AppData\Roaming\nushell\
+ls
+nvim config.nu
+nnu
+ls
+cd.
+cd
+ls
+$nu.config-path
+cd AppData\Roaming\nushell\
+ls
+nvim env.nu
+cd
+ls
+nvim .zoxide.nu
+zi
+ls
+z luogu
+ls
+timeit ls
+ls
+timeit ls
+man timeit
+z persit
+z persist
+ls
+nvim al
+nvim alacritty\
+zi
+ls
+scoop list | grep nu
+scoop list | grep zoxide
+ls
+z luogu
+ls
+z luogu
+ls
+timeit ls
+ls
+neofetch
+z nu
+ls
+nvim env.nu
+ls
+z
+ls
+z nu
+ls
+nvim config
+nvim config.nu
+nvim env.nu
+nvim
+nushell
+nvim
+ls
+pwsh
+ls
+z persist
+ls
+nvim alacritty\
+msys2
+ls
+z luogu
+ls
+time ls
+timeit ls.exe 
+timeit ls
+timeit ls | grep *.exe
+ls
+z persist
+ls
+z
+fc list
+fclist
+fclip.exe 
+nvim alacritty\alacritty.yml
+scoop search wrap
+scoop-search.exe wrap
+ls
+fd
+grep
+ls
+busybox.exe 
+ash
+klist.exe 
+ls
+z persist
+ls
+neofetch
+nvim
+msys2
+ls
+scoop uninstall msys2
+sudo scoop uninstall msys2 --global
+ls
+mingw
+10 / 2
+10 / n
+find 
+ps
+ps | where cpu > 5
+date
+date now
+date now | date to-table 
+sys 
+sys | get host
+echo.exe 
+nvim
+ls
+nvim 
+lss
+sl
+ls
+alacritty.exe 
+scoop reset -h
+scoop uninstall nushell
+sudo scoop reset nushell --global
+zi
+z
+ls
+zi
+ls
+timit ls
+timeit ls
+ls
+grep
+ls | grep .
+6
+neofetch
+ls
+nvim 
+z luogu
+ls
+z luogu
+ls
+timeit ls
+time ls
+timeit ls
+timeit ls.exe
+l
+ls
+?
+1
+1+3+4/2*8
+1 + 3 + 4 / 2 * 8
+ls
+neofetch
+sh
+pwsh
+ls
+neofetch
+sys
+help sort
+{b: 4, a: 3, c:1} | sort -v
+help help
+help
+ls
+sys
+{b: 4, a: 3, c:1} | sort -v
+sort
+{b: 12,a: b+12,c: a+13} | sort -v
+{b: 12,a: 12,c: 13} | sort -v
+{b: 12,a: b+12,c: a+13} | sort -v
+sort
+ls | sorted
+ls | sort
+z Videos\
+ls
+ls | sorted
+ls | sort
+ls | size sort
+ls | sort-by size
+nvim
+ls
+z 
+ls
+$nu.config-path
+cp AppData\Roaming\nushell Documents\wusitee\
+help cp
