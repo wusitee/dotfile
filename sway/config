@@ -12,7 +12,11 @@ gaps outer 4px
 
 ### Variables
 #
+set $term /usr/bin/alacritty
+set $term_cwd $term --directory "$(swaycwd 2>/dev/null || echo $HOME)"
+set $term_float $term --class floating_shell
 # Logo key. Use Mod1 for Alt.
+#
 set $mod Mod4
 # Home row direction keys, like vim
 set $left h
