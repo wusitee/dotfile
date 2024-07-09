@@ -278,3 +278,7 @@ exec weektodo
 
 # Toggle control center
 bindsym $mod+Shift+n exec swaync-client -t -sw
+
+# xwayland resolution
+xwayland force scale 1.2
+exec xsettingsd
