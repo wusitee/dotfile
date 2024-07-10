@@ -78,15 +78,8 @@ input type:touchpad {
 input "type:keyboard" xkb_options caps:swapescape
 input "type:pointer" accel_profile flat
 
-# use copyq
-exec copyq
-for_window [app_id="copyq"] floating enable, sticky enable, resize set height 600px width 550px, move position cursor, move down 330
-bindsym $mod+Shift+v exec copyq toggle
-# run clash-verge when boot
-exec clash-verge
 
-
-# make some application floating
+# set floating application
 
 for_window [app_id="blueman-manager"] floating enable
 for_window [app_id="pavucontrol"] floating enable
@@ -260,25 +253,34 @@ bindsym $mod+r mode "resize"
 #
 # Status Bar:
 #
-# Read `man 5 sway-bar` for more information about this section.
+# using waybar instead of sway-bar
 bar {
     swaybar_command waybar
 }
 
-include /etc/sway/config.d/*
+# load when login
 
-# load input method
+# input method
 exec fcitx5 -d --replace
 
 # Notification Daemon
 exec swaync
 
-# Todo
-exec weektodo
-
 # Toggle control center
 bindsym $mod+Shift+n exec swaync-client -t -sw
 
+# Todolist
+exec weektodo
+
+# clash-verge
+exec clash-verge
+
+# clip board
+exec copyq
+for_window [app_id="copyq"] floating enable, sticky enable, resize set height 600px width 550px, move position cursor, move down 330
+bindsym $mod+Shift+v exec copyq toggle
+
+
 # xwayland resolution
-xwayland force scale 1.2
-exec xsettingsd
+
+include /etc/sway/config.d/*
