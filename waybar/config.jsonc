@@ -41,10 +41,11 @@
         "format": "{name}: {icon}",
         "format-icons": {
             "1": " ",
-            "2": " ",
+            "2": " ",
             "3": " ",
-            "4": " ",
+            "4": "▶",
             "5": " ",
+            "6": "✉ ",
             "urgent": " ",
             // "focused": "",
             "default": " "
@@ -92,8 +93,8 @@
             "on": "1 "
         },
         "state-icons": {
-            "paused": "",
-            "playing": ""
+            "paused": " ",
+            "playing": " "
         },
         "tooltip-format": "MPD (connected)",
         "tooltip-format-disconnected": "MPD (disconnected)"
