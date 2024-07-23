@@ -6,8 +6,9 @@
 (setq scroll-conservatively 101) ;; make the scroll better
 (setq shell-file-name (executable-find "bash")) ;; set excutable shell to bash instead of fish
 (setq-default vterm-shell (executable-find "fish")) ;; let v-term to use fish
-(setq company-idle-delay 0.05) ;; make the company windows popup faster
+;; (setq company-idle-delay 0.05) ;; make the company windows popup faster
 (setq doom-font (font-spec :family "CaskaydiaCove Nerd Font" :size 17 ))
+(setq vterm-timer-delay 0.01)
 
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets. It is optional.
