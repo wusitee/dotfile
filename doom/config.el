@@ -6,10 +6,22 @@
 (setq scroll-conservatively 101) ;; make the scroll better
 (setq shell-file-name (executable-find "bash")) ;; set excutable shell to bash instead of fish
 (setq-default vterm-shell (executable-find "fish")) ;; let v-term to use fish
-;; (setq company-idle-delay 0.05) ;; make the company windows popup faster
 (setq doom-font (font-spec :family "CaskaydiaCove Nerd Font" :size 17 ))
 (setq vterm-timer-delay 0.01)
-
+(setq display-line-numbers-type nil) ;;disable line number
+(setq lsp-auto-guess-root t);; let emacs enable lsp on a single file
+;; org mode config
+(after! org
+  (setq org-fontify-quote-and-verse-blocks nil
+        org-fontify-whole-heading-line nil
+        org-hide-leading-stars nil))
+;; bind fuzzy find to SPC f h
+(use-package! affe
+  :config
+  (setq affe-find-command "fd -t file -H")
+  (map! :map doom-leader-file-map
+        :desc "Fuzzy Find" "F" #'affe-find
+        :desc "Fuzzy Find Home" "h" (lambda () (interactive) (affe-find "~"))))
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets. It is optional.
 ;; (setq user-full-name "John Doe"
