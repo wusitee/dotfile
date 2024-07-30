@@ -1,3 +1,29 @@
+@define-color bg-color rgb(60, 65, 60);               /* #3C413C */
+@define-color bg-color-tray rgb (60, 65, 68);         /* #3C4144 */
+@define-color bg-color-0 rgb (60, 65, 68);            /* #3C4144 */
+@define-color bg-color-1 rgb(71, 95, 148);            /* #475f94 */
+@define-color bg-color-2 rgb(16, 122, 176);           /* #107AB0 */
+@define-color bg-color-3 rgb(1, 115, 116);            /* #017374 */
+@define-color bg-color-4 rgb(31, 59, 77);             /* #1F3B4D */
+@define-color bg-color-5 rgb(16, 166, 116);           /* #10A674 */
+@define-color bg-color-6 rgb(73, 132, 184);           /* #4984B8 */
+@define-color bg-color-7 rgb(0, 1, 51);               /* #000133 */
+@define-color bg-color-8 rgb(8, 120, 127);            /* #08787F */
+@define-color bg-color-9 rgb(33, 71, 97);             /* #214761 */
+@define-color bg-color-10 rgb(108, 52, 97);           /* #6C3461 */
+@define-color bg-color-11 rgb(0, 82, 73);             /* #005249 */
+@define-color bg-color-12 rgb(49, 102, 138);          /* #31668A */
+@define-color bg-color-13 rgb(106, 110, 9);           /* #6A6E09 */
+@define-color bg-color-14 rgb(91, 124, 153);          /* #5B7C99 */
+@define-color bg-color-15 rgb(60, 65, 68);            /* #1D2021 */
+@define-color bg-color-16 rgb(41, 41, 61);            /* #29293D  */
+
+@define-color fg-color rgb(243, 244, 245);           /* #f3f4f5 */
+@define-color alert-bg-color rgb(189, 44, 64);       /* #bd2c40 */
+@define-color alert-fg-color rgb(255,255,255);       /* #FFFFFF */
+@define-color inactive-fg-color rgb(144, 153, 162);   /* #9099a2 */
+@define-color inactive-bg-color rgb(64, 69, 82);      /* #404552 */
+
 * {
     /* `otf-font-awesome` is required to be installed for icons */
     font-family: FontAwesome, Roboto, Helvetica, Arial, sans-serif;
