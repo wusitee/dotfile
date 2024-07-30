@@ -83,6 +83,7 @@ input "type:pointer" accel_profile flat
 
 for_window [app_id="blueman-manager"] floating enable
 for_window [app_id="pavucontrol"] floating enable
+for_window [app_id="speedcrunch"] floating enable
 
 # make some type of xwayland floating
 for_window [window_type="dialog"] floating enable
