@@ -273,9 +273,6 @@ bindsym $mod+Shift+n exec swaync-client -t -sw
 # Todolist
 exec weektodo
 
-# clash-verge
-exec clash-verge
-
 # clip board
 exec copyq
 for_window [app_id="copyq"] floating enable, sticky enable, resize set height 600px width 550px, move position cursor, move down 330
