@@ -22,6 +22,11 @@
   (map! :map doom-leader-file-map
         :desc "Fuzzy Find" "F" #'affe-find
         :desc "Fuzzy Find Home" "h" (lambda () (interactive) (affe-find "~"))))
+;; activate SQL source code blocks
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((sql . t)))
+
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets. It is optional.
 ;; (setq user-full-name "John Doe"
