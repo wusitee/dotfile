@@ -27,6 +27,11 @@
  'org-babel-load-languages
  '((sql . t)))
 
+;; use zoxide to change directory
+(map!
+ :map doom-leader-file-map
+ "z" #'cd)
+
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets. It is optional.
 ;; (setq user-full-name "John Doe"
