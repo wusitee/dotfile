@@ -41,6 +41,12 @@
 (after! langtool
   (setq langtool-default-language "en-GB"))
 
+;; set org-mode latex-preview size
+(setq org-format-latex-options (plist-put org-format-latex-options :scale 0.5))
+;; keep latex preview on in org-mode
+(after! org
+  (setq org-startup-with-latex-preview t))
+
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets. It is optional.
 ;; (setq user-full-name "John Doe"
