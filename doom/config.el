@@ -8,7 +8,6 @@
 (setq-default vterm-shell (executable-find "fish")) ;; let v-term to use fish
 (setq doom-font (font-spec :family "CaskaydiaCove Nerd Font" :size 17 ))
 (setq vterm-timer-delay 0.01)
-(setq display-line-numbers-type nil) ;;disable line number
 ;; org mode config
 (after! org
   (setq org-fontify-quote-and-verse-blocks nil
