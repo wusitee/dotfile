@@ -44,11 +44,11 @@
 (after! org
   (setq org-startup-with-latex-preview t))
 
-;; prevent duplicate title in roam
-(setq org-roam-capture-templates
-      '(("d" "default" plain "%?" :target
-         (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "${title}\n")
-         :unnarrowed t)))
+;; ;; prevent duplicate title in roam
+;; (setq org-roam-capture-templates
+;;       '(("d" "default" plain "%?" :target
+;;          (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "${title}\n")
+;; :unnarrowed t)))
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets. It is optional.
 ;; (setq user-full-name "John Doe"
