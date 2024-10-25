@@ -259,19 +259,19 @@ bar {
     swaybar_command waybar
 }
 
+
 # load when login
 
 # input method
 exec fcitx5 -d --replace
 
-# Notification Daemon
+# use swaync as Notification Daemon
 exec swaync
-
-# Toggle control center
 bindsym $mod+Shift+n exec swaync-client -t -sw
 
-# Todolist
-exec weektodo
+# lunch clash-verge when boot in workspace 10
+exec clash-verge
+# assign [app_id="clash-verge"]  → "10"
 
 # clip board
 exec copyq
