@@ -51,3 +51,5 @@
 
 (package! tldr)
 (package! affe)
+(unpin! org-roam)
+(package! org-roam-ui)
