@@ -39,20 +39,75 @@
   (setq langtool-default-language "en-GB"))
 
 ;; set org-mode latex-preview size
-(setq org-format-latex-options (plist-put org-format-latex-options :scale 0.5))
+(setq org-format-latex-options (plist-put org-format-latex-options :scale 0.7))
 ;; keep latex preview on in org-mode
 (after! org
   (setq org-startup-with-latex-preview t))
 
-;; ;; prevent duplicate title in roam
-;; (setq org-roam-capture-templates
-;;       '(("d" "default" plain "%?" :target
-;;          (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "${title}\n")
-;; :unnarrowed t)))
-;; Some functionality uses this to identify you, e.g. GPG configuration, email
-;; clients, file templates and snippets. It is optional.
-;; (setq user-full-name "John Doe"
-;;       user-mail-address "john@doe.com")
+(use-package! websocket
+  :after org-roam)
+
+(use-package! org-roam-ui
+  :after org-roam ;; or :after org
+  ;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
+  ;;         a hookable mode anymore, you're advised to pick something yourself
+  ;;         if you don't care about startup time, use
+  ;;  :hook (after-init . org-roam-ui-mode)
+  :config
+  (setq org-roam-ui-sync-theme t
+        org-roam-ui-follow t
+        org-roam-ui-update-on-save t
+        org-roam-ui-open-on-start t))
+
+;; use org-morden
+(use-package! org
+  :hook (org-mode . org-modern-mode)
+  :hook (org-agenda-finalize . org-modern-agenda)
+  )
+
+;; enable fragtop
+(use-package! org-fragtog
+  :hook
+  (org-mode . org-fragtog-mode))
+
+
+;; let emacs use okular as pdf browser
+(setq doc-view-continuous t
+      doc-view-resolver 'doc-view-okular)
+
+;; force page break after toc
+(setq org-latex-toc-command "\\clearpage \\tableofcontents \\clearpage")
+
+;; tried to fix YASnippet templates not working in Latex fragments in org files
+;; (add-hook! org-mode (yas-activate-extra-mode 'latex-mode))
+
+
+;; for transparency
+(set-frame-parameter nil 'alpha-background 90)
+(add-to-list 'default-frame-alist '(alpha-background . 90))
+
+(setq yas-snippet-dirs '("~/.config/doom/snippets/"))
+;; solve the key conflict in while using yasinppets and org-mode
+(defun yas/org-very-safe-expand ()
+  (let ((yas/fallback-behavior 'return-nil)) (yas/expand)))
+(add-hook 'org-mode-hook
+          (lambda ()
+            (make-variable-buffer-local 'yas/trigger-key)
+            (setq yas/trigger-key [tab])
+            (add-to-list 'org-tab-first-hook 'yas/org-very-safe-expand)
+            (define-key yas/keymap [tab] 'yas-next-field)))
+
+
+;; Inlay Hints
+(after! lsp-mode
+  (setq lsp-inlay-hint-enable t))
+
+(setq user-full-name "wusitee"
+      user-mail-address "kekdkkwk@outlook.com")
+
+;; use anki-editor
+(use-package! anki-editor
+  :after org)
 
 ;; Doom exposes five (optional) variables for controlling fonts in Doom:
 ;;
