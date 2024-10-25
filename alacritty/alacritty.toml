@@ -1,4 +1,4 @@
-[shell]
+[terminal.shell]
 args = ['--login']
 program = "/usr/bin/fish"
 
