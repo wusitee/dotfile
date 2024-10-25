@@ -1,36 +1,29 @@
 // -*- mode: jsonc -*-
 {
-    // "layer": "top", // Waybar at top layer
+    "layer": "top", // Waybar at top layer
+    "margin-top": 10,
     // "position": "bottom", // Waybar position (top|bottom|left|right)
-    "height": 25, // Waybar height (to be removed for auto height)
-    // "width": 1280, // Waybar width
+    "height": 29, // Waybar height (to be removed for auto height)
+    "width": 1484, // Waybar width
     "spacing": 0, // Gaps between modules (4px)
     // Choose the order of the modules
     "modules-left": [
         "sway/workspaces",
-        "sway/mode",
-        "sway/scratchpad",
-        "custom/media"
+        // "sway/mode",
+        "sway/scratchpad"
+
     ],
     "modules-center": [
-        "sway/window",
-        "custom/media"
+        "custom/waybar-mpris",
+        "clock",
+        "pulseaudio",
+        "backlight",
+        "network",
+        "cpu",
+        "memory"
     ],
     "modules-right": [
-        "mpd",
-        "idle_inhibitor",
-        "pulseaudio",
-        "network",
-        "power-profiles-daemon",
-        "cpu",
-        "memory",
-        "temperature",
-        "backlight",
-        // "keyboard-state",
-        // "sway/language",
         "battery",
-        // "battery#bat2",
-        "clock",
         "tray"
     ],
     // Modules configuration
@@ -38,17 +31,15 @@
         "disable-scroll": true,
         "all-outputs": true,
         "warp-on-scroll": false,
-        "format": "{name}: {icon}",
+        "format": "{name} {icon} ",
         "format-icons": {
-            "1": " ",
-            "2": " ",
-            "3": " ",
-            "4": "▶",
-            "5": " ",
-            "6": "✉",
-            "urgent": " ",
-            // "focused": "",
-            "default": " "
+            "1": "",
+            "2": "",
+            "4": "",
+            "9": "",
+            "urgent": "󰮯",
+            "default": "󰊠"
+
         }
     },
     "keyboard-state": {
@@ -102,33 +93,54 @@
     "idle_inhibitor": {
         "format": "{icon}",
         "format-icons": {
-            "activated": " ",
-            "deactivated": " "
+            "activated": "",
+            "deactivated": ""
         }
     },
     "tray": {
-        "icon-size": 21,
+        "icon-size": 18,
         "spacing": 10
     },
     "clock": {
         // "timezone": "America/New_York",
-        "format": "{:%a, %d %b %R}",
-        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
-        "format-alt": "{:%Y-%m-%d}"
+      "format": "📅 {:%a %d %m 🕑 %H:%M %p}",
+      "format-alt": "{:%A, %B %d, %Y (%R)}",
+      "tooltip-format": "<tt><small>{calendar}</small></tt>",
+      "calendar": {
+                  "mode"          : "month",
+                  "mode-mon-col"  : 3,
+                  "weeks-pos"     : "right",
+                  "on-scroll"     : 1,
+                  "on-click-right": "mode",
+                  "format": {
+                            "months":     "<span color='#ffead3'><b>{}</b></span>",
+                            "days":       "<span color='#ecc6d9'><b>{}</b></span>",
+                            "weeks":      "<span color='#99ffdd'><b>W{}</b></span>",
+                            "weekdays":   "<span color='#ffcc66'><b>{}</b></span>",
+                            "today":      "<span color='#ff6699'><b><u>{}</u></b></span>"
+                            }
+                  },
+      "actions":  {
+                  "on-click-right": "mode",
+                  "on-click-forward": "tz_up",
+                  "on-click-backward": "tz_down",
+                  "on-scroll-up": "shift_up",
+                  "on-scroll-down": "shift_down"
+                  }
     },
     "cpu": {
-        "format": "{usage}% ",
+        "format": " {usage}%",
         "tooltip": false
     },
     "memory": {
-        "format": "{}% "
+        "format": " {}%"
     },
     "temperature": {
         // "thermal-zone": 2,
         "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
         "critical-threshold": 80,
         // "format-critical": "{temperatureC}°C {icon}",
-        "format": "{temperatureC}°C {icon}",
+        "format": "{icon}{temperatureC}°C",
         "format-icons": [
             "",
             "",
@@ -137,7 +149,7 @@
     },
     "backlight": {
         // "device": "acpi_video1",
-        "format": "{percent}% {icon}",
+        "format": "{icon} {percent}%",
         "format-icons": [
             "",
             "",
@@ -152,14 +164,14 @@
     },
     "battery": {
         "states": {
-            // "good": 95,
+            "good": 95,
             "warning": 30,
             "critical": 15
         },
-        "format": "{capacity}% {icon}",
-        "format-full": "{capacity}% {icon}",
-        "format-charging": "{capacity}% ",
-        "format-plugged": "{capacity}% ",
+        "tooltip": false,
+        "format": "{icon} {capacity}%",
+        "format-charging": " {capacity}%",
+        "format-plugged": " {capacity}%",
         "format-alt": "{time} {icon}",
         // "format-good": "", // An empty format will hide the module
         // "format-full": "",
@@ -186,17 +198,21 @@
         }
     },
     "network": {
-        // "interface": "wlp2*", // (Optional) To force the use of this interface
-        "format-wifi": "{essid} ({signalStrength}%) ",
-        "format-ethernet": "{ipaddr}/{cidr} ",
-        "tooltip-format": "{ifname} via {gwaddr} ",
-        "format-linked": "{ifname} (No IP) ",
-        "format-disconnected": "Disconnected ⚠",
-        "format-alt": "{ifname}: {ipaddr}/{cidr}"
+        "interval": 5,
+        // "format-wifi": " {essid} ({signalStrength}%) ↑{bandwidthUpBytes} ↓{bandwidthDownBytes}",
+        "format-wifi": " {essid} ({signalStrength}%)",
+        "format-ethernet": " enp2s0",
+        "format-linked": " {ifname} (No IP)",
+        "format-disconnected": "󱚼  Disconnected",
+        "format-disabled": "󰖪  Disabled",
+        // "format-alt": " {bandwidthUpBytes} |  {bandwidthDownBytes}",
+        "format-alt": "{ifname}: {ipaddr}/{cidr}",
+        "tooltip": false,
+        // "max-length": 50
     },
     "pulseaudio": {
         // "scroll-step": 1, // %, can be a float
-        "format": "{volume}% {icon} {format_source}",
+        "format": "{volume}% {icon}  {format_source}",
         "format-bluetooth": "{volume}% {icon} {format_source}",
         "format-bluetooth-muted": " {icon} {format_source}",
         "format-muted": " {format_source}",
@@ -217,16 +233,19 @@
         },
         "on-click": "pavucontrol"
     },
-    "custom/media": {
-        "format": "{icon} {}",
+    "custom/waybar-mpris": {
         "return-type": "json",
-        "max-length": 40,
-        "format-icons": {
-            "spotify": "",
-            "default": "🎜"
-        },
+        "exec": "waybar-mpris --position --autofocus --order SYMBOL:POSITION --pause  --play ",
+        "on-click": "waybar-mpris --send toggle",
+        // This option will switch between players on right click.
+            "on-click-right": "waybar-mpris --send player-next ",
+        // The options below will switch the selected player on scroll
+            "on-scroll-up": "waybar-mpris --send player-next",
+            "on-scroll-down": "waybar-mpris --send player-prev",
+        // The options below will go to next/previous track on scroll
+            // "on-scroll-up": "waybar-mpris --send next",
+            // "on-scroll-down": "waybar-mpris --send prev",
         "escape": true,
-        "exec": "$HOME/.config/waybar/mediaplayer.py 2> /dev/null" // Script in resources folder
-        // "exec": "$HOME/.config/waybar/mediaplayer.py --player spotify 2> /dev/null" // Filter player based on name
-    }
+        "max-length": 50,
+    },
 }
