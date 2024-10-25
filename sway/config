@@ -224,6 +224,9 @@ bindsym Mod1+F4 exec ~/.config/sway/kill.sh
 # for screen shot
     bindsym Print exec slurp | grim -g - - | wl-copy
     bindsym Control+Print exec slurp | grim -g
+    bindsym Print exec pkill slurp || slurp | grim -g - - | wl-copy
+    bindsym Control+Print exec pkill slurp || exec slurp | grim -g
+    bindsym Control+Shift+Print exec grim - | wl-copy
 # Resizing containers:
 #
 #
