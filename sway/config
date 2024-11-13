@@ -35,7 +35,8 @@ default_border pixel 5
 ### Output configuration
 #
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
-output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
+# output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
+output * bg /home/wste/Pictures/wallpaper/simple-mountain.png fill
 #
 # Example configuration:
 #
@@ -48,12 +49,9 @@ output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
 # Example configuration:
 #
 # --effect-compose ~/Pictures/lock.png for set a locking picture
-exec swayidle -w \
-	timeout 1000 'swaylock -f' \
-	timeout 1005 'swaymsg "output * power off"' \
-	resume 'swaymsg "output * power on"' \
-    timeout 10 'if pgrep -x swaylock; then swaymsg "output * power off"; fi' \
-    before-sleep 'playerctl pause; swaylock'
+#
+#lock
+# bindsym --locked XF86PowerOff exec lock sway-close-display
 
 # when there is a full-screen window, prevent the swayidle
 for_window [class=.*] inhibit_idle fullscreen
@@ -222,11 +220,13 @@ bindsym Mod1+F4 exec ~/.config/sway/kill.sh
     bindsym XF86MonBrightnessUp exec light -A 5
     bindsym XF86MonBrightnessDown exec light -U 5
 # for screen shot
-    bindsym Print exec slurp | grim -g - - | wl-copy
-    bindsym Control+Print exec slurp | grim -g
     bindsym Print exec pkill slurp || slurp | grim -g - - | wl-copy
     bindsym Control+Print exec pkill slurp || exec slurp | grim -g
     bindsym Control+Shift+Print exec grim - | wl-copy
+# locking & idling
+    bindsym $mod+Control+l exec swaylock
+# Bluetooth
+    bindsym $mod+Shift+b exec blueman-manager
 # Resizing containers:
 #
 #
@@ -252,7 +252,6 @@ mode "resize" {
 }
 bindsym $mod+r mode "resize"
 
-#
 
 #
 # Status Bar:
@@ -282,6 +281,7 @@ for_window [app_id="copyq"] floating enable, sticky enable, resize set height 60
 bindsym $mod+Shift+v exec copyq toggle
 
 
+# exec_always "./swayinitapp.sh"
 # xwayland resolution
-
 include /etc/sway/config.d/*
+

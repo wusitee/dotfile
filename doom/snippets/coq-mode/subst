@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: subst
+# key: su
+# uuid: su
+# --
+subst $1

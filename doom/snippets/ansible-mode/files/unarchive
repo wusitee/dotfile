@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name : Copies an archive to a remote location and unpack it
+# key : unarchive
+# condition: ansible
+# --
+- name: ${1:Copies an archive to a remote location and unpack it}
+  unarchive: src=$2 dest=$3 $0

@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name : manage docker images
+# key : docker_image
+# condition: ansible
+# --
+- name: ${1:manage docker images}
+  docker_image: name=$2 $0

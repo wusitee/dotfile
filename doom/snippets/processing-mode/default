@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: default
+# key: default
+# uuid: default
+# --
+default:
+  $0
+break;

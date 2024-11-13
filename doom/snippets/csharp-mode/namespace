@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# contributor: Alejandro Espinoza Esparza <aespinoza@structum.com.mx>
+# name: namespace .. { ... }
+# key: namespace
+# uuid: namespace
+# --
+namespace $1
+{
+$0
+}

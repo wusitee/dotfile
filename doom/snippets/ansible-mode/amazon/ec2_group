@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name : maintain an ec2 VPC security group.
+# key : ec2_group
+# condition: ansible
+# --
+- name: ${1:maintain an ec2 VPC security group.}
+  ec2_group: name=$2 description=$3 $0

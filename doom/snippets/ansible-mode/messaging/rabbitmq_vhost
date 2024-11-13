@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name : Manage the state of a virtual host in RabbitMQ
+# key : rabbitmq_vhost
+# condition: ansible
+# --
+- name: ${1:Manage the state of a virtual host in RabbitMQ}
+  rabbitmq_vhost: name=$2 $0

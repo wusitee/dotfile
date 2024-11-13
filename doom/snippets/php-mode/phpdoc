@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: docblock summary
+# key: doc
+# uuid: doc
+# --
+/**
+ * ${0:`(if % (s-replace "\n" "\n * " %))`}
+ */

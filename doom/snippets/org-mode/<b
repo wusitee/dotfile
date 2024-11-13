@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: \begin
+# key: <b
+# --
+
+\begin{${1:env}}
+$0
+\end{$1}

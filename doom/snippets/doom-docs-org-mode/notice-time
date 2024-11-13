@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: Notice: timestamp
+# key: <time
+# --
+#+begin_quote
+ 󰥔 ${1:`(or % (format-time-string "%B %d, %Y"))`}
+#+end_quote

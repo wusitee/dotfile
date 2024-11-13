@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# type: command
+# key: inc
+# uuid: inc
+# name: include
+# --
+include ($0)

@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: <?php ... ?>
+# key: php
+# uuid: php
+# --
+<?php ${1:declare(strict_types=1);} ${0:?>}

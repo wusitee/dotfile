@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name : Makes an OSX computer to speak.
+# key : osx_say
+# condition: ansible
+# --
+- name: ${1:Makes an OSX computer to speak.}
+  osx_say: msg=$2 $0

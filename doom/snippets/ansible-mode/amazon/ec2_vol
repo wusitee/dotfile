@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name : create and attach a volume, return volume id and device map
+# key : ec2_vol
+# condition: ansible
+# --
+- name: ${1:create and attach a volume, return volume id and device map}
+  ec2_vol: $0

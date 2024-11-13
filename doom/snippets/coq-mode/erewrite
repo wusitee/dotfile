@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: erewrite
+# key: er
+# uuid: er
+# --
+erewrite $1

@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: $var = value;
+# key: va
+# uuid: va
+# --
+\$${1:var_name} = `%`$0;

@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: match with 2
+# key: m2
+# uuid: m2
+# --
+match $1 with
+| $2 => $3
+| $4 => $5
+end

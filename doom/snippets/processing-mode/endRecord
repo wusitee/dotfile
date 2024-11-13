@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: endRecord
+# key: file
+# uuid: file
+# --
+endRecord();

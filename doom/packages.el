@@ -53,7 +53,11 @@
 (package! affe)
 (unpin! org-roam)
 (package! org-roam-ui)
+(package! lsp-dart)
 (package! org-modern)
 (package! org-fragtog)
+(package! markdown-mode)
+(package! anki-editor
+  :recipe (:host github :repo "anki-editor/anki-editor"))
 (package! copilot
   :recipe (:host github :repo "copilot-emacs/copilot.el" :files ("*.el")))

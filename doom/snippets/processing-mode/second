@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: second
+# key: time
+# uuid: time
+# --
+second()$0

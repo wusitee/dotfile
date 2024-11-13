@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: macro
+# key: macro
+# uuid: macro
+# --
+!macro ${1:Name} UN
+$0
+
+!macroend

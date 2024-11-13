@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: Ref: ...
+# key: ref
+# --
+Ref: ${1:URL|12-CHAR HASH|#GITHUBREF}

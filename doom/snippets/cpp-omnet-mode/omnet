@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: omnet
+# key: omnet
+# uuid: omnet
+# --
+#include <omnetpp.h>

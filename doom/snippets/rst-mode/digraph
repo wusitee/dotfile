@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: digraph
+# key: graph
+# uuid: graph
+# --
+.. digraph:: $1
+
+   $0

@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: updatePixels
+# key: updatePixels
+# uuid: updatePixels
+# --
+updatePixels();

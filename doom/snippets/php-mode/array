@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: array(...)
+# key: ar
+# uuid: ar
+# --
+array(`%`$0)

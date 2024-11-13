@@ -10,6 +10,6 @@ return {
   end,
   ft = { "markdown" },
   config = function()
-    vim.g.mkdp_browser = "/usr/bin/firefox"
+    -- vim.g.mkdp_browser = "/usr/bin/firefox"
   end,
 }

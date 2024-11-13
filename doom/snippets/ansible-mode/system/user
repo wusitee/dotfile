@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name : Manage user accounts
+# key : user
+# condition: ansible
+# --
+- name: ${1:Manage user accounts}
+  user: name=$2 $0

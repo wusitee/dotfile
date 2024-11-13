@@ -71,6 +71,7 @@
   margin: 0;
   box-shadow: none;
   background: transparent;
+  opacity: 0.9;
   border: none;
   color: @text-color;
   transition: background 0.15s ease-in-out;

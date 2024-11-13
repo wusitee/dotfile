@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: sim
+# key: sim
+# uuid: sim
+# --
+#ifdef TOSSIM
+       $0
+#endif

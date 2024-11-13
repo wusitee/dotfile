@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: keyPressed
+# key: key
+# uuid: key
+# --
+void keyPressed(){
+  ${1}
+}
