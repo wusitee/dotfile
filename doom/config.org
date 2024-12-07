@@ -1,0 +1,172 @@
+#+title: Config
+
+* Information
+My personal information.
+#+begin_src emacs-lisp
+(setq user-full-name "wusitee"
+      user-mail-address "kekdkkwk@outlook.com")
+#+end_src
+* Client
+** Workspace
+Prevent client from creating new workspace.
+#+begin_src emacs-lisp
+(after! persp-mode
+  (setq persp-emacsclient-init-frame-behaviour-override "main"))
+#+end_src
+** font
+#+begin_src emacs-lisp
+(setq doom-font (font-spec :family "CaskaydiaMono Nerd Font" :size 17 ))
+#+end_src
+** Transparency
+Make client transparent.
+#+begin_src emacs-lisp
+(set-frame-parameter nil 'alpha-background 90)
+(add-to-list 'default-frame-alist '(alpha-background . 90))
+#+end_src
+** Line number
+#+begin_src emacs-lisp
+(setq display-line-numbers-type t)
+#+end_src
+** Theme
+#+begin_src emacs-lisp
+(setq doom-theme 'doom-one)
+#+end_src
+* V-term
+Using fish for v-term.
+#+begin_src emacs-lisp
+(setq shell-file-name (executable-find "bash"))
+(setq-default vterm-shell (executable-find "fish"))
+(setq vterm-timer-delay 0) ;; make vterm smoother
+#+end_src
+* Language tool
+Set the spelling check to en-US
+#+begin_src emacs-lisp
+(after! langtool
+  (setq langtool-default-language "en-GB"))
+#+end_src
+* Snippets
+** snippet dir
+Set the snippet dirs.
+#+begin_src emacs-lisp
+(setq yas-snippet-dirs '("~/.config/doom/snippets/"))
+#+end_src
+** tab conflict
+Resolve the tab conflict.
+#+begin_src emacs-lisp
+(defun yas/org-very-safe-expand ()
+  (let ((yas/fallback-behavior 'return-nil)) (yas/expand)))
+(add-hook 'org-mode-hook
+          (lambda ()
+            (make-variable-buffer-local 'yas/trigger-key)
+            (setq yas/trigger-key [tab])
+            (add-to-list 'org-tab-first-hook 'yas/org-very-safe-expand)
+            (define-key yas/keymap [tab] 'yas-next-field)))
+#+end_src
+* Latex
+** Latex viewer
+Set default latex viewer to Okular.
+#+begin_src emacs-lisp
+(setq +latex-viewers '(okular))
+#+end_src
+* Org
+** Latex preview
+*** setup
+Start latex preview when startup with a proper size.
+#+begin_src emacs-lisp
+(after! org
+  (setq org-startup-with-latex-preview t)
+  (setq org-format-latex-options
+      (plist-put org-format-latex-options :scale 0.7)))
+#+end_src
+*** Fragtog
+See the source code while cursor is on latex formula.
+#+begin_src emacs-lisp
+(use-package! org-fragtog
+  :hook
+  (org-mode . org-fragtog-mode))
+#+end_src
+** Org Roam UI
+#+begin_src emacs-lisp
+(use-package! websocket
+  :after org-roam)
+
+(use-package! org-roam-ui
+  :after org-roam ;; or :after org
+  ;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
+  ;;         a hookable mode anymore, you're advised to pick something yourself
+  ;;         if you don't care about startup time, use
+  ;;  :hook (after-init . org-roam-ui-mode)
+  :config
+  (setq org-roam-ui-sync-theme t
+        org-roam-ui-follow t
+        org-roam-ui-update-on-save t
+        org-roam-ui-open-on-start t))
+#+end_src
+** Anki editor
+#+begin_src emacs-lisp
+(use-package! anki-editor
+  :after org
+  :hook (org-mode . (lambda ()
+                      (if (ignore-errors (anki-editor-api-check))
+                          (anki-editor-mode))))
+  :config
+  (map! :map anki-editor-mode-map
+        :leader
+        :prefix ("n e" . "Anki Editor")
+        :desc "Anki editor mode" "e" #'anki-editor-mode
+        :desc "Insert note" "i" #'anki-editor-insert-note
+        :desc "Push notes" "p" #'anki-editor-push-notes
+        :desc "Cloze note" "c" #'anki-editor-cloze-dwim
+        :desc "Delete current note" "d" #'anki-editor-delete-note-at-point
+        :desc "Browse current note" "b" #'anki-editor-gui-browse
+        :desc "Set current note type" "t" #'anki-editor-set-note-type
+        :desc "Push new notes" "P" #'anki-editor-push-new-notes))
+#+end_src
+** Org Modern
+Make org file beautiful.
+#+begin_src emacs-lisp
+(use-package! org
+  :hook (org-mode . org-modern-mode)
+  :hook (org-agenda-finalize . org-modern-agenda))
+#+end_src
+** Latex export
+Force page break after toc
+#+begin_src emacs-lisp
+(setq org-latex-toc-command "\\clearpage \\tableofcontents \\clearpage")
+#+end_src
+** org directory
+#+begin_src emacs-lisp
+(setq org-directory "~/org/")
+#+end_src
+** Line number
+Disable line number
+#+begin_src emacs-lisp
+(add-hook! org-mode
+           (setq display-line-numbers nil))
+#+end_src
+** Chinese support
+While using org, the table can't be aligned if Chinese characters are in it:
+| 中文 | 对齐   |
+| 中文 | 对不齐 |
+Therefore, using
++ 'M-x describe-font' to find the Sarasa-Mono-SC-Nerd and use it in org.
+#+begin_src emacs-lisp
+(defun org-buffer-face-mode-variable ()
+  (interactive)
+  (make-face 'width-font-face)
+  (set-face-attribute 'width-font-face nil :font "等距更纱黑体 SC 12") ;; font size must be even
+  (setq buffer-face-mode-face 'width-font-face)
+  (buffer-face-mode))
+(add-hook! org-mode
+           (org-buffer-face-mode-variable))
+#+end_src
+* Copilot
+#+begin_src emacs-lisp
+(use-package! copilot
+  ;; :hook (prog-mode . copilot-mode)
+  :bind (:map copilot-completion-map
+              ("<tab>" . 'copilot-accept-completion)
+              ("TAB" . 'copilot-accept-completion)
+              ("C-TAB" . 'copilot-accept-completion-by-word)
+              ("C-<tab>" . 'copilot-accept-completion-by-word)))
+#+end_src
