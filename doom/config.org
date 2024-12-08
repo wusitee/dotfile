@@ -67,6 +67,15 @@ Resolve the tab conflict.
 Set default latex viewer to Okular.
 #+begin_src emacs-lisp
 (setq +latex-viewers '(okular))
+* Completion
+** Vertico
+Add pinyin search support to Vertico.
+#+begin_src emacs-lisp
+(defun my-orderless-regexp (orig-func component)
+  (let ((result (funcall orig-func component)))
+    (pyim-cregexp-build result)))
+
+(advice-add 'orderless-regexp :around #'my-orderless-regexp)
 #+end_src
 * Org
 ** Latex preview
