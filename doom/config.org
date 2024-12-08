@@ -31,7 +31,7 @@ Make client transparent.
 #+begin_src emacs-lisp
 (setq doom-theme 'doom-one)
 #+end_src
-* V-term
+* Terminal
 Using fish for v-term.
 #+begin_src emacs-lisp
 (setq shell-file-name (executable-find "bash"))
@@ -39,6 +39,7 @@ Using fish for v-term.
 (setq vterm-timer-delay 0) ;; make vterm smoother
 #+end_src
 * Language tool
+** Spelling check
 Set the spelling check to en-US
 #+begin_src emacs-lisp
 (after! langtool
@@ -62,11 +63,17 @@ Resolve the tab conflict.
             (add-to-list 'org-tab-first-hook 'yas/org-very-safe-expand)
             (define-key yas/keymap [tab] 'yas-next-field)))
 #+end_src
-* Latex
-** Latex viewer
-Set default latex viewer to Okular.
+* Copilot
+Use copilot when needed
 #+begin_src emacs-lisp
-(setq +latex-viewers '(okular))
+(use-package! copilot
+  ;; :hook (prog-mode . copilot-mode)
+  :bind (:map copilot-completion-map
+              ("<tab>" . 'copilot-accept-completion)
+              ("TAB" . 'copilot-accept-completion)
+              ("C-TAB" . 'copilot-accept-completion-by-word)
+              ("C-<tab>" . 'copilot-accept-completion-by-word)))
+#+end_src
 * Completion
 ** Vertico
 Add pinyin search support to Vertico.
@@ -77,9 +84,10 @@ Add pinyin search support to Vertico.
 
 (advice-add 'orderless-regexp :around #'my-orderless-regexp)
 #+end_src
-* Org
-** Latex preview
-*** setup
+* lang
+** Org
+*** Latex preview
+**** setup
 Start latex preview when startup with a proper size.
 #+begin_src emacs-lisp
 (after! org
@@ -87,14 +95,14 @@ Start latex preview when startup with a proper size.
   (setq org-format-latex-options
       (plist-put org-format-latex-options :scale 0.7)))
 #+end_src
-*** Fragtog
+**** Fragtog
 See the source code while cursor is on latex formula.
 #+begin_src emacs-lisp
 (use-package! org-fragtog
   :hook
   (org-mode . org-fragtog-mode))
 #+end_src
-** Org Roam UI
+*** Org Roam UI
 #+begin_src emacs-lisp
 (use-package! websocket
   :after org-roam)
@@ -111,7 +119,7 @@ See the source code while cursor is on latex formula.
         org-roam-ui-update-on-save t
         org-roam-ui-open-on-start t))
 #+end_src
-** Anki editor
+*** Anki editor
 #+begin_src emacs-lisp
 (use-package! anki-editor
   :after org
@@ -131,29 +139,29 @@ See the source code while cursor is on latex formula.
         :desc "Set current note type" "t" #'anki-editor-set-note-type
         :desc "Push new notes" "P" #'anki-editor-push-new-notes))
 #+end_src
-** Org Modern
+*** Org Modern
 Make org file beautiful.
 #+begin_src emacs-lisp
 (use-package! org
   :hook (org-mode . org-modern-mode)
   :hook (org-agenda-finalize . org-modern-agenda))
 #+end_src
-** Latex export
+*** Latex export
 Force page break after toc
 #+begin_src emacs-lisp
 (setq org-latex-toc-command "\\clearpage \\tableofcontents \\clearpage")
 #+end_src
-** org directory
+*** org directory
 #+begin_src emacs-lisp
 (setq org-directory "~/org/")
 #+end_src
-** Line number
+*** Line number
 Disable line number
 #+begin_src emacs-lisp
 (add-hook! org-mode
            (setq display-line-numbers nil))
 #+end_src
-** Chinese support
+*** Chinese support
 While using org, the table can't be aligned if Chinese characters are in it:
 | 中文 | 对齐   |
 | 中文 | 对不齐 |
@@ -169,13 +177,9 @@ Therefore, using
 (add-hook! org-mode
            (org-buffer-face-mode-variable))
 #+end_src
-* Copilot
+** Latex
+*** Latex viewer
+Set default latex viewer to Okular.
 #+begin_src emacs-lisp
-(use-package! copilot
-  ;; :hook (prog-mode . copilot-mode)
-  :bind (:map copilot-completion-map
-              ("<tab>" . 'copilot-accept-completion)
-              ("TAB" . 'copilot-accept-completion)
-              ("C-TAB" . 'copilot-accept-completion-by-word)
-              ("C-<tab>" . 'copilot-accept-completion-by-word)))
+(setq +latex-viewers '(okular))
 #+end_src
