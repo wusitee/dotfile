@@ -161,21 +161,13 @@ Disable line number
 (add-hook! org-mode
            (setq display-line-numbers nil))
 #+end_src
-*** Chinese support
-While using org, the table can't be aligned if Chinese characters are in it:
+*** Table Alignment
+Use Valign to align table.
 | 中文 | 对齐   |
-| 中文 | 对不齐 |
-Therefore, using
-+ 'M-x describe-font' to find the Sarasa-Mono-SC-Nerd and use it in org.
+| bush | 对不齐 |
 #+begin_src emacs-lisp
-(defun org-buffer-face-mode-variable ()
-  (interactive)
-  (make-face 'width-font-face)
-  (set-face-attribute 'width-font-face nil :font "等距更纱黑体 SC 12") ;; font size must be even
-  (setq buffer-face-mode-face 'width-font-face)
-  (buffer-face-mode))
 (add-hook! org-mode
-           (org-buffer-face-mode-variable))
+           (valign-mode))
 #+end_src
 ** Latex
 *** Latex viewer
