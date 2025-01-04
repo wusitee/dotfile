@@ -45,6 +45,13 @@ Set the spelling check to en-US
 (after! langtool
   (setq langtool-default-language "en-GB"))
 #+end_src
+** lsp
+Follow the [[https://emacs-lsp.github.io/lsp-mode/page/performance/][Performance page]]:
+#+begin_src emacs-lisp
+(setq gc-cons-threshold 100000000)
+(setq read-process-output-max (* 1024 1024)) ;; 1mb
+#+end_src
+
 * Snippets
 ** snippet dir
 Set the snippet dirs.
