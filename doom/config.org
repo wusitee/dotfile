@@ -181,8 +181,11 @@ See the source code while cursor is on latex formula.
 Make org file beautiful.
 #+begin_src emacs-lisp
 (use-package! org
-  :hook (org-mode . org-modern-mode)
-  :hook (org-agenda-finalize . org-modern-agenda))
+  :hook
+  (org-mode . org-modern-mode)
+  (org-agenda-finalize . org-modern-agenda)
+  :config
+  (setq org-modern-table nil))
 #+end_src
 *** Latex export
 Force page break after toc
@@ -205,7 +208,8 @@ Use Valign to align table.
 | bush | 对不齐 |
 #+begin_src emacs-lisp
 (add-hook! org-mode
-           (valign-mode))
+           (valign-mode)
+           (setq valign-fancy-bar 1))
 #+end_src
 ** Latex
 *** Latex viewer
