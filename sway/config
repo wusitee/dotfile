@@ -82,6 +82,7 @@ input "type:pointer" accel_profile flat
 for_window [app_id="blueman-manager"] floating enable
 for_window [app_id="pavucontrol"] floating enable
 for_window [app_id="speedcrunch"] floating enable
+for_window [app_id="com/xiaoyifang/goldendict-ng.https://github.goldendict"] floating enable
 
 # make some type of xwayland floating
 for_window [window_type="dialog"] floating enable
@@ -251,6 +252,9 @@ mode "resize" {
     bindsym Escape mode "default"
 }
 bindsym $mod+r mode "resize"
+
+# goldendict
+bindsym $mod+Shift+d exec goldendict
 
 
 #
