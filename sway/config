@@ -28,7 +28,7 @@ set $term alacritty
 # Your preferred application launcher
 # Note: pass the final command to swaymsg so that the resulting window can be opened
 # on the original workspace that the command was run on.
-set $menu rofi -show combi
+set $menu pkill rofi || rofi -show combi
 
 default_border pixel 5
 
