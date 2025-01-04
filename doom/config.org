@@ -15,7 +15,7 @@ Prevent client from creating new workspace.
 #+end_src
 ** font
 #+begin_src emacs-lisp
-(setq doom-font (font-spec :family "CaskaydiaMono Nerd Font" :size 17 ))
+(setq doom-font (font-spec :family "Maple Mono SC NF" :size 16 ))
 #+end_src
 ** Transparency
 Make client transparent.
