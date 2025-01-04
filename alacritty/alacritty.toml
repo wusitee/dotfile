@@ -9,7 +9,7 @@ style = "Beam"
 size = 13.0
 
 [font.normal]
-family = "CaskaydiaCove Nerd Font Mono"
+family = "Maple Mono SC NF"
 
 [window]
 startup_mode = "Windowed"
