@@ -72,6 +72,17 @@ Resolve the tab conflict.
 #+end_src
 * Copilot
 Use copilot when needed
+* Completion
+** Vertico
+Add Chinese pinyin search support to Vertico.
+#+begin_src emacs-lisp
+(defun pyin-orderless-regexp (orig-func component)
+  (let ((result (funcall orig-func component)))
+    (pyim-cregexp-build result)))
+
+(advice-add 'orderless-regexp :around #'pyin-orderless-regexp)
+#+end_src
+
 #+begin_src emacs-lisp
 (use-package! copilot
   ;; :hook (prog-mode . copilot-mode)
