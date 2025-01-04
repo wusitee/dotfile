@@ -43,7 +43,7 @@ Using fish for v-term.
 Set the spelling check to en-US
 #+begin_src emacs-lisp
 (after! langtool
-  (setq langtool-default-language "en-GB"))
+  (setq langtool-default-language "en-US"))
 #+end_src
 ** lsp
 Follow the [[https://emacs-lsp.github.io/lsp-mode/page/performance/][Performance page]]:
