@@ -51,6 +51,10 @@ Follow the [[https://emacs-lsp.github.io/lsp-mode/page/performance/][Performance
 (setq gc-cons-threshold 100000000)
 (setq read-process-output-max (* 1024 1024)) ;; 1mb
 #+end_src
+** Direnv
+#+begin_src emacs-lisp
+(add-hook 'after-init-hook 'envrc-global-mode)
+#+end_src
 
 * Snippets
 ** snippet dir
