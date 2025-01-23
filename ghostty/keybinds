@@ -1,0 +1,19 @@
+# tabs
+keybind = alt+t=new_tab
+keybind = alt+q=close_surface
+keybind = alt+h=previous_tab
+keybind = alt+l=next_tab
+
+# split
+keybind = alt+w>v=new_split:right
+keybind = alt+w>s=new_split:down
+keybind = alt+w>c=close_surface
+keybind = alt+w>k=goto_split:top
+keybind = alt+w>j=goto_split:bottom
+keybind = alt+w>h=goto_split:left
+keybind = alt+w>l=goto_split:right
+# focus-follows-mouse should be set to false
+# to make the above work as intended.
+
+# windows
+keybind = alt+enter=new_window

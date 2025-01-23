@@ -1,0 +1,11 @@
+font-family = "Maple Mono SC NF"
+background-opacity = 0.85
+window-inherit-working-directory = true
+window-decoration = false
+window-theme = system
+resize-overlay = never
+focus-follows-mouse = true
+gtk-wide-tabs = false
+gtk-single-instance = true
+focus-follows-mouse = false
+config-file = "keybinds"
