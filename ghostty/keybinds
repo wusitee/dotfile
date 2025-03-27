@@ -1,8 +1,10 @@
 # tabs
 keybind = alt+t=new_tab
 keybind = alt+q=close_surface
+keybind = alt+w=close_surface
 keybind = alt+h=previous_tab
 keybind = alt+l=next_tab
+keybind = alt+,=toggle_tab_overview
 
 # split
 keybind = alt+w>v=new_split:right

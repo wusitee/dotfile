@@ -7,7 +7,7 @@ configuration {
 /*	xoffset: 0;*/
 /*	fixed-num-lines: true;*/
 	show-icons: true;
-	terminal: "/bin/alacritty";
+	// terminal: "/bin/alacritty";
 /*	ssh-client: "ssh";*/
 /*	ssh-command: "{terminal} -e {ssh-client} {host} [-p {port}]";*/
 /*	run-command: "{cmd}";*/
@@ -38,7 +38,7 @@ configuration {
 /*	tokenize: true;*/
 /*	m: "-5";*/
 /*	filter: ;*/
-/*	dpi: -1;*/
+/*	dpi: 150;*/
 /*	threads: 0;*/
 /*	scroll-method: 0;*/
 /*	window-format: "{w}    {c}   {t}";*/
@@ -149,5 +149,6 @@ configuration {
       directories-first: true;
       sorting-method:    "name";
   }
+   dpi: 192;
 }
-@theme "/usr/share/rofi/themes/Arc-Dark.rasi"
+@theme "/home/wste/.config/rofi/themes/Arc-Dark.rasi"

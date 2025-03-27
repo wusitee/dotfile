@@ -27,7 +27,7 @@ font pango: CaskaydiaCove Nerd Font 12
 
 ### Variables
 set $term ghostty
-set $menu pkill rofi || rofi -show combi
+set $menu rofi
 
 # Start XDG autostart .desktop files using dex. See also
 # https://wiki.archlinux.org/index.php/XDG_Autostart
@@ -35,7 +35,7 @@ exec --no-startup-id dex --autostart --environment i3
 # wallpaper
 exec --no-startup-id feh --bg-scale "/home/wste/Pictures/wallpaper/simple-mountain.png"
 # use xrandr to scale
-exec --no-startup-id "xrandr --output eDP1 --scale 0.5 --rate 60"
+# exec --no-startup-id "xrandr --output eDP1 --scale 0.5 --rate 60"
 # touchpad config
 ## for natrual scrolling
 exec --no-startup-id xinput set-prop "SYNA1D31:00 06CB:CD48 Touchpad" "libinput Natural Scrolling Enabled" 1
@@ -92,7 +92,8 @@ bindsym $mod+Return exec --no-startup-id ghostty
 bindsym $mod+Shift+q kill
 
 # start dmenu (a program launcher)
-bindsym $mod+d exec --no-startup-id $menu
+bindsym $mod+d exec --no-startup-id $menu -show drun
+bindsym $fod+space exec --no-startup-id $menu -show window
 # A more modern dmenu replacement is rofi:
 # bindcode $mod+40 exec "rofi -modi drun,run -show drun"
 # There also is i3-dmenu-desktop which only displays applications shipping a
@@ -142,7 +143,7 @@ bindsym $mod+e layout toggle split
 bindsym $mod+Shift+space floating toggle
 
 # change focus between tiling / floating windows
-bindsym $mod+space focus mode_toggle
+# bindsym $mod+space focus mode_toggle
 
 # focus the parent container
 bindsym $mod+a focus parent
@@ -209,10 +210,10 @@ mode "resize" {
         # Pressing right will grow the window’s width.
         # Pressing up will shrink the window’s height.
         # Pressing down will grow the window’s height.
-        bindsym j resize shrink width 10 px or 10 ppt
-        bindsym k resize grow height 10 px or 10 ppt
-        bindsym l resize shrink height 10 px or 10 ppt
-        bindsym semicolon resize grow width 10 px or 10 ppt
+        bindsym h resize shrink width 10 px or 10 ppt
+        bindsym j resize grow height 10 px or 10 ppt
+        bindsym k resize shrink height 10 px or 10 ppt
+        bindsym l resize grow width 10 px or 10 ppt
 
         # same bindings, but for the arrow keys
         bindsym Left resize shrink width 10 px or 10 ppt

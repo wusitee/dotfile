@@ -9,7 +9,7 @@ style = "Beam"
 size = 13.0
 
 [font.normal]
-family = "Maple Mono SC NF"
+family = "Maple Mono"
 
 [window]
 startup_mode = "Windowed"

@@ -50,8 +50,8 @@
 ;; (unpin! t)
 
 (package! org :recipe
-  (:host nil :repo "https://git.tecosaur.net/mirrors/org-mode.git" :remote "mirror" :fork
-   (:host nil :repo "https://git.tecosaur.net/tec/org-mode.git" :branch "dev" :remote "tecosaur")
+  (:host nil :repo "https://code.tecosaur.net/mirrors/org-mode.git" :remote "mirror" :fork
+   (:host nil :repo "https://code.tecosaur.net/tec/org-mode.git" :branch "dev" :remote "tecosaur")
    :files
    (:defaults "etc")
    :build t :pre-build
@@ -73,7 +73,7 @@
         "(provide 'org-version)\n"))))
   :pin nil)
 (unpin! org)
-(package! affe)
+;; (package! affe)
 (unpin! org-roam)
 (package! org-roam-ui)
 (package! lsp-dart)
@@ -84,3 +84,10 @@
   :recipe (:host github :repo "copilot-emacs/copilot.el" :files ("*.el")))
 (package! valign)
 (package! envrc)
+(package! carbon-now-sh
+  :recipe (:host github :repo "veelenga/carbon-now-sh.el" :files ("*.el")))
+(package! package-lint :pin "21edc6d0d0eadd2d0a537f422fb9b7b8a3ae6991")
+;;; fix invalid function incf on emacs 30.1 
+(package! track-changes :built-in t)
+(when (eq emacs-major-version 30)
+  (package! eldoc :built-in t))
