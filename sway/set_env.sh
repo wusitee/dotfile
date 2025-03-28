@@ -1,0 +1,7 @@
+#!/bin/bash
+
+export XDG_CURRENT_DESKTOP=sway
+export MOZ_ENABLE_WAYLAND=1
+export SDL_VIDEODRIVER=wayland
+export _JAVA_AWT_WM_NONREPARENTING=1
+export GOLDENDICT_FORCE_WAYLAND=1

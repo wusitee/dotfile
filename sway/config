@@ -206,10 +206,7 @@ for_window [window_role="dialog"] floating enable
 #
 #
 # force kill currently focused window
-bindsym Mod1+F4 exec ~/.config/sway/kill.sh
-
-#
-# Media keys
+bindsym Mod1+F4 exec ~/.config/sway/kill.sh # # Media keys
 # Audio
     bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5%
     bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5%
@@ -268,6 +265,10 @@ bar {
 
 # load when login
 
+# env_var
+
+exec ~/.config/sway/set_env.sh
+
 # input method
 exec fcitx5 -d --replace
 
@@ -284,8 +285,14 @@ exec copyq
 for_window [app_id="copyq"] floating enable, sticky enable, resize set height 600px width 550px, move position cursor, move down 330
 bindsym $mod+Shift+v exec copyq toggle
 
+# emacs everywhere
+
+bindsym $mod+c exec emacsclient --eval "(emacs-everywhere)"
 
 # exec_always "./swayinitapp.sh"
 # xwayland resolution
 include /etc/sway/config.d/*
 
+# digital tablet
+
+# input type:tablet_tool map_to_output Display-Name
