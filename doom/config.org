@@ -16,7 +16,7 @@ Prevent client from creating new workspace.
 ** font
 #+begin_src emacs-lisp
 (setq use-default-font-for-symbols nil)
-(setq doom-font (font-spec :family "MapleMono NF" :size 32 ))
+(setq doom-font (font-spec :family "MapleMono NF" :size 16 ))
 (add-hook! 'after-setting-font-hook
   (set-fontset-font t 'latin (font-spec :family "Roboto Mono"))
   (set-fontset-font t 'symbol (font-spec :family "Symbola"))
@@ -378,6 +378,12 @@ images cannot be displayed with %s"
         (display-buffer (current-buffer))))
     diag))
 #+end_src
+*** Latex export
+Force page break after toc
+#+begin_src emacs-lisp
+(setq org-latex-toc-command "\\clearpage \\tableofcontents \\clearpage")
+#+end_src
+*** Latex snippets
 #+begin_src elisp
 (add-hook! 'org-mode (yas-activate-extra-mode 'latex-mode))
 #+end_src
@@ -495,14 +501,6 @@ Disable line number
 #+end_src
 *** Table Alignment
 Use Valign to align table.
-| 中文    | 对齐         |
-|--------+-------------|
-| bush   | 对不齐       |
-| 测试    | 好不好       |
-| 比较好  | 有点卡       |
-| 现在好了 | 这边有点卡    |
-| 越大越卡 | 但是不长就不卡 |
-| 文言文  | 感觉还可以    |
 #+begin_src emacs-lisp
 (add-hook! org-mode
            (valign-mode)

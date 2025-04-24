@@ -1,6 +1,6 @@
 font-family = "MapleMono"
 font-size = 13 
-background-opacity = 0.85
+background-opacity = 1
 window-inherit-working-directory = true
 window-decoration = false
 window-theme = dark
