@@ -1,7 +1,7 @@
 configuration {
-	modes: "window,drun,ssh,combi";
-    combi-modi: "window,drun,shh";
-	font: "hack 10";
+modes: "window,drun,ssh,combi,run";
+combi-modi: "window,drun,shh,run";
+font: "hack 10";
 /*	location: 0;*/
 /*	yoffset: 0;*/
 /*	xoffset: 0;*/
