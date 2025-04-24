@@ -149,6 +149,6 @@ font: "hack 10";
       directories-first: true;
       sorting-method:    "name";
   }
-   dpi: 192;
+   dpi: 96;
 }
 @theme "/home/wste/.config/rofi/themes/Arc-Dark.rasi"
