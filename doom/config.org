@@ -415,7 +415,7 @@ Setup Org Roam capture templates.
            :unnarrowed t
            :empty-lines 1)
           ("a" "Anki Card" plain "* ${title}\n%?"
-           :target (file+head "${slug}.org" ":PROPERTIES:\n:ANKI_DECK: study\n:END:\n#+title: ${title}\n%(org-roam-template-select-tags)\n")
+           :target (file+head "${slug}.org" ":PROPERTIES:\n:ANKI_DECK: \n:END:\n#+title: ${title}\n%(org-roam-template-select-tags)\n")
            :unnarrowed t
            :empty-lines 1))))
 #+end_src 
