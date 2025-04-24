@@ -440,6 +440,32 @@ Setup Org Roam capture templates.
         :desc "Push new notes" "P" #'anki-editor-push-new-notes)
   (setq org-export-with-broken-links t))
 #+end_src
+**** Change all the cards' deck to study
+#+begin_src emacs-lisp :tangle no
+(dolist (file (directory-files-recursively "~/org/roam/" "\\.org$"))
+  (let ((buf (find-file-noselect file))
+        (changed nil))
+    (with-current-buffer buf
+      ;; Check and update file-level property
+      (when (org-entry-get nil "anki_deck")
+        (org-entry-put nil "anki_deck" "study")
+        (setq changed t))
+      ;; Check and update properties in headings
+      (org-map-entries
+       (lambda ()
+         (when (org-entry-get (point) "anki_deck")
+           (org-entry-put (point) "anki_deck" "study")
+           (setq changed t)))
+       "anki_deck" 'file)
+      ;; Save the buffer and push notes if changes were made
+      (when changed
+        (save-buffer)
+        (anki-editor-push-notes 'file)))
+    (kill-buffer buf)))
+#+end_src
+
+#+RESULTS:
+
 *** Org Modern
 Make org file beautiful.
 #+begin_src emacs-lisp :tangle no
