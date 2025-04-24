@@ -1,17 +1,16 @@
-/* @define-color bg-color #121212;               /\* #3C413C *\/ */
-@define-color bg-color rgba(43, 48, 59, 0.98);
-@define-color bg-color-tray rgb(60, 65, 68);         /* #3C4144 */
-@define-color bg-color-0 rgb(60, 65, 68);            /* #3C4144 */
-@define-color bg-color-1 #006466;            /* #475f94 */
-@define-color bg-color-2 #065A60;           /* #107AB0 */
-@define-color bg-color-3 #0B525B;            /* #017374 */
-@define-color bg-color-4 #144552;             /* #1F3B4D */
-@define-color bg-color-5 #1B3A4B;           /* #10A674 */
-@define-color bg-color-6 #212F45;           /* #4984B8 */
-@define-color bg-color-7 #272640;               /* #000133 */
-@define-color bg-color-8 #312244;            /* #08787F */
-@define-color bg-color-9 #3E1F47;             /* #214761 */
-@define-color bg-color-10 #4D194D;           /* #6C3461 */
+@define-color bg-color rgb(60, 65, 60);               /* #3C413C */
+@define-color bg-color-tray rgb (60, 65, 68);         /* #3C4144 */
+@define-color bg-color-0 rgb (60, 65, 68);            /* #3C4144 */
+@define-color bg-color-1 rgb(71, 95, 148);            /* #475f94 */
+@define-color bg-color-2 rgb(16, 122, 176);           /* #107AB0 */
+@define-color bg-color-3 rgb(1, 115, 116);            /* #017374 */
+@define-color bg-color-4 rgb(31, 59, 77);             /* #1F3B4D */
+@define-color bg-color-5 rgb(16, 166, 116);           /* #10A674 */
+@define-color bg-color-6 rgb(73, 132, 184);           /* #4984B8 */
+@define-color bg-color-7 rgb(0, 1, 51);               /* #000133 */
+@define-color bg-color-8 rgb(8, 120, 127);            /* #08787F */
+@define-color bg-color-9 rgb(33, 71, 97);             /* #214761 */
+@define-color bg-color-10 rgb(108, 52, 97);           /* #6C3461 */
 @define-color bg-color-11 rgb(0, 82, 73);             /* #005249 */
 @define-color bg-color-12 rgb(49, 102, 138);          /* #31668A */
 @define-color bg-color-13 rgb(106, 110, 9);           /* #6A6E09 */
@@ -27,38 +26,30 @@
 
 * {
     /* `otf-font-awesome` is required to be installed for icons */
-    font-family: 'ComicShannsMono Nerd Font', FontAwesome;
-    font-size: 13px;
-    opacity: 1;
+    font-family: FontAwesome, Roboto, Helvetica, Arial, sans-serif;
+    font-size: 12px;
 }
 
 window#waybar {
     background-color: rgba(43, 48, 59, 0.5);
-    /* border-bottom: 3px solid rgba(100, 114, 125, 0.5); */
-    /* color: rgba(200, 200, 206, 1); */
-    border-radius: 4px;
+    border-bottom: 3px solid rgba(100, 114, 125, 0.5);
+    color: #ffffff;
     transition-property: background-color;
     transition-duration: .5s;
-    background: @bg-color;
-    opacity: 0.9;
-}
-.module {
-    border-radius: 15px;
-    border: solid @bg-color 4px;
 }
 
 window#waybar.hidden {
-    opacity: 1;
+    opacity: 0.2;
 }
 
-
+/*
 window#waybar.empty {
-    /* background-color: transparent; */
-    background-color: rgba(43, 48, 59, 0.5);
+    background-color: transparent;
 }
 window#waybar.solo {
     background-color: #FFFFFF;
 }
+*/
 
 window#waybar.termite {
     background-color: #3F3F3F;
@@ -89,43 +80,27 @@ button:hover {
 }
 
 #workspaces button {
-    padding:0 4px;
+    padding: 0 5px;
     background-color: transparent;
-    border-radius: 0;
-    border: none;
     color: #ffffff;
 }
-
-#workspaces button {
-    color: white;
-    background: shade(alpha(@borders, 0.3), 1);
-    background-color: transparent;
-}
-
-#workspaces button.active {
-    color: #fdff00;
-}
-
 
 #workspaces button:hover {
     background: rgba(0, 0, 0, 0.2);
 }
 
 #workspaces button.focused {
-    /* background-color: #64727D; */
-    /* box-shadow: inset 0 -3px #ffffff; */
-    color: #fdff00;
+    background-color: #64727D;
+    box-shadow: inset 0 -3px #ffffff;
 }
 
 #workspaces button.urgent {
     background-color: #eb4d4b;
 }
 
-
 #mode {
     background-color: #64727D;
     box-shadow: inset 0 -3px #ffffff;
-
 }
 
 #clock,
@@ -165,31 +140,29 @@ button:hover {
 }
 
 #clock {
-    background-color: #0B525B;
+    background-color: #64727D;
 }
 
 #battery {
-    /* background-color: rgba(255,255,255,0.6); */
-    /* color: #000000; */
-    border-radius: 0;
-    border: none;
+    background-color: #ffffff;
+    color: #000000;
 }
 
-#battery.charging, #battery.plugged{
-    color: rgb(16, 166, 116);
-    /* background-color: #26A65B; */
+#battery.charging, #battery.plugged {
+    color: #ffffff;
+    background-color: #26A65B;
 }
 
 @keyframes blink {
     to {
-        /* background-color: #ffffff; */
+        background-color: #ffffff;
         color: #000000;
     }
 }
 
 /* Using steps() instead of linear as a timing function to limit cpu usage */
 #battery.critical:not(.charging) {
-    /* background-color: #f53c3c; */
+    background-color: #f53c3c;
     color: #ffffff;
     animation-name: blink;
     animation-duration: 0.5s;
@@ -203,17 +176,17 @@ button:hover {
 }
 
 #power-profiles-daemon.performance {
-    /* background-color: #f53c3c; */
+    background-color: #f53c3c;
     color: #ffffff;
 }
 
 #power-profiles-daemon.balanced {
-    /* background-color: #2980b9; */
+    background-color: #2980b9;
     color: #ffffff;
 }
 
 #power-profiles-daemon.power-saver {
-    /* background-color: #2ecc71; */
+    background-color: #2ecc71;
     color: #000000;
 }
 
@@ -222,89 +195,73 @@ label:focus {
 }
 
 #cpu {
-    background-color: #3E1F47;
-    /* color: #000000; */
-    /* border-radius: 0; */
-    /* border: none; */
+    background-color: #2ecc71;
+    color: #000000;
 }
 
 #memory {
-    background-color: #4D194D;
-    /* border-radius: 0; */
-    /* border: none; */
+    background-color: #9b59b6;
 }
 
 #disk {
-    /* background-color: #964B00; */
+    background-color: #964B00;
 }
 
 #backlight {
-    background-color: #272640;
-    /* opacity: 0.8; */
+    background-color: #90b1b1;
 }
 
 #network {
-    background-color: #312244;
-    /* border: solid rgba(64, 69, 82,1) 4px; */
-;
+    background-color: #2980b9;
 }
 
 #network.disconnected {
-    background-color: rgba(189, 44, 64, 0.3);
+    background-color: #f53c3c;
 }
 
 #pulseaudio {
-    background-color: #1B3A4B;
-    /* color: #000000; */
+    background-color: #f1c40f;
+    color: #000000;
 }
 
 #pulseaudio.muted {
-    /* background-color: #90b1b1; */
+    background-color: #90b1b1;
     color: #2a5c45;
 }
 
 #wireplumber {
-    /* background-color: #fff0f5; */
+    background-color: #fff0f5;
     color: #000000;
 }
 
 #wireplumber.muted {
-    /* background-color: #f53c3c; */
+    background-color: #f53c3c;
 }
 
 #custom-media {
-    /* background-color: #66cc99; */
+    background-color: #66cc99;
     color: #2a5c45;
     min-width: 100px;
 }
-#custom-waybar-mpris {
-    padding-left: 8;
-    background-color: #006466;
-
-}
 
 #custom-media.custom-spotify {
-    /* background-color: #66cc99; */
+    background-color: #66cc99;
 }
 
 #custom-media.custom-vlc {
-    /* background-color: #ffa000; */
+    background-color: #ffa000;
 }
 
 #temperature {
-    /* background-color: #f0932b; */
+    background-color: #f0932b;
 }
 
 #temperature.critical {
-    /* background-color: #eb4d4b; */
+    background-color: #eb4d4b;
 }
 
 #tray {
-    /* background-color: #2980b9; */
-    /* "icon-size": 10 */
-    /* font-size: 10px */
-    border: none;
-    border-radius: 0;
+    background-color: #2980b9;
 }
 
 #tray > .passive {
@@ -317,33 +274,33 @@ label:focus {
 }
 
 #idle_inhibitor {
-    /* background-color: #2d3436; */
+    background-color: #2d3436;
 }
 
 #idle_inhibitor.activated {
-    /* background-color: #ecf0f1; */
+    background-color: #ecf0f1;
     color: #2d3436;
 }
 
 #mpd {
-    /* background-color: #66cc99; */
+    background-color: #66cc99;
     color: #2a5c45;
 }
 
 #mpd.disconnected {
-    /* background-color: #f53c3c; */
+    background-color: #f53c3c;
 }
 
 #mpd.stopped {
-    /* background-color: #90b1b1; */
+    background-color: #90b1b1;
 }
 
 #mpd.paused {
-    /* background-color: #51a37a; */
+    background-color: #51a37a;
 }
 
 #language {
-    /* background: #00b093; */
+    background: #00b093;
     color: #740864;
     padding: 0 5px;
     margin: 0 5px;
@@ -351,7 +308,7 @@ label:focus {
 }
 
 #keyboard-state {
-    /* background: #97e1ad; */
+    background: #97e1ad;
     color: #000000;
     padding: 0 0px;
     margin: 0 5px;
@@ -368,9 +325,6 @@ label:focus {
 
 #scratchpad {
     background: rgba(0, 0, 0, 0.2);
-    border-radius: 0;
-    /* padding-left: 3; */
-    /* border: none; */
 }
 
 #scratchpad.empty {
