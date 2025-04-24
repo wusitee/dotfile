@@ -10,3 +10,4 @@ gtk-wide-tabs = false
 gtk-single-instance = true
 gtk-tabs-location = bottom
 config-file = "keybinds"
+# gtk-custom-css = tab-style.css
