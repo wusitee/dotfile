@@ -1,0 +1,153 @@
+#+title: Computer
+
+* System
+** Battery
+TLP is a good choice.
+#+begin_src shell
+systemctl enable tlp --now
+#+end_src
+In addition to TLP, we also using matebook-applet and huawei-wmi
+#+begin_src shell
+yay -S matebook-applet huawei-wmi
+#+end_src
+** microcode
+intel-ucode for Intel processors.
+#+begin_src shell
+sudo pacman -S intel-ucode
+#+end_src
+** firewall
+using nftables and ufw
+#+begin_src shell
+sudo pacman -S iptables-nft ufw
+#+end_src
+Default configuration for [[https://wiki.archlinux.org/title/Uncomplicated_Firewall][ufw]]
+#+begin_src shell
+sudo ufw default deny
+sudo ufw allow from 192.168.0.0/24
+sudo ufw allow Deluge
+sudo ufw limit ssh
+sudo ufw enable
+#+end_src
+** input method
+using [[https://wiki.archlinuxcn.org/wiki/Fcitx5][fcitx5]]
+#+begin_src shell
+yay -S fcitx5-im fctix5-chinese-addons fcitx5-pinyin-sougou
+#+end_src
+Using theme [[https://github.com/tonyfettes/fcitx5-nord][Nord-Dark]]
+** sound
+Install the firmware.
+#+begin_src shell
+sudo pacman -S sof-firmware
+#+end_src
+
+** Graphic Display
+*** hyprland
+[[https://wiki.archlinux.org/title/Hyprland][hyprland]]
+Using xdg desktop portal
+#+begin_src shell
+sudo pacman -S xdg-desktop-portal-hyprland xdg-desktop-portal-gtk
+#+end_src
+**** status bar
+Using waybar for status bar
+#+begin_src shell
+sudo pacman -S waybar
+#+end_src
+**** launcher
+Using rofi as application launcher
+#+begin_src shell
+sudo pacman -S rofi-wayland
+#+end_src
+And in hyprland.conf
+#+begin_src Conf
+$menu = rofi -show combi
+#+end_src
+**** clipboard manager
+Using copyq
+#+begin_src shell
+sudo pacman -S copyq
+#+end_src
+**** screenshot
+Use hyprshot
+#+begin_src shell
+yay hyprshot
+#+end_src
+**** defualt applications
+Use xdg-mime to change the default program that opens a specific type. For example to set defualt pdf reader to okular
+#+begin_src shell
+xdg-mime default okularApplication_pdf.desktop application/pdf
+xdg-mime query default application/pdf # should be "okularApplication_pdf.desktop"
+#+end_src
+**** TODO idle
+*** i3
+*** kde
+*** Sway
+** Applications
+*** GUI
+**** firefox
+#+begin_src shell
+sudo pacman -S firefox
+#+end_src
+***** Hide the horizontal tabs
+:PROPERTIES:
+:ID:       95658cd2-b982-4efb-a472-bea9a70870ea
+:END:
+Do [[https://github.com/FirefoxCSS-Store/FirefoxCSS-Store.github.io/blob/main/README.md#generic-installation][the followings]].
+In userChrome.css
+#+begin_src css
+/* hide the tabs on the of the window */
+:root{
+    --sidebar-hover-width: 22px;
+    --sidebar-visible-width: 140px;
+}
+#TabsToolBar {
+    visibility: collapse;
+}
+#TabsToolbar, #sidebar-header{
+    display: none !important;
+}
+
+#sidebar-box {
+    position: relative !important;
+    overflow: hidden;
+    max-width: var(--sidebar-hover-width) !important;
+}
+
+#sidebar-box:hover {
+    transition: all 200ms !important;
+    max-width: var(--sidebar-visible-width) !important;
+}
+#+end_src
+***** Chinese
+Install a font
+#+begin_src shell
+sudo pacman -S firefox-i18n-zh-cn
+#+end_src
+**** Okular
+A tool for pdf reading
+#+begin_src shell
+sudo pacman -S okular
+#+end_src
+**** golden dict
+A diction tool
+#+begin_src shell
+sudo pacman -S golden-dict-ng
+#+end_src
+[[https://acytoo.com/ladder/goldendict/][guide]]
+*** CLI
+**** Autojumping
+using zoixde
+#+begin_src shell
+sudo pacman -S zoixde fzf
+zoixde init fish
+#+end_src
+**** shell
+using fish
+#+begin_src shell
+sudo pacman -S fish
+#+end_src
+** text editing
+Using doom emacs as primary text editor
+#+begin_src shell
+git clone --depth 1 https://github.com/doomemacs/doomemacs ~/.config/emacs
+~/.config/emacs/bin/doom install
+#+end_src
