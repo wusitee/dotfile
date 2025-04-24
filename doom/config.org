@@ -378,6 +378,9 @@ images cannot be displayed with %s"
         (display-buffer (current-buffer))))
     diag))
 #+end_src
+#+begin_src elisp
+(add-hook! 'org-mode (yas-activate-extra-mode 'latex-mode))
+#+end_src
 *** Org Roam UI
 #+begin_src emacs-lisp
 (use-package! websocket
