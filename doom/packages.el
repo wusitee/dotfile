@@ -77,7 +77,6 @@
 (unpin! org-roam)
 (package! org-roam-ui)
 (package! lsp-dart)
-(package! org-modern)
 (package! anki-editor
   :recipe (:host github :repo "anki-editor/anki-editor"))
 (package! copilot

@@ -439,7 +439,7 @@ Setup Org Roam capture templates.
 #+end_src
 *** Org Modern
 Make org file beautiful.
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (use-package! org
   :hook
   (org-mode . org-modern-mode)
@@ -447,10 +447,9 @@ Make org file beautiful.
   :config
   (setq org-modern-table nil))
 #+end_src
-*** Latex export
-Force page break after toc
-#+begin_src emacs-lisp
-(setq org-latex-toc-command "\\clearpage \\tableofcontents \\clearpage")
+
+#+begin_src emacs-lisp :tangle yes
+(setq org-modern-table nil)
 #+end_src
 *** org directory
 #+begin_src emacs-lisp
