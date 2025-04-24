@@ -1,46 +1,30 @@
 // -*- mode: jsonc -*-
 {
     "layer": "top", // Waybar at top layer
-    "margin-top": 10,
     // "position": "bottom", // Waybar position (top|bottom|left|right)
-    "height": 29, // Waybar height (to be removed for auto height)
-    "width": 1484, // Waybar width
+    "height": 22, // Waybar height (to be removed for auto height)
     "spacing": 0, // Gaps between modules (4px)
     // Choose the order of the modules
     "modules-left": [
-        "sway/workspaces",
-        // "sway/mode",
-        "sway/scratchpad"
-
-    ],
-    "modules-center": [
-        "custom/waybar-mpris",
-        "clock",
-        "pulseaudio",
-        "backlight",
-        "network",
-        "cpu",
-        "memory"
-    ],
-    "modules-right": [
-        "battery",
+        "hyprland/workspaces",
         "tray"
     ],
+    "modules-center": [
+        "clock",
+    ],
+    "modules-right": [
+        "pulseaudio",
+        "backlight",
+        "cpu",
+        "memory",
+        "battery"
+    ],
     // Modules configuration
-    "sway/workspaces": {
+    "hyprland/workspaces": {
         "disable-scroll": true,
         "all-outputs": true,
         "warp-on-scroll": false,
-        "format": "{name} {icon} ",
-        "format-icons": {
-            "1": "",
-            "2": "",
-            "4": "",
-            "9": "",
-            "urgent": "󰮯",
-            "default": "󰊠"
-
-        }
+        "format": "{name}",
     },
     "keyboard-state": {
         "numlock": true,
@@ -98,12 +82,12 @@
         }
     },
     "tray": {
-        "icon-size": 18,
+        "icon-size": 16,
         "spacing": 10
     },
     "clock": {
         // "timezone": "America/New_York",
-      "format": "📅 {:%a %d %m 🕑 %H:%M %p}",
+      "format": "{:%H:%M}",
       "format-alt": "{:%A, %B %d, %Y (%R)}",
       "tooltip-format": "<tt><small>{calendar}</small></tt>",
       "calendar": {
@@ -212,10 +196,10 @@
     },
     "pulseaudio": {
         // "scroll-step": 1, // %, can be a float
-        "format": "{volume}% {icon}  {format_source}",
-        "format-bluetooth": "{volume}% {icon} {format_source}",
-        "format-bluetooth-muted": " {icon} {format_source}",
-        "format-muted": " {format_source}",
+        "format": "{icon} {volume}%",
+        "format-bluetooth": "{icon} {volume}%",
+        "format-bluetooth-muted": " {icon}",
+        "format-muted": " 0%",
         "format-source": "{volume}% ",
         "format-source-muted": "",
         "format-icons": {
