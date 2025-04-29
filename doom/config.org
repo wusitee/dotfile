@@ -62,7 +62,7 @@ Set the spelling check to en-US
         :host "api.vveai.com"
         :endpoint "/v1/chat/completions"
         :stream t                      ;optionally nil as Cerebras is instant AI
-        :key "***REMOVED***";can be a function that returns the key
+        :key (gptel-api-key-from-auth-source) ;can be a function that returns the key
         :models '(claude-3-7-sonnet-20250219
                   gpt-4o
                   gpt-4.1
@@ -472,7 +472,7 @@ Setup Org Roam capture templates.
 
 #+RESULTS:
 
-*** Org Modern
+*** pretty
 Make org file beautiful.
 #+begin_src emacs-lisp :tangle no
 (use-package! org
@@ -485,6 +485,7 @@ Make org file beautiful.
 
 #+begin_src emacs-lisp :tangle yes
 (setq org-modern-table nil)
+(setq org-appear-inside-latex t)
 #+end_src
 *** org directory
 #+begin_src emacs-lisp
