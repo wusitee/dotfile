@@ -507,6 +507,30 @@ Use Valign to align table.
            (valign-mode)
            (setq valign-fancy-bar 1))
 #+end_src
+*** image slicing
+Use org sliced images mode to make image displayed better
+#+begin_src emacs-lisp :tangle yes
+
+(add-hook! org-mode
+           (org-sliced-images-mode)
+           (setq org-sliced-images-mode 1))
+
+(defun +org--toggle-inline-sliced-images-in-subtree (&optional beg end refresh)
+  "Refresh inline sliced image previews in the current heading/tree."
+  (let* ((beg (or beg
+                  (if (org-before-first-heading-p)
+                      (save-excursion (point-min))
+                    (save-excursion (org-back-to-heading) (point)))))
+         (end (or end
+                  (if (org-before-first-heading-p)
+                      (save-excursion (org-next-visible-heading 1) (point))
+                    (save-excursion (org-end-of-subtree) (point))))))
+    (org-sliced-images-toggle-inline-images t beg end)))
+(advice-add '+org--toggle-inline-images-in-subtree :override #'+org--toggle-inline-sliced-images-in-subtree)
+#+end_src
+
+#+RESULTS:
+
 ** Latex
 *** Latex viewer
 Set default latex viewer to Okular.
