@@ -145,6 +145,11 @@ using fish
 #+begin_src shell
 sudo pacman -S fish
 #+end_src
+**** onedrive
+#+begin_src shell
+yay onedrive-abraunegg
+#+end_src
+[[https://github.com/abraunegg/onedrive][onedrive]]
 ** text editing
 Using doom emacs as primary text editor
 #+begin_src shell
