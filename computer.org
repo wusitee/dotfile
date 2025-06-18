@@ -133,6 +133,11 @@ A diction tool
 sudo pacman -S golden-dict-ng
 #+end_src
 [[https://acytoo.com/ladder/goldendict/][guide]]
+**** Zotero
+A citation manager.
+#+begin_src sh
+sudo pacman -S zotero
+#+end_src
 *** CLI
 **** Autojumping
 using zoixde
