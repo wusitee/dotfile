@@ -530,6 +530,18 @@ Use org sliced images mode to make image displayed better
 #+end_src
 
 #+RESULTS:
+** java
+#+begin_src emacs-lisp :tangle yes
+(after! lsp-mode
+  (setq lsp-java-import-gradle-java-home t))
+
+(after! lsp-java
+  (setq lsp-java-java-path (concat (getenv "JAVA_HOME") "/bin/java"))
+  (setq lsp-java-configuration-runtimes `[
+                                          (:name "JavaSE-17"
+                                           :path ,(getenv "JAVA_HOME")
+                                           :default t)]))
+#+end_src
 
 ** Latex
 *** Latex viewer
