@@ -92,3 +92,4 @@
 
 ;; use gptel
 (package! gptel :recipe (:nonrecursive t))
+(package! org-sliced-images)
