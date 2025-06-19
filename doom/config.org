@@ -37,13 +37,6 @@ Make client transparent.
 #+begin_src emacs-lisp
 (setq doom-theme 'doom-horizon)
 #+end_src
-* Terminal
-Using fish for v-term.
-#+begin_src emacs-lisp
-(setq shell-file-name (executable-find "bash"))
-(setq-default vterm-shell (executable-find "fish"))
-(setq vterm-timer-delay 0) ;; make vterm smoother
-#+end_src
 * Tools
 ** Spelling check
 Set the spelling check to en-US
@@ -79,16 +72,27 @@ Set the spelling check to en-US
   (add-hook 'gptel-post-stream-hook 'gptel-auto-scroll)
   (add-hook 'gptel-post-response-functions 'gptel-end-of-response))
 #+end_src
-
 ** lsp
+*** Performance
 Follow the [[https://emacs-lsp.github.io/lsp-mode/page/performance/][Performance page]]:
 #+begin_src emacs-lisp
 (setq gc-cons-threshold 100000000)
 (setq read-process-output-max (* 1024 1024)) ;; 1mb
 #+end_src
+*** Inlay Hints
 #+begin_src emacs-lisp
+(after! lsp-mode
+  (setq lsp-inlay-hint-enable t))
+#+end_src
+*** Basedpyright
+#+begin_src emacs-lisp
+(setq lsp-pyright-langserver-command "basedpyright")
 #+end_src
 
+** Direnv
+#+begin_src emacs-lisp :tangle yes
+(add-hook 'after-init-hook 'envrc-global-mode)
+#+end_src
 ** Snippets
 *** snippet dir
 Set the snippet dirs.
@@ -106,6 +110,13 @@ Resolve the tab conflict.
             (setq yas/trigger-key [tab])
             (add-to-list 'org-tab-first-hook 'yas/org-very-safe-expand)
             (define-key yas/keymap [tab] 'yas-next-field)))
+#+end_src
+** Terminal
+Using fish for v-term.
+#+begin_src emacs-lisp
+(setq shell-file-name (executable-find "bash"))
+(setq-default vterm-shell (executable-find "fish"))
+(setq vterm-timer-delay 0) ;; make vterm smoother
 #+end_src
 * Completion
 ** Vertico
