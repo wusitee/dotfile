@@ -81,7 +81,6 @@
 (package! copilot
   :recipe (:host github :repo "copilot-emacs/copilot.el" :files ("*.el")))
 (package! valign)
-(package! envrc)
 (package! carbon-now-sh
   :recipe (:host github :repo "veelenga/carbon-now-sh.el" :files ("*.el")))
 (package! package-lint :pin "21edc6d0d0eadd2d0a537f422fb9b7b8a3ae6991")
