@@ -89,7 +89,4 @@
 (package! track-changes :built-in t)
 (when (eq emacs-major-version 30)
   (package! eldoc :built-in t))
-
-;; use gptel
-(package! gptel :recipe (:nonrecursive t))
 (package! org-sliced-images)

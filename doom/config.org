@@ -53,26 +53,31 @@ Set the spelling check to en-US
 #+end_src
 ** gptel
 #+begin_src emacs-lisp
-(use-package! gptel)
 ;; vveai offers an instant OpenAI compatible API
-(setq gptel-model 'gpt-4o
-      gptel-backend
-      (gptel-make-openai "vveai"
-        :protocol "https"
-        :host "api.vveai.com"
-        :endpoint "/v1/chat/completions"
-        :stream t                      ;optionally nil as Cerebras is instant AI
-        :key (gptel-api-key-from-auth-source) ;can be a function that returns the key
-        :models '(claude-3-7-sonnet-20250219
-                  gpt-4o
-                  gpt-4.1
-                  o3-mini
-                  claude-3-7-sonnet-20250219-thinking
-                  ))
-      gptel-default-mode 'org-mode
-      gptel-track-media t)
-(add-hook 'gptel-post-stream-hook 'gptel-auto-scroll)
-(add-hook 'gptel-post-response-functions 'gptel-end-of-response)
+(after! gptel
+  (setq gptel-model 'gpt-4o
+        gptel-backend
+        (gptel-make-openai "vveai"
+          :protocol "https"
+          :host "api.vveai.com"
+          :endpoint "/v1/chat/completions"
+          :stream t                      ;optionally nil as Cerebras is instant AI
+          :key
+          (let ((found (auth-source-search :host "vveai.com" :user "apikey")))
+            (if found
+                (funcall (plist-get (car found) :secret))
+              (error "No authentication entry found for vveai.com with user apikey")))
+                                        ;can be a function that returns the key
+          :models '(claude-3-7-sonnet-20250219
+                    gpt-4o
+                    gpt-4.1
+                    o3-mini
+                    claude-3-7-sonnet-20250219-thinking
+                    ))
+        gptel-default-mode 'org-mode
+        gptel-track-media t)
+  (add-hook 'gptel-post-stream-hook 'gptel-auto-scroll)
+  (add-hook 'gptel-post-response-functions 'gptel-end-of-response))
 #+end_src
 
 ** lsp
