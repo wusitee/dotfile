@@ -91,8 +91,7 @@ sudo pacman -S firefox
 :PROPERTIES:
 :ID:       95658cd2-b982-4efb-a472-bea9a70870ea
 :END:
-Do [[https://github.com/FirefoxCSS-Store/FirefoxCSS-Store.github.io/blob/main/README.md#generic-installation][the followings]].
-In userChrome.css
+Do [[https://github.com/FirefoxCSS-Store/FirefoxCSS-Store.github.io/blob/main/README.md#generic-installation][the followings]], and in userChrome.css
 #+begin_src css
 /* hide the tabs on the of the window */
 :root{
@@ -122,6 +121,8 @@ Install a font
 #+begin_src shell
 sudo pacman -S firefox-i18n-zh-cn
 #+end_src
+***** When firefox is laggy
+You can choose to refresh firefox and redo the above config
 **** Okular
 A tool for pdf reading
 #+begin_src shell
