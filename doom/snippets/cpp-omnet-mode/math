@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: math
-# key: math
-# uuid: math
-# --
-#include <cmath>

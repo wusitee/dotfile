@@ -1,7 +1,0 @@
-# -*- mode: snippet -*-
-# name : Gathers facts about remote hosts
-# key : setup
-# condition: ansible
-# --
-- name: ${1:Gathers facts about remote hosts}
-  setup: $0

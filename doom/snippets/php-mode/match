@@ -1,8 +1,0 @@
-# -*- mode: snippet -*-
-# name: match expression
-# key: match
-# uuid: match
-# --
-match (\$${1:subject_expression}) {
-    ${2:conditional_expression} => ${3:return_expression},
-};

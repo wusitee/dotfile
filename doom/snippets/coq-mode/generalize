@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: generalize
-# key: g
-# uuid: g
-# --
-generalize $1

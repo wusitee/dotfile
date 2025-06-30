@@ -1,7 +1,0 @@
-# -*- mode: snippet -*-
-# name : Manage zfs
-# key : zfs
-# condition: ansible
-# --
-- name: ${1:Manage zfs}
-  zfs: name=$2 state=$3 $0

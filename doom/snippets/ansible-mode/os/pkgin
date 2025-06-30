@@ -1,7 +1,0 @@
-# -*- mode: snippet -*-
-# name : Package manager for SmartOS
-# key : pkgin
-# condition: ansible
-# --
-- name: ${1:Package manager for SmartOS}
-  pkgin: name=$2 $0

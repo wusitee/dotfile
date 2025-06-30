@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: endCamera
-# key: camera
-# uuid: camera
-# --
-endCamera();

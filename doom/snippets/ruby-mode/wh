@@ -1,4 +1,0 @@
-# -*- mode: snippet -*-
-# name: where(field: value)
-# --
-where(${field}: ${value})

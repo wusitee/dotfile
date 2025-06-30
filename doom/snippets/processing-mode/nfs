@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: nfs
-# key: nfs
-# uuid: nfs
-# --
-nfs(${3:value}, ${4:left}${6:, ${5:right}});

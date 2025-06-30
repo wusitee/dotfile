@@ -1,7 +1,0 @@
-# -*- mode: snippet -*-
-# name : Manage MySQL replication
-# key : mysql_replication
-# condition: ansible
-# --
-- name: ${1:Manage MySQL replication}
-  mysql_replication: $0

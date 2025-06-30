@@ -1,8 +1,0 @@
-# -*- mode: snippet -*-
-# name: Structure
-# key: str
-# uuid: str
-# --
-Structure $1 : $2 := {
-$3 : $4;
-$5 : $6 }

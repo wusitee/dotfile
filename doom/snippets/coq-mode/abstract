@@ -1,4 +1,0 @@
-# -*- mode: snippet -*-
-# name: abstract
-# --
-abstract ${1:tac} using ${2:name}.

@@ -1,8 +1,0 @@
-# -*- mode: snippet -*-
-# name: anonymous function
-# key: fuan
-# uuid: fuan
-# --
-function ($${2:variable}) {
-    $0;
-}

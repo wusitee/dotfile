@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: namespace
-# key: name
-# uuid: name
-# --
-namespace ${1:name};

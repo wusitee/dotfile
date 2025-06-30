@@ -1,8 +1,0 @@
-# -*- mode: snippet -*-
-# name: else if
-# key: else
-# uuid: else
-# --
-else if ($1) {
-  $0
-}

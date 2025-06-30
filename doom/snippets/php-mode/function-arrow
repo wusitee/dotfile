@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: arrow function
-# key: fuar
-# uuid: fuar
-# --
-fn(\$${1:variable}) => $0;

@@ -1,8 +1,0 @@
-# -*- mode: snippet -*-
-# name: Theorem
-# key: th
-# uuid: th
-# --
-Theorem $1 : $2.
-$3
-Qed.

@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: lim
-# key: lim
-# condition: (texmathp)
-# --
-\lim_{${1:n} \to ${2:\infty}} $0

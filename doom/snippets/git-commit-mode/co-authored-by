@@ -1,5 +1,0 @@
-# -*- mode: snippet -*-
-# name: Co-authored-by: ...
-# key: cab
-# --
-Co-authored-by: ${1:username} <${2:$1@users.noreply.github.com}>

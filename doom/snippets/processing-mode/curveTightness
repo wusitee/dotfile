@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: curveTightness
-# key: curve
-# uuid: curve
-# --
-curveTightness(${1:squishy});

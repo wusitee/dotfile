@@ -1,7 +1,0 @@
-# -*- mode: snippet -*-
-# name : apt_rpm package manager
-# key : apt_rpm
-# condition: ansible
-# --
-- name: ${1:apt_rpm package manager}
-  apt_rpm: pkg=$2 $0

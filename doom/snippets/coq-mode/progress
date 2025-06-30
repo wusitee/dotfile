@@ -1,4 +1,0 @@
-# -*- mode: snippet -*-
-# name: progress
-# --
-progress $1

@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: Arguments
-# key: args
-# uuid: args
-# --
-Arguments ${1:id} : ${2:rule}

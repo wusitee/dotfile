@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: minute
-# key: time
-# uuid: time
-# --
-minute()$0

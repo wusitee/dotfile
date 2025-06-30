@@ -1,7 +1,0 @@
-# -*- mode: snippet -*-
-# name : Control active and configured mount points
-# key : mount
-# condition: ansible
-# --
-- name: ${1:Control active and configured mount points}
-  mount: name=$2 src=$3 fstype=$4 state=$5 $0

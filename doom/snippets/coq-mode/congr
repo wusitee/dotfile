@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: congr
-# key: con
-# uuid: con
-# --
-congr $1

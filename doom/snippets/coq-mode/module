@@ -1,8 +1,0 @@
-# -*- mode: snippet -*-
-# name: Module :
-# key: moi
-# uuid: moi
-# --
-Module $1 : $2.
-$3
-End $4.

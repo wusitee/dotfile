@@ -1,4 +1,0 @@
-# -*- mode: snippet -*-
-# name: Require Import
-# --
-Require Import $1.

@@ -1,7 +1,0 @@
-# -*- mode: snippet -*-
-# contributor: M. Yas. Davoodeh
-# name: fork
-# --
-fork
-    $0
-end fork

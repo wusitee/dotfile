@@ -1,4 +1,0 @@
-# -*- mode: snippet -*-
-# name: first
-# --
-first [ $1 | $2 ]

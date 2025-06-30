@@ -1,4 +1,0 @@
-# -*- mode: snippet -*-
-# name: Local Coercion
-# --
-Local Coercion ${1:id} : ${2:typ1} >-> ${3:typ2}.

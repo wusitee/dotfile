@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: decompose sum
-# key: decs
-# uuid: decs
-# --
-decompose sum $1

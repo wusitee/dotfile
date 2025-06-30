@@ -1,8 +1,0 @@
-# -*- mode: snippet -*-
-# name: TOSSIM
-# key: tossim
-# uuid: tossim
-# --
-#ifndef TOSSIM
-        $0
-#endif

@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: functional induction
-# key: fi
-# uuid: fi
-# --
-functional induction ${1:f} ${2:args}

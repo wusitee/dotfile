@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: double induction
-# key: dind
-# uuid: dind
-# --
-double induction $1 $2

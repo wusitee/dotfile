@@ -1,7 +1,0 @@
-# -*- mode: snippet -*-
-# name : Gathers facts about remote hosts within ec2 (aws)
-# key : ec2_facts
-# condition: ansible
-# --
-- name: ${1:Gathers facts about remote hosts within ec2 (aws)}
-  ec2_facts: $0

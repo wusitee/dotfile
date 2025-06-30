@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: before-all ...
-# key: bfa
-# uuid: bfa
-# --
-(before-all ${1:`(doom-snippets-format "%n%s")`})

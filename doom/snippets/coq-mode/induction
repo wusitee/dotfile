@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: induction
-# key: ind
-# uuid: ind
-# --
-induction $1

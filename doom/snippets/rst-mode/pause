@@ -1,7 +1,0 @@
-# -*- mode: snippet -*-
-# name: pause
-# key: pause
-# uuid: pause
-# group: hieroglyph
-# --
-.. rst-class:: build

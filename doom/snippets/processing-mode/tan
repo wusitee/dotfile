@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: tan
-# key: tan
-# uuid: tan
-# --
-tan(${1:rad});

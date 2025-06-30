@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: Recursive Extraction Module
-# key: recextrm
-# uuid: recextrm
-# --
-Recursive Extraction Module ${1:id}.

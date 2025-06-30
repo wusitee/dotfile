@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: cbn (with flags)
-# key: cbn
-# uuid: cbn
-# --
-cbn beta delta [$1] iota zeta

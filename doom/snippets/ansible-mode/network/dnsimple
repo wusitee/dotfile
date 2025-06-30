@@ -1,7 +1,0 @@
-# -*- mode: snippet -*-
-# name : Interface with dnsimple.com (a DNS hosting service).
-# key : dnsimple
-# condition: ansible
-# --
-- name: ${1:Interface with dnsimple.com (a DNS hosting service).}
-  dnsimple: $0

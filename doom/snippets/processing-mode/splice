@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: splice
-# key: splice
-# uuid: splice
-# --
-splice(${1:array}, ${2:value/array2}, ${3:index});

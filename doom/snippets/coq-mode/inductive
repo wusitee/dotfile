@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: Inductive
-# key: indv
-# uuid: indv
-# --
-Inductive $1 : $2 := $3 : $4.

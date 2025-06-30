@@ -1,7 +1,0 @@
-# -*- mode: snippet -*-
-# name : Manages github service hooks.
-# key : github_hooks
-# condition: ansible
-# --
-- name: ${1:Manages github service hooks.}
-  github_hooks: user=$2 oauthkey=$3 repo=$4 action=$5 $0

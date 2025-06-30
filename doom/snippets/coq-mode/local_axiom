@@ -1,4 +1,0 @@
-# -*- mode: snippet -*-
-# name: Local Axiom
-# --
-Local Axiom $1 : $2

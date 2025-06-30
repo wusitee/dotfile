@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: provides
-# key: provides
-# uuid: provides
-# --
-provides interface ${1:Interface};

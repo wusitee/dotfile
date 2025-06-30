@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: Arguments Scope
-# key: argsc
-# uuid: argsc
-# --
-Arguments Scope ${1:id} [ ${2:_} ]

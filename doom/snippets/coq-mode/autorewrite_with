@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: autorewrite with
-# key: ar
-# uuid: ar
-# --
-autorewrite with ${1:db,db...}

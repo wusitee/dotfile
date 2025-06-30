@@ -1,4 +1,0 @@
-# -*- mode: snippet -*-
-# name: Strategy
-# --
-Strategy $1 [$2].

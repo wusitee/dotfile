@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: round
-# key: round
-# uuid: round
-# --
-round(${1:value});

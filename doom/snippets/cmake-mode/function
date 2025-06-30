@@ -1,8 +1,0 @@
-# -*- mode: snippet -*-
-# name: function
-# key: fun
-# uuid: fun
-# --
-function (${1:name})
-         $0
-endfunction()

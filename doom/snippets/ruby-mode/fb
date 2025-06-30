@@ -1,4 +1,0 @@
-# -*- mode: snippet -*-
-# name: find_by(column: value)
-# --
-find_by(${column}: ${value})

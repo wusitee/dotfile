@@ -1,7 +1,0 @@
-# -*- mode: snippet -*-
-# name : Installing packages from FreeBSD's ports system
-# key : portinstall
-# condition: ansible
-# --
-- name: ${1:Installing packages from FreeBSD's ports system}
-  portinstall: name=$2 $0

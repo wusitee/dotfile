@@ -1,7 +1,0 @@
-# -*- mode: snippet -*-
-# name : a wrapper to the unix getent utility
-# key : getent
-# condition: ansible
-# --
-- name: ${1:a wrapper to the unix getent utility}
-  getent: database=$2 $0

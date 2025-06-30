@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: acos
-# key: acos
-# uuid: acos
-# --
-acos(${1:rad});

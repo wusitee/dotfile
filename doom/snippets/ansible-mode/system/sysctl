@@ -1,7 +1,0 @@
-# -*- mode: snippet -*-
-# name : Manage entries in sysctl.conf.
-# key : sysctl
-# condition: ansible
-# --
-- name: ${1:Manage entries in sysctl.conf.}
-  sysctl: name=$2 $0

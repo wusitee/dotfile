@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: forall
-# key: fo
-# uuid: fo
-# --
-forall $1:$2,$3

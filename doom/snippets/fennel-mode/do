@@ -1,4 +1,0 @@
-# -*- mode: snippet -*-
-# name: do
-# --
-(do`(if % (concat " " (doom-snippets-format "%n%s")))`$0)

@@ -1,4 +1,0 @@
-# -*- mode: snippet -*-
-# name: Local Definition
-# --
-Local Definition $1:$2 := $3.

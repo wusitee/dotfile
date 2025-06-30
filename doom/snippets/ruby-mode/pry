@@ -1,4 +1,0 @@
-# -*- mode: snippet -*-
-# name: binding.pry
-# --
-require 'pry'; binding.pry

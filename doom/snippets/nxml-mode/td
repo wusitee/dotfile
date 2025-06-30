@@ -1,5 +1,0 @@
-# -*- mode: snippet -*-
-# contributor: Anders Bach Nielsen <abachn@abachn.net>
-# name: <td>...</td>
-# --
-<td$1>$2</td>

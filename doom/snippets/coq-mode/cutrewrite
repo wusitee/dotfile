@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: cutrewrite
-# key: cutr
-# uuid: cutr
-# --
-cutrewrite -> $1 = $2

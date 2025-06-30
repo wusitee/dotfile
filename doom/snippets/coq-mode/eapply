@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: eapply
-# key: eap
-# uuid: eap
-# --
-eapply $1

@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: dependent rewrite ->
-# key: depr
-# uuid: depr
-# --
-dependent rewrite -> ${1:id}

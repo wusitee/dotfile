@@ -1,7 +1,0 @@
-# -*- mode: snippet -*-
-# name : Obtain status of asynchronous task
-# key : async_status
-# condition: ansible
-# --
-- name: ${1:Obtain status of asynchronous task}
-  async_status: jid=$2 $0

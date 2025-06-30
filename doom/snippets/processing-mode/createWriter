@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: createWriter
-# key: file
-# uuid: file
-# --
-createWriter(${1:filename});

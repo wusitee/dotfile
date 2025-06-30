@@ -1,4 +1,0 @@
-# -*- mode: snippet -*-
-# name: var
-# --
-(var ${1:varname} ${2:value})

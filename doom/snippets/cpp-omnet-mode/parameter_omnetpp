@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: parameter_omnetpp
-# key: par
-# uuid: par
-# --
-${1:var} = par("${2:par}");

@@ -1,7 +1,0 @@
-# -*- mode: snippet -*-
-# name: li ...
-# key: li.
-# uuid: li.
-# --
-li
-  `%`$0

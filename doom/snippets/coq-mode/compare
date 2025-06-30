@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: compare
-# key: cmpa
-# uuid: cmpa
-# --
-compare $1 $2

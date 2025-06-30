@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: stepr
-# key: str
-# uuid: str
-# --
-stepr $1

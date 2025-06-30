@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: set
-# key: set
-# uuid: set
-# --
-set $1 := $2

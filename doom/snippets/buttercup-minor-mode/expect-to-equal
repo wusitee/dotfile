@@ -1,7 +1,0 @@
-# -*- mode: snippet -*-
-# name: :to-equal
-# key: e
-# uuid: e
-# condition: (doom-snippets-without-trigger (eq (char-before) ?:))
-# --
-to-equal $1

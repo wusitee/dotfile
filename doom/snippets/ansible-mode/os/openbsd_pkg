@@ -1,7 +1,0 @@
-# -*- mode: snippet -*-
-# name : Manage packages on OpenBSD.
-# key : openbsd_pkg
-# condition: ansible
-# --
-- name: ${1:Manage packages on OpenBSD.}
-  openbsd_pkg: name=$2 state=$3 $0

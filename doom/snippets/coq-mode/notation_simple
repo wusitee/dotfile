@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: Notation (simple)
-# key: nots
-# uuid: nots
-# --
-Notation $1 := $2.

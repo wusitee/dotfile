@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: tu
-# key: tu
-# uuid: tu
-# --
-require 'test/unit'

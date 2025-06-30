@@ -1,8 +1,0 @@
-# -*- mode: snippet -*-
-# name: style tag
-# key: trigger-key
-# condition: t
-# --
-<style>
-    $0
-</style

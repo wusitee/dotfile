@@ -1,7 +1,0 @@
-# -*- mode: snippet -*-
-# name : Pause playbook execution
-# key : pause
-# condition: ansible
-# --
-- name: ${1:Pause playbook execution}
-  pause: $0

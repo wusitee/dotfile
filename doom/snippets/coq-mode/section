@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: Section
-# key: sec
-# uuid: sec
-# --
-Section $1.

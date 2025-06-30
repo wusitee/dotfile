@@ -1,5 +1,0 @@
-# -*- mode: snippet -*-
-# name: length
-# key: len
-# --
-(length ${1:var})

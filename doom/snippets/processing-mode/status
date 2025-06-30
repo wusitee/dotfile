@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: status
-# key: status
-# uuid: status
-# --
-status(${1:text});

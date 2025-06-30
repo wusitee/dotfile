@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: Let
-# key: Let
-# uuid: Let
-# --
-Let $1 : $2 := $3.

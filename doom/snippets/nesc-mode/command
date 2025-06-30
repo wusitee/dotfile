@@ -1,8 +1,0 @@
-# -*- mode: snippet -*-
-# name: command
-# key: command
-# uuid: command
-# --
-command ${1:void} ${2:naMe}($3) {
-
-}

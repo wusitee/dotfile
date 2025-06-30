@@ -1,7 +1,0 @@
-# -*- mode: snippet -*-
-# name : Manage CSW-Packages on Solaris
-# key : pkgutil
-# condition: ansible
-# --
-- name: ${1:Manage CSW-Packages on Solaris}
-  pkgutil: name=$2 state=$3 $0

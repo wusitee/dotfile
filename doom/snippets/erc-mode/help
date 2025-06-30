@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: help
-# key: h
-# uuid: h
-# --
-help $0

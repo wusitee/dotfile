@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: noLights
-# key: light
-# uuid: light
-# --
-noLights();

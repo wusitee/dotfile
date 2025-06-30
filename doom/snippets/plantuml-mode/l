@@ -1,5 +1,0 @@
-# -*- mode: snippet -*-
-# contributor: M. Yas. Davoodeh
-# name: Right -left-> Left
-# --
-${1:Right} -left${3:-}> ${2:Left}

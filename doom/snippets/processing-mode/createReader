@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: createReader
-# key: file
-# uuid: file
-# --
-createReader(${1:filename});

@@ -1,7 +1,0 @@
-# -*- mode: snippet -*-
-# name : Module for tracking logs via logentries.com
-# key : logentries
-# condition: ansible
-# --
-- name: ${1:Module for tracking logs via logentries.com}
-  logentries: path=$2 $0

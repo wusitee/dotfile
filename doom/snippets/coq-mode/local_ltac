@@ -1,4 +1,0 @@
-# -*- mode: snippet -*-
-# name: Local Ltac
-# --
-Local Ltac $1 := $2

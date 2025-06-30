@@ -1,8 +1,0 @@
-# -*- mode: snippet -*-
-# name: macro
-# key: macro
-# uuid: macro
-# --
-macro(${1:name}${2: args})
-
-endmacro()

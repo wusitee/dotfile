@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: random
-# key: random
-# uuid: random
-# --
-random(${1:value1}${3:, ${2:value2}});

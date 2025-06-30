@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: Conjecture
-# key: conj
-# uuid: conj
-# --
-Conjecture $1: $2.

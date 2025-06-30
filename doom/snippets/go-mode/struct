@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: type ... struct { ... }
-# --
-type ${1:name} struct {
-    `%`$0
-}

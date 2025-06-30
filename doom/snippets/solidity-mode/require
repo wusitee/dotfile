@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# contributor: Seong Yong-ju
-# name: require(...);
-# key: require
-# --
-require($0);

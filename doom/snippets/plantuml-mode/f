@@ -1,5 +1,0 @@
-# -*- mode: snippet -*-
-# contributor: M. Yas. Davoodeh
-# name: {field}
-# --
-{field} ${0:Name}

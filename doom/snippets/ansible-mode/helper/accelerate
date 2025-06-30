@@ -1,7 +1,0 @@
-# -*- mode: snippet -*-
-# name : Enable accelerated mode on remote node
-# key : accelerate
-# condition: ansible
-# --
-- name: ${1:Enable accelerated mode on remote node}
-  accelerate: $0

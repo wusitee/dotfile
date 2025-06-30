@@ -1,8 +1,0 @@
-# -*- mode: snippet -*-
-# name: keytyped
-# key: key
-# uuid: key
-# --
-void keyTyped(){
-  ${1}
-}

@@ -1,7 +1,0 @@
-# -*- mode: snippet -*-
-# contributor: M. Yas. Davoodeh
-# name: group
-# --
-group('$1', () {
-  $0
-});

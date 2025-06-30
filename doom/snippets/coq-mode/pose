@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: pose
-# key: po
-# uuid: po
-# --
-pose $1 := $2

@@ -1,4 +1,0 @@
-# -*- mode: snippet -*-
-# name: solve
-# --
-solve [ $1 | $2 ]

@@ -1,7 +1,0 @@
-# -*- mode: snippet -*-
-# name: :to-be ...
-# key: b
-# uuid: b
-# condition: (doom-snippets-without-trigger (eq (char-before) ?:))
-# --
-to-be ${1:nil}

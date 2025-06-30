@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: textLeading
-# key: text
-# uuid: text
-# --
-textLeading(${1:size});

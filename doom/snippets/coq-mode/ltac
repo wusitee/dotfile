@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: Ltac
-# key: ltac
-# uuid: ltac
-# --
-Ltac $1 := $2

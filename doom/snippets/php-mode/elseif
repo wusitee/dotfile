@@ -1,8 +1,0 @@
-# -*- mode: snippet -*-
-# name: elseif (...) { ... }
-# key: ei
-# uuid: ei
-# --
-elseif ($1) {
-    `%`$0
-}

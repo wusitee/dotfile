@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: after-all ...
-# key: afa
-# uuid: afa
-# --
-(after-all ${1:`(doom-snippets-format "%n%s")`})

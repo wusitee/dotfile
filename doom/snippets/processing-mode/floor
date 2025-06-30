@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: floor
-# key: floor
-# uuid: floor
-# --
-floor(${1:value});

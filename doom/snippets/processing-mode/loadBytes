@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: loadBytes
-# key: load
-# uuid: load
-# --
-loadBytes(${2:"${1:filename}"});

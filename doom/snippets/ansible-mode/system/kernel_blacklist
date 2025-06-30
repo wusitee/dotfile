@@ -1,7 +1,0 @@
-# -*- mode: snippet -*-
-# name : Blacklist kernel modules
-# key : kernel_blacklist
-# condition: ansible
-# --
-- name: ${1:Blacklist kernel modules}
-  kernel_blacklist: name=$2 $0

@@ -1,7 +1,0 @@
-# -*- mode: snippet -*-
-# contributor: M. Yas. Davoodeh
-# name: repeat while (...)
-# --
-repeat
-    $0
-repeat while (${1:condition}) is (${2:Yes})

@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: ring
-# key: ring
-# uuid: ring
-# --
-ring $1

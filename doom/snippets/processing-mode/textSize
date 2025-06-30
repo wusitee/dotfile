@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: textSize
-# key: text
-# uuid: text
-# --
-textSize(${1:size});

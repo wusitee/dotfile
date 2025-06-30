@@ -1,7 +1,0 @@
-# -*- mode: snippet -*-
-# name: Notice: credit
-# key: <credit
-# --
-#+begin_quote
- 󰔓 `%`$0
-#+end_quote

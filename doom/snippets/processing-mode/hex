@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: hex
-# key: hex
-# uuid: hex
-# --
-hex(${3:c});

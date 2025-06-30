@@ -1,7 +1,0 @@
-# -*- mode: snippet -*-
-# name: CoFixpoint
-# key: cfix
-# uuid: cfix
-# --
-CoFixpoint $1 ($2:$3) : $4 :=
-$5.

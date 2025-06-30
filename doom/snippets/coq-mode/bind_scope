@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: Bind Scope
-# key: bndsc
-# uuid: bndsc
-# --
-Bind Scope ${1:scope} with ${2:type}

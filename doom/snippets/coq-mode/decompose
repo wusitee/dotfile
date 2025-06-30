@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: decompose
-# key: dec
-# uuid: dec
-# --
-decompose [$1] $2

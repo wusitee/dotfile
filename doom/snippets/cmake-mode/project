@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: project
-# key: proj
-# uuid: proj
-# --
-project ($0)

@@ -1,7 +1,0 @@
-# -*- mode: snippet -*-
-# name : Manage packages with I(pacman)
-# key : pacman
-# condition: ansible
-# --
-- name: ${1:Manage packages with I(pacman)}
-  pacman: $0

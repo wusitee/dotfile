@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: suffices
-# key: suffices
-# uuid: suffices
-# --
-suffices $1 : $2

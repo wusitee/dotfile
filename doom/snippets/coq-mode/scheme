@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: Scheme
-# key: sc
-# uuid: sc
-# --
-Scheme ${1:name} := $1.

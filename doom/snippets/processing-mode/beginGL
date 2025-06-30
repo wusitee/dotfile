@@ -1,8 +1,0 @@
-# -*- mode: snippet -*-
-# name: beginGL
-# key: begingl
-# uuid: begingl
-# --
-pgl.beginGL();
-$1
-pgl.endGL();

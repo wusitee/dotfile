@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: Local Close Scope
-# key: lclsc
-# uuid: lclsc
-# --
-Local Close Scope $1

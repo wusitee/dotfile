@@ -1,4 +1,0 @@
-# -*- mode: snippet -*-
-# name: Context
-# --
-Context $1, ($2 : $3).
