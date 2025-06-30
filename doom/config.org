@@ -401,6 +401,10 @@ Force page break after toc
 #+begin_src emacs-lisp
 (setq org-latex-toc-command "\\clearpage \\tableofcontents \\clearpage")
 #+end_src
+**** tags
+#+begin_src emacs-lisp :tangle yes
+(setq org-tag-alist '(("noexport") ("ignore")))
+#+end_src
 *** Latex snippets
 #+begin_src elisp
 (add-hook! 'org-mode (yas-activate-extra-mode 'latex-mode))
