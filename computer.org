@@ -139,6 +139,11 @@ A citation manager.
 #+begin_src sh
 sudo pacman -S zotero
 #+end_src
+**** rnote
+To make rnote or other GTK applications have a proper view, we have to use default gtk config file. Therefore, adding this to the .desktop file may solve the problem.
+#+begin_src sh
+env XDG_CONFIG_HOME=/tmp/empty-config
+#+end_src
 *** CLI
 **** Autojumping
 using zoixde
