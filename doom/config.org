@@ -162,7 +162,7 @@ Use copilot when needed.
 
   ;; Turn on auto-mode, it's built into Org and much faster/more featured than
   ;; org-fragtog. (Remember to turn off/uninstall org-fragtog.)
-  (add-hook 'org-mode-hook 'org-latex-preview-auto-mode)
+  (add-hook 'org-mode-hook 'org-latex-preview-mode)
 
   ;; Block C-n, C-p etc from opening up previews when using auto-mode
   ;; (setq org-latex-preview-auto-ignored-commands
