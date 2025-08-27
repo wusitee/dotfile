@@ -39,6 +39,8 @@ Install the firmware.
 #+begin_src shell
 sudo pacman -S sof-firmware
 #+end_src
+For Huawei Matebook follow [[https://github.com/codepayne/linux-sound-huawei/issues/15
+][this]] to fix sound issue.
 
 ** Graphic Display
 *** hyprland
