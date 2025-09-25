@@ -146,6 +146,8 @@ To make rnote or other GTK applications have a proper view, we have to use defau
 #+begin_src sh
 env XDG_CONFIG_HOME=/tmp/empty-config
 #+end_src
+**** clash-verge-rev
+The newest version of clash-verge-rev can't function well in arch linux. I suggest to use clash-verge-rev v2.3.2-1
 *** CLI
 **** Autojumping
 using zoixde
