@@ -446,11 +446,7 @@ Setup Org Roam capture templates.
 
 (after! org-roam
   (setq org-roam-capture-templates
-        '(("d" "Default" plain "%?"
-           :target (file+head "${slug}.org" "#+title: ${title}\n%(org-roam-template-select-tags)\n")
-           :unnarrowed t
-           :empty-lines 1)
-          ("a" "Anki Card" plain "* ${title}\n%?"
+        '(("a" "Anki Card" plain "* ${title}\n%?"
            :target (file+head "${slug}.org" ":PROPERTIES:\n:ANKI_DECK: study \n:END:\n#+title: ${title}\n%(org-roam-template-select-tags)\n")
            :unnarrowed t
            :empty-lines 1))))
