@@ -121,12 +121,20 @@ Using fish for v-term.
 * Completion
 ** Vertico
 Add Chinese pinyin search support to Vertico.
-#+begin_src emacs-lisp
-(defun pyin-orderless-regexp (orig-func component)
-  (let ((result (funcall orig-func component)))
-    (pyim-cregexp-build result)))
+#+begin_src emacs-lisp :tangle no
+;; It's good practice to ensure the function you're advising is loaded.
+;; The `orderless` feature provides `orderless-regexp`.
+(with-eval-after-load 'orderless
+  (defun pyin-orderless-regexp (orig-func component)
+    "Advise orderless-regexp to support pinyin search."
+    (let ((result (funcall orig-func component)))
+      ;; pyim-cregexp-build is available if the pyim package is loaded.
+      ;; Assuming pyim is loaded, this will add pinyin support.
+      (if (fboundp 'pyim-cregexp-build)
+          (pyim-cregexp-build result)
+        result)))
 
-(advice-add 'orderless-regexp :around #'pyin-orderless-regexp)
+  (advice-add 'orderless-regexp :around #'pyin-orderless-regexp))
 #+end_src
 
 ** Copilot
