@@ -29,9 +29,9 @@ sudo ufw limit ssh
 sudo ufw enable
 #+end_src
 ** input method
-using [[https://wiki.archlinuxcn.org/wiki/Fcitx5][fcitx5]]
+using [[https://wiki.archlinuxcn.org/wiki/Fcitx5][fcitx5]] with [[https://wiki.archlinux.org/title/Rime][rime]] and [[https://github.com/iDvel/rime-ice][雾凇拼音]]
 #+begin_src shell
-yay -S fcitx5-im fctix5-chinese-addons fcitx5-pinyin-sougou
+yay -S fcitx5-im fcitx-rime rime-ice-git
 #+end_src
 Using theme [[https://github.com/tonyfettes/fcitx5-nord][Nord-Dark]]
 ** sound
