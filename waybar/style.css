@@ -1,4 +1,4 @@
-@define-color background #282A2E;               
+@define-color background #282A2E;
 @define-color background-alt #373B41;
 @define-color foreground #C5c8C6;
 @define-color primary #F0C674;
@@ -6,9 +6,8 @@
 @define-color alert #A54242;
 @define-color disabled #707880;
 
-
 * {
-    font-family: Maplemono NF;
+    font-family: "Maple Mono NF", "Symbols Nerd Font", "HanaMinA", sans-serif;
     font-size: 16px;
 }
 
@@ -41,14 +40,18 @@ window#waybar {
     color: @alert;
 }
 
-#mode, #battery, #cpu, #memory, #backlight, #pulseaudio {
+#mode,
+#battery,
+#cpu,
+#memory,
+#backlight,
+#pulseaudio {
     padding: 0 10px;
 }
 
-#clock{
+#clock {
     color: @primary;
 }
-
 
 #battery.charging {
     color: green;
