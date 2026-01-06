@@ -83,6 +83,10 @@ xdg-mime query default application/pdf # should be "okularApplication_pdf.deskto
 #+begin_src shell
 sudo pacman -S swaync
 #+end_src
+**** idle
+#+begin_src shell
+sudo pacman -S hyprlock hypridle
+#+end_src
 *** i3
 *** kde
 *** Sway
