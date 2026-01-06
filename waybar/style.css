@@ -7,7 +7,7 @@
 @define-color disabled #707880;
 
 * {
-    font-family: "Maple Mono NF", "Symbols Nerd Font", "HanaMinA", sans-serif;
+    font-family: "Maple Mono NF";
     font-size: 16px;
 }
 
@@ -61,6 +61,12 @@ window#waybar {
     to {
         color: black;
     }
+}
+
+#pulseaudio {
+    /* 关键点：将 Maple Mono NF 放在第一位，
+       并在后面加上 "Symbols Nerd Font" 作为双重保险 */
+    font-family: "Maple Mono NF", "Symbols Nerd Font", monospace;
 }
 
 #battery.warning:not(.charging) {
