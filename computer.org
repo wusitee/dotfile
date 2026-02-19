@@ -10,6 +10,7 @@ In addition to TLP, we also using matebook-applet and huawei-wmi
 #+begin_src shell
 yay -S matebook-applet huawei-wmi
 #+end_src
+In addition to that, using the script in dotfiles-huawei-wmi to make the threshold works after suspension.
 ** microcode
 intel-ucode for Intel processors.
 #+begin_src shell
