@@ -89,3 +89,7 @@
 (when (eq emacs-major-version 30)
   (package! eldoc :built-in t))
 (package! org-sliced-images)
+(package! emacs-chinese-word-segmentation
+  :recipe (:host github :repo "kanglmf/emacs-chinese-word-segmentation" :files ("*.el")))
+(package! uv
+  :recipe (:host github :repo "borgstad/uv.el" :files ("*.el")))

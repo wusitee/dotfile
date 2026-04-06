@@ -16,12 +16,7 @@ Prevent client from creating new workspace.
 ** font
 #+begin_src emacs-lisp
 (setq use-default-font-for-symbols nil)
-(setq doom-font (font-spec :family "MapleMono NF" :size 16 ))
-(add-hook! 'after-setting-font-hook
-  (set-fontset-font t 'latin (font-spec :family "Roboto Mono"))
-  (set-fontset-font t 'symbol (font-spec :family "Symbola"))
-  (set-fontset-font t 'mathematical (font-spec :family "Symbola"))
-  (set-fontset-font t 'emoji (font-spec :family "Symbola")))
+(setq doom-font (font-spec :family "Maple Mono Normal NF CN" :size 15))
 #+end_src
 ** Transparency
 Make client transparent.
@@ -45,7 +40,7 @@ Set the spelling check to en-US
   (setq langtool-default-language "en-US"))
 #+end_src
 ** gptel
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 ;; vveai offers an instant OpenAI compatible API
 (after! gptel
   (setq gptel-model 'gpt-4o
@@ -69,6 +64,26 @@ Set the spelling check to en-US
                     ))
         gptel-default-mode 'org-mode
         gptel-track-media t)
+  (add-hook 'gptel-post-stream-hook 'gptel-auto-scroll)
+  (add-hook 'gptel-post-response-functions 'gptel-end-of-response))
+#+end_src
+
+#+begin_src emacs-lisp :tangle yes
+(after! gptel
+  (setq
+   gptel-model 'gemini-2.5-pro
+   gptel-backend (gptel-make-gemini "Gemini"
+                   :key
+                   (let ((found (auth-source-search :host "gemini" :user "apikey")))
+                     (if found
+                         (funcall (plist-get (car found) :secret))
+                       (error "No authentication entry found for vveai.com with user apikey")))
+                   :models '(gemini-2.5-flash-lite
+                             gemini-2.5-flash
+                             gemini-2.5-pro)
+                   :stream t)
+   gptel-default-mode 'org-mode
+   gptel-track-media t)
   (add-hook 'gptel-post-stream-hook 'gptel-auto-scroll)
   (add-hook 'gptel-post-response-functions 'gptel-end-of-response))
 #+end_src
@@ -152,6 +167,16 @@ Use copilot when needed.
 ** evil
 #+begin_src emacs-lisp :tangle yes
 (setq evil-respect-visual-line-mode t)
+#+end_src
+** Chinese word segmentation
+#+begin_src emacs-lisp :tangle yes
+;; (add-to-list 'load-path "/home/wste/code/emacs-chinese-word-segmentation")
+;; (setq cns-prog "/home/wste/code/emacs-chinese-word-segmentation/cnws")
+;; (setq cns-dict-directory "/home/wste/code/emacs-chinese-word-segmentation/cppjieba/dict")
+
+;; (require 'cns nil t)
+;; (when (featurep 'cns)
+;;   (add-hook 'find-file-hook 'cns-auto-enable))
 #+end_src
 * lang
 ** Org
@@ -587,7 +612,6 @@ Use org sliced images mode to make image displayed better
 (advice-add '+org--toggle-inline-images-in-subtree :override #'+org--toggle-inline-sliced-images-in-subtree)
 #+end_src
 
-#+RESULTS:
 ** java
 #+begin_src emacs-lisp :tangle yes
 (after! lsp-mode
@@ -606,4 +630,9 @@ Use org sliced images mode to make image displayed better
 Set default latex viewer to Okular.
 #+begin_src emacs-lisp
 (setq +latex-viewers '(okular))
+#+end_src
+** python
+*** uv
+#+begin_src emacs-lisp :tangle no
+(add-hook! 'python-mode 'uv-edit-pyproject-toml)
 #+end_src
