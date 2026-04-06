@@ -10,10 +10,6 @@ set PATH $PATH /home/wste/.local/bin
 # init pyenv
 # pyenv init - | source
 # status --is-interactive; and pyenv virtualenv-init - | source
-function ff
-    fastfetch -c examples/6.jsonc
-end
-
 function y
     set tmp (mktemp -t "yazi-cwd.XXXXXX")
     yazi $argv --cwd-file="$tmp"
