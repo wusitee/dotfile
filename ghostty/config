@@ -1,4 +1,4 @@
-font-family = "MapleMono"
+font-family = "Maple Mono Normal NF CN"
 font-size = 13 
 background-opacity = 1
 window-inherit-working-directory = true
@@ -11,3 +11,4 @@ gtk-single-instance = true
 gtk-tabs-location = bottom
 config-file = "keybinds"
 # gtk-custom-css = tab-style.css
+keybind = shift+enter=text:\x1b\r
