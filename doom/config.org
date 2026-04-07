@@ -68,7 +68,7 @@ Set the spelling check to en-US
   (add-hook 'gptel-post-response-functions 'gptel-end-of-response))
 #+end_src
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
 (after! gptel
   (setq
    gptel-model 'gemini-2.5-pro
@@ -86,6 +86,15 @@ Set the spelling check to en-US
    gptel-track-media t)
   (add-hook 'gptel-post-stream-hook 'gptel-auto-scroll)
   (add-hook 'gptel-post-response-functions 'gptel-end-of-response))
+#+end_src
+** claude-code-ide
+#+begin_src emacs-lisp
+(use-package! claude-code-ide
+  :config
+  (claude-code-ide-emacs-tools-setup)
+  (map! :leader
+        :prefix ("c" . "code")
+        :desc "Claude Code IDE" "'" #'claude-code-ide-menu))
 #+end_src
 ** lsp
 *** Performance

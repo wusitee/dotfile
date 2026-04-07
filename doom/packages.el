@@ -93,3 +93,5 @@
   :recipe (:host github :repo "kanglmf/emacs-chinese-word-segmentation" :files ("*.el")))
 (package! uv
   :recipe (:host github :repo "borgstad/uv.el" :files ("*.el")))
+(package! claude-code-ide
+  :recipe (:host github :repo "manzaltu/claude-code-ide.el"))
