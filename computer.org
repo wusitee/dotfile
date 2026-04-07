@@ -93,6 +93,15 @@ using  nwg-look to set the theme for gtk, using qt6ct to set the theme for qt
 #+begin_src shell
 sudo pacman -S new-look qt6ct
 #+end_src
+**** wallpaper
+Using awww (successor to swww) for animated wallpapers
+#+begin_src shell
+yay -S awww
+#+end_src
+Add to hyprland.conf autostart:
+#+begin_src conf
+exec-once = awww-daemon
+#+end_src
 *** i3
 *** kde
 *** Sway

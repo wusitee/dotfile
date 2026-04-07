@@ -53,7 +53,7 @@ Since this is a dotfiles repo, there are no build/test commands. Instead, use th
 
 ### Hyprland
 - Monitor scale is set to 2 (high DPI)
-- Autostart programs defined in `hyprland.conf`: waybar, nm-applet, matebook-applet, fcitx5, copyq, swww-daemon, hypridle, swaync, gammastep, onedrive
+- Autostart programs defined in `hyprland.conf`: waybar, nm-applet, matebook-applet, fcitx5, copyq, awww-daemon, hypridle, swaync, gammastep, onedrive
 - Environment variables for Qt theming and fcitx input method
 
 ### Doom Emacs
