@@ -1,27 +1,50 @@
-#+title: Computer
+#+title: Computer Setup Guide
 
-* System
-** Battery
-TLP is a good choice.
+* Overview
+This document contains the complete setup guide for a personal Arch Linux system running on a Huawei MateBook X Pro 2021. It covers hardware-specific configurations, system setup, desktop environment configuration, and application installation.
+
+The system uses Hyprland as the primary window manager with a suite of Wayland-native tools for daily computing.
+
+* Hardware-Specific Configuration
+
+** Battery Management (MateBook)
+TLP is the power management tool of choice:
 #+begin_src shell
 systemctl enable tlp --now
 #+end_src
-In addition to TLP, we also using matebook-applet and huawei-wmi
+
+In addition to TLP, we also use matebook-applet and huawei-wmi for battery threshold control:
 #+begin_src shell
 yay -S matebook-applet huawei-wmi
 #+end_src
-In addition to that, using the script in dotfiles-huawei-wmi to make the threshold works after suspension.
-** microcode
-intel-ucode for Intel processors.
+
+Additionally, use the script in dotfiles-huawei-wmi to restore battery threshold after suspension.
+
+** Sound (MateBook)
+Install the firmware:
+#+begin_src shell
+sudo pacman -S sof-firmware
+#+end_src
+
+*** Troubleshooting
+**** No sound after suspend (MateBook specific)
+Follow [[https://github.com/codepayne/linux-sound-huawei/issues/15][this GitHub issue]] to fix sound issues on Huawei MateBook devices.
+
+* Base System
+
+** Boot
+intel-ucode for Intel processors:
 #+begin_src shell
 sudo pacman -S intel-ucode
 #+end_src
-** firewall
-using nftables and ufw
+
+** Firewall
+Using nftables and ufw:
 #+begin_src shell
 sudo pacman -S iptables-nft ufw
 #+end_src
-Default configuration for [[https://wiki.archlinux.org/title/Uncomplicated_Firewall][ufw]]
+
+Default configuration for [[https://wiki.archlinux.org/title/Uncomplicated_Firewall][ufw]]:
 #+begin_src shell
 sudo ufw default deny
 sudo ufw allow from 192.168.0.0/24
@@ -29,95 +52,123 @@ sudo ufw allow Deluge
 sudo ufw limit ssh
 sudo ufw enable
 #+end_src
-** input method
-using [[https://wiki.archlinuxcn.org/wiki/Fcitx5][fcitx5]] with [[https://wiki.archlinux.org/title/Rime][rime]] and [[https://github.com/iDvel/rime-ice][雾凇拼音]]
-#+begin_src shell
-yay -S fcitx5-im fcitx-rime rime-ice-git ttf-hanamin
-#+end_src
-Using theme [[https://github.com/tonyfettes/fcitx5-nord][Nord-Dark]]
-** sound
-Install the firmware.
-#+begin_src shell
-sudo pacman -S sof-firmware
-#+end_src
-For Huawei Matebook follow [[https://github.com/codepayne/linux-sound-huawei/issues/15
-][this]] to fix sound issue.
 
-** Graphic Display
-*** hyprland
-[[https://wiki.archlinux.org/title/Hyprland][hyprland]]
-Using xdg desktop portal
+* Desktop Environment
+
+** Hyprland (Primary)
+[[https://wiki.archlinux.org/title/Hyprland][Hyprland]] is a dynamic tiling Wayland compositor.
+
+Using xdg desktop portal:
 #+begin_src shell
 sudo pacman -S xdg-desktop-portal-hyprland xdg-desktop-portal-gtk
 #+end_src
-**** status bar
-Using waybar for status bar
+
+*** Status Bar (waybar)
+Using waybar for status bar:
 #+begin_src shell
 sudo pacman -S waybar
 #+end_src
-**** launcher
-Using rofi as application launcher
+
+*** Launcher (rofi)
+Using rofi as application launcher:
 #+begin_src shell
 sudo pacman -S rofi-wayland
 #+end_src
-And in hyprland.conf
-#+begin_src Conf
+
+And in hyprland.conf:
+#+begin_src conf
 $menu = rofi -show combi
 #+end_src
-**** clipboard manager
-Using copyq
+
+*** Clipboard (copyq)
+Using copyq as clipboard manager:
 #+begin_src shell
 sudo pacman -S copyq
 #+end_src
-**** screenshot
-Use hyprshot
+
+*** Screenshots (hyprshot)
+Use hyprshot for screenshots:
 #+begin_src shell
-yay hyprshot
+yay -S hyprshot
 #+end_src
-**** defualt applications
-Use xdg-mime to change the default program that opens a specific type. For example to set defualt pdf reader to okular
-#+begin_src shell
-xdg-mime default okularApplication_pdf.desktop application/pdf
-xdg-mime query default application/pdf # should be "okularApplication_pdf.desktop"
-#+end_src
-**** message center
+
+*** Notifications (swaync)
+Notification center:
 #+begin_src shell
 sudo pacman -S swaync
 #+end_src
-**** idle
+
+*** Idle/Lock (hypridle/hyprlock)
+Screen lock and idle management:
 #+begin_src shell
 sudo pacman -S hyprlock hypridle
 #+end_src
-**** theme & icon
-using  nwg-look to set the theme for gtk, using qt6ct to set the theme for qt
-#+begin_src shell
-sudo pacman -S new-look qt6ct
-#+end_src
-**** wallpaper
-Using awww (successor to swww) for animated wallpapers
+
+*** Wallpaper (awww)
+Using awww (successor to swww) for animated wallpapers:
 #+begin_src shell
 yay -S awww
 #+end_src
+
 Add to hyprland.conf autostart:
 #+begin_src conf
 exec-once = awww-daemon
 #+end_src
-*** i3
-*** kde
-*** Sway
-** Applications
-*** GUI
-**** firefox
+
+*** Theming (nwg-look, qt6ct)
+Using nwg-look to set the theme for GTK, using qt6ct to set the theme for Qt:
+#+begin_src shell
+sudo pacman -S nwg-look qt6ct
+#+end_src
+
+*** Default Applications
+Use xdg-mime to change the default program that opens a specific type. For example to set default PDF reader to okular:
+#+begin_src shell
+xdg-mime default okularApplication_pdf.desktop application/pdf
+xdg-mime query default application/pdf  # should be "okularApplication_pdf.desktop"
+#+end_src
+
+** i3                                                                   :HOLD:
+Used previously on X11. Configuration is preserved but not actively maintained.
+
+** Sway                                                                 :HOLD:
+Wayland port of i3. Not currently in use.
+
+** KDE                                                                  :HOLD:
+Previously used for testing. Configuration no longer actively maintained.
+
+* Input & Localization
+
+** Input Method (Fcitx5 + Rime)
+Using [[https://wiki.archlinuxcn.org/wiki/Fcitx5][fcitx5]] with [[https://wiki.archlinux.org/title/Rime][rime]] and [[https://github.com/iDvel/rime-ice][雾凇拼音]]:
+#+begin_src shell
+yay -S fcitx5-im fcitx5-rime rime-ice-git
+#+end_src
+
+Using theme [[https://github.com/tonyfettes/fcitx5-nord][Nord-Dark]].
+
+** Chinese Fonts
+Install Japanese/Chinese font support:
+#+begin_src shell
+sudo pacman -S ttf-hanamin
+#+end_src
+
+* Applications
+
+** GUI Applications
+
+*** Firefox
 #+begin_src shell
 sudo pacman -S firefox
 #+end_src
-***** Hide the horizontal tabs
+
+**** Hide the horizontal tabs (Sideberry CSS)
 :PROPERTIES:
 :ID:       95658cd2-b982-4efb-a472-bea9a70870ea
 :END:
-Do [[https://github.com/FirefoxCSS-Store/FirefoxCSS-Store.github.io/blob/main/README.md#generic-installation][the followings]], and in userChrome.css
+Do [[https://github.com/FirefoxCSS-Store/FirefoxCSS-Store.github.io/blob/main/README.md#generic-installation][the following]], and in userChrome.css:
 #+begin_src css
-/* hide the tabs on the of the window */
+/* hide the tabs on the top of the window */
 :root{
     --sidebar-hover-width: 22px;
     --sidebar-visible-width: 140px;
@@ -140,56 +191,108 @@ Do [[https://github.com/FirefoxCSS-Store/FirefoxCSS-Store.github.io/blob/main/RE
     max-width: var(--sidebar-visible-width) !important;
 }
 #+end_src
-***** Chinese
-Install a font
+
+**** Chinese Language Pack
 #+begin_src shell
 sudo pacman -S firefox-i18n-zh-cn
 #+end_src
-***** When firefox is laggy
-You can choose to refresh firefox and redo the above config
-**** Okular
-A tool for pdf reading
+
+**** Troubleshooting: When Firefox is laggy
+You can choose to refresh Firefox and redo the above configuration.
+
+*** Okular
+A PDF reader:
 #+begin_src shell
 sudo pacman -S okular
 #+end_src
-**** golden dict
-A diction tool
+
+*** GoldenDict
+A dictionary tool:
 #+begin_src shell
 sudo pacman -S golden-dict-ng
 #+end_src
-[[https://acytoo.com/ladder/goldendict/][guide]]
-**** Zotero
-A citation manager.
-#+begin_src sh
+
+[[https://acytoo.com/ladder/goldendict/][Configuration guide]]
+
+*** Zotero
+A citation manager:
+#+begin_src shell
 sudo pacman -S zotero
 #+end_src
-**** rnote
-To make rnote or other GTK applications have a proper view, we have to use default gtk config file. Therefore, adding this to the .desktop file may solve the problem.
-#+begin_src sh
+
+*** rnote
+Note-taking application. To make rnote or other GTK applications have a proper view, we have to use default GTK config file. Adding this to the .desktop file may solve the problem:
+#+begin_src shell
 env XDG_CONFIG_HOME=/tmp/empty-config
 #+end_src
-**** clash-verge-rev
-The newest version of clash-verge-rev can't function well in arch linux. I suggest to use clash-verge-rev v2.3.2-1
-*** CLI
-**** Autojumping
-using zoixde
+
+*** Clash Verge Rev
+Proxy client:
 #+begin_src shell
-sudo pacman -S zoixde fzf
-zoixde init fish
+yay -S clash-verge-rev-bin
 #+end_src
-**** shell
-using fish
+
+*** Ghostty
+Fast, native terminal emulator written in Zig:
+#+begin_src shell
+sudo pacman -S ghostty
+#+end_src
+
+Configuration is at =~/.config/ghostty/config=. See the Ghostty documentation for configuration options.
+
+** CLI Applications
+
+*** Shell (Fish)
+Using fish as the interactive shell:
 #+begin_src shell
 sudo pacman -S fish
 #+end_src
-**** onedrive
+
+*** Autojump (zoxide + fzf)
+Using zoxide for directory jumping:
 #+begin_src shell
-yay onedrive-abraunegg
+sudo pacman -S zoxide fzf
+zoxide init fish
 #+end_src
-[[https://github.com/abraunegg/onedrive][onedrive]]
-** text editing
-Using doom emacs as primary text editor
+
+*** Cloud Sync (onedrive)
+#+begin_src shell
+yay -S onedrive-abraunegg
+#+end_src
+
+[[https://github.com/abraunegg/onedrive][onedrive GitHub repository]]
+
+* Development Environment
+
+** Doom Emacs
+Using Doom Emacs as the primary text editor:
 #+begin_src shell
 git clone --depth 1 https://github.com/doomemacs/doomemacs ~/.config/emacs
 ~/.config/emacs/bin/doom install
 #+end_src
+
+* Troubleshooting Reference
+Cross-cutting issues that don't fit in specific sections:
+
+- Firefox performance: See [[Firefox]] section for refresh instructions
+- Sound after suspend: See [[Sound (MateBook)]] section
+
+* Dotfiles Management
+This repository contains configuration files for the entire system. Here's how to apply changes:
+
+** Applying Configuration Changes
+| Component      | Reload Command                              |
+|----------------+---------------------------------------------|
+| Hyprland       | =hyprctl reload= (or auto-reloads on save)  |
+| Doom Emacs     | =doom sync= (after init.el/packages.el changes) |
+| Fish           | =source ~/.config/fish/config.fish=         |
+| Waybar         | =killall waybar && waybar=                  |
+
+** Repository Structure
+- =hypr/= - Hyprland window manager configuration
+- =doom/= - Doom Emacs configuration (edit =config.org=, not =config.el=)
+- =fish/= - Fish shell configuration
+- =ghostty/= - Ghostty terminal configuration
+- =waybar/= - Status bar configuration
+- =rofi/= - Application launcher configuration
+- =yazi/= - Terminal file manager configuration
