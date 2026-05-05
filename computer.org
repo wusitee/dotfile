@@ -115,10 +115,20 @@ Add to hyprland.conf autostart:
 exec-once = awww-daemon
 #+end_src
 
-*** Theming (nwg-look, qt6ct)
-Using nwg-look to set the theme for GTK, using qt6ct to set the theme for Qt:
+*** Theming (GTK, Qt)
+GTK theme is managed via config files in the dotfiles repository:
+- =gtk-3.0/settings.ini= — Uses =Adwaita-dark= (GTK3)
+- =gtk-4.0/settings.ini= — Uses =Adwaita= with =prefer-dark-theme= (GTK4)
+
+Copy these to =~/.config/= to apply:
 #+begin_src shell
-sudo pacman -S nwg-look qt6ct
+cp gtk-3.0/settings.ini ~/.config/gtk-3.0/settings.ini
+cp gtk-4.0/settings.ini ~/.config/gtk-4.0/settings.ini
+#+end_src
+
+Qt theming is set via =qt6ct=:
+#+begin_src shell
+sudo pacman -S qt6ct
 #+end_src
 
 *** Default Applications
@@ -296,3 +306,5 @@ This repository contains configuration files for the entire system. Here's how t
 - =waybar/= - Status bar configuration
 - =rofi/= - Application launcher configuration
 - =yazi/= - Terminal file manager configuration
+- =gtk-3.0/= - GTK3 theme configuration
+- =gtk-4.0/= - GTK4 theme configuration
