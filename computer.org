@@ -265,6 +265,17 @@ sudo pacman -S zoxide fzf
 zoxide init fish
 #+end_src
 
+*** File Manager (yazi)
+Terminal file manager with drag-and-drop support:
+#+begin_src shell
+sudo pacman -S yazi parallel ripdrag
+#+end_src
+
+Key features:
+- Press =C-n= in Yazi to drag and drop selected files
+- Files open via =xdg-open= using GNU Parallel for batch opening
+- Fish integration: =y= command changes cwd on exit
+
 *** Cloud Sync (onedrive)
 #+begin_src shell
 yay -S onedrive-abraunegg
