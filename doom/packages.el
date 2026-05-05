@@ -89,9 +89,15 @@
 (when (eq emacs-major-version 30)
   (package! eldoc :built-in t))
 (package! org-sliced-images)
+(package! org-super-agenda)
 (package! emacs-chinese-word-segmentation
   :recipe (:host github :repo "kanglmf/emacs-chinese-word-segmentation" :files ("*.el")))
 (package! uv
   :recipe (:host github :repo "borgstad/uv.el" :files ("*.el")))
 (package! claude-code-ide
   :recipe (:host github :repo "manzaltu/claude-code-ide.el"))
+(package! claude-code-ide-extras
+  :recipe (:host github :repo "acmorrow/claude-code-ide-extras"))
+(package! kimi-code-ide
+  :recipe (:host github :repo "wusitee/kimi-code-ide.el" :branch "token-mode-line"))
+(package! web-server)

@@ -96,6 +96,21 @@ Set the spelling check to en-US
         :prefix ("c" . "code")
         :desc "Claude Code IDE" "'" #'claude-code-ide-menu))
 #+end_src
+** claude-code-ide-extras
+#+begin_src emacs-lisp
+(use-package! claude-code-ide-extras
+  :after claude-code-ide
+  :config
+  (claude-code-ide-extras-setup))
+#+end_src
+** kimi-code-ide
+#+begin_src emacs-lisp
+(use-package! kimi-code-ide
+  :bind ("C-c C-k" . kimi-code-ide-menu)
+  :config
+  (kimi-code-ide-tools-setup))
+#+end_src
+
 ** lsp
 *** Performance
 Follow the [[https://emacs-lsp.github.io/lsp-mode/page/performance/][Performance page]]:
@@ -582,6 +597,19 @@ Make org file beautiful.
 *** org directory
 #+begin_src emacs-lisp
 (setq org-directory "~/org/")
+#+end_src
+*** org agenda files
+Add research todo and schedule files to org agenda.
+#+begin_src emacs-lisp
+(after! org
+  (add-to-list 'org-agenda-files "~/research/todo.org")
+  (add-to-list 'org-agenda-files "~/research/plan/schedule.org"))
+#+end_src
+*** org super agenda
+Group agenda items into sections for better scannability.
+#+begin_src emacs-lisp
+(use-package! org-super-agenda
+  :after org-agenda)
 #+end_src
 *** org habit
 #+begin_src emacs-lisp :tangle yes
