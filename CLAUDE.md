@@ -128,3 +128,4 @@ This repository requires GPG-signed commits. If GPG signing times out with "gpg:
 - Hyprland config uses `$variable` syntax for defining reusable values
 - Fish functions should be in separate files under `fish/functions/` (not in `config.fish`)
 - Many configs use the Nord color theme
+- **Whenever you add, remove, or significantly change a configuration directory (e.g., `gtk-3.0/`, `doom/`, `hypr/`), update `computer.org` to reflect the new setup. Keep documentation in sync with the actual configs.**
