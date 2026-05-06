@@ -4,3 +4,6 @@
 tmp/
 config.el
 configBac.el
+AGENTS.md
+doom/.env
+ghostty/*.bak

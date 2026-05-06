@@ -266,13 +266,20 @@ zoxide init fish
 #+end_src
 
 *** File Manager (yazi)
-Terminal file manager with drag-and-drop support:
+Terminal file manager with drag-and-drop and clipboard support:
 #+begin_src shell
-sudo pacman -S yazi parallel ripdrag
+sudo pacman -S yazi parallel ripdrag xclip
+#+end_src
+
+Plugins (managed via =ya pkg=):
+#+begin_src shell
+ya pkg add boydaihungst/restore
+ya pkg add simla33/ucp
 #+end_src
 
 Key features:
 - Press =C-n= in Yazi to drag and drop selected files
+- Press =C-y= in Yazi to copy selected files to system clipboard (Wayland + XWayland via =ucp.yazi=)
 - Files open via =xdg-open= using GNU Parallel for batch opening
 - Fish integration: =y= command changes cwd on exit
 

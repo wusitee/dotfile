@@ -1,6 +1,7 @@
 [mgr]
   prepend_keymap = [
     { on = "<C-n>", run = "shell -- ripdrag %s -xan 2>/dev/null &", desc = "Drag and drop selected files" },
+    { on = "<C-y>", run = "plugin ucp -- copy notify", desc = "Copy selected files to clipboard" },
 
     { on = "u", run = "plugin restore", desc = "Restore last deleted files/folders" },
     # or use "d + u" like me

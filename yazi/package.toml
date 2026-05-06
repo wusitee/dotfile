@@ -3,5 +3,15 @@ use = "boydaihungst/restore"
 rev = "2161735"
 hash = "901741afba1979739b4650324265162e"
 
+[[plugin.deps]]
+use = "XYenon/clipboard"
+rev = "d6fc531"
+hash = "c5607f93b1a0d128f08e3abc07135dbe"
+
+[[plugin.deps]]
+use = "simla33/ucp"
+rev = "b74651d"
+hash = "a008e4f6e4222f282472044bec7df1ef"
+
 [flavor]
 deps = []
