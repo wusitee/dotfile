@@ -210,6 +210,14 @@ sudo pacman -S firefox-i18n-zh-cn
 **** Troubleshooting: When Firefox is laggy
 You can choose to refresh Firefox and redo the above configuration.
 
+**** Troubleshooting: Firefox extension popups are oversized on Wayland
+On Firefox 150 with Wayland/HiDPI, extension popups such as uBlock Origin can
+render extremely large and stop registering clicks correctly. The workaround
+from this [[https://bbs.archlinux.org/viewtopic.php?id=313261][Arch Linux forum thread]] is:
+
+- Open =about:config=.
+- Set =widget.wayland.fractional-scale.enabled= to =false=.
+
 *** Okular
 A PDF reader:
 #+begin_src shell
