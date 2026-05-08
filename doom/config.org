@@ -603,13 +603,24 @@ Add research todo and schedule files to org agenda.
 #+begin_src emacs-lisp
 (after! org
   (add-to-list 'org-agenda-files "~/research/todo.org")
-  (add-to-list 'org-agenda-files "~/research/plan/schedule.org"))
+  (add-to-list 'org-agenda-files "~/research/plan/schedule.org")
+  (add-to-list 'org-agenda-files "~/research/papers/papers.org"))
 #+end_src
 *** org super agenda
 Group agenda items into sections for better scannability.
 #+begin_src emacs-lisp
 (use-package! org-super-agenda
   :after org-agenda)
+#+end_src
+*** org agenda cleanup
+Keep dated TODO entries out of the lower global TODO list.
+#+begin_src emacs-lisp :tangle yes
+(after! org
+  (setq org-agenda-custom-commands
+        '(("n" "Agenda and de-duplicated TODOs"
+           ((agenda "")
+            (alltodo ""
+                     ((org-agenda-todo-ignore-with-date t))))))))
 #+end_src
 *** org habit
 #+begin_src emacs-lisp :tangle yes

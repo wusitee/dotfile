@@ -307,6 +307,11 @@ git clone --depth 1 https://github.com/doomemacs/doomemacs ~/.config/emacs
 ~/.config/emacs/bin/doom install
 #+end_src
 
+*** Org agenda
+The custom =n= agenda command shows the 10-day agenda with a lower TODO list.
+The TODO list ignores entries with dates, so scheduled tasks, deadlines, habits,
+and timestamped items do not repeat below the agenda.
+
 * Troubleshooting Reference
 Cross-cutting issues that don't fit in specific sections:
 
