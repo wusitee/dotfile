@@ -78,6 +78,10 @@ The repository is hosted at `git@github.com:wusitee/dotfile.git`.
 
 ### Doom Emacs
 
+- For Doom-only maintenance, AI coding agents should read `doom/AGENTS.md`
+  before making changes. It contains the focused Doom workflow, custom Org-stack
+  notes, agenda behavior, and validation steps so Codex, Claude Code, and other
+  tools do not need to re-read unrelated dotfile sections.
 - Always edit `doom/config.org`, not `doom/config.el`.
 - `config.el` is tangled from `config.org` and is generated output.
 - Run `doom sync` after changing `doom/init.el` or `doom/packages.el`.
