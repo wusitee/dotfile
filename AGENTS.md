@@ -36,10 +36,12 @@ The repository is hosted at `git@github.com:wusitee/dotfile.git`.
 
 ```
 ├── hypr/                    # Hyprland configuration
-│   ├── hyprland.conf        # Main compositor config
+│   ├── hyprland.lua         # Main compositor config
+│   ├── hyprland_common.lua  # Shared compositor settings
+│   ├── hyprland_without_hy3.lua  # Native-layout fallback config
+│   ├── hyprland.conf        # Legacy Hyprlang fallback (ignored when Lua exists)
 │   ├── hypridle.conf        # Idle management (lock / dpms off / suspend)
-│   ├── hyprlock.conf        # Screen lock UI config
-│   └── hyprland_without_hy3.conf  # Fallback config without hy3
+│   └── hyprlock.conf        # Screen lock UI config
 ├── doom/                    # Doom Emacs configuration
 │   ├── config.org           # Primary literate config (edit this)
 │   ├── config.el            # Tangled output (do not edit directly)
@@ -102,10 +104,15 @@ The repository is hosted at `git@github.com:wusitee/dotfile.git`.
 
 ### Hyprland
 
-- Config uses `$variable` syntax for reusable values.
+- Config uses Lua locals for reusable values.
+- `hyprland.lua` is the active entry point; `hyprland_without_hy3.lua` selects
+  the native `dwindle` layout, and `hyprland.conf` remains only as a legacy
+  fallback.
 - Monitor scale is `2` for the laptop panel.
-- Autostart is declared with `exec-once` in `hyprland.conf`.
-- Primary layout is `hy3`; `hyprland_without_hy3.conf` is the fallback.
+- Autostart is registered with `hl.on("hyprland.start", ...)` in
+  `hyprland_common.lua`.
+- Primary layout is `hy3`; native Hyprland bindings remain available in the
+  main config when the plugin is temporarily incompatible.
 - The config also uses `hyprexpo` and `hyprpm reload -n` at startup.
 - Keybindings use `SUPER` as the main modifier.
 
@@ -200,7 +207,7 @@ This setup is tailored for a Huawei MateBook X Pro 2021.
   `/usr/lib/systemd/system-sleep/`.
 - `dotfiles-huawei-wmi/huawei-wmi-thresholds.sh` restores battery thresholds
   after suspend/resume from `/etc/default/huawei-wmi/charge_control_thresholds`.
-- `matebook-applet` runs at startup from `hyprland.conf`.
+- `matebook-applet` runs at startup from `hyprland_common.lua`.
 - `sof-firmware` is required; sound-after-suspend notes live in `computer.org`.
 
 ## System Documentation

@@ -1,0 +1,323 @@
+return function(options)
+    local useHy3 = options.use_hy3
+    local terminal = "ghostty"
+    local fileManager = "yazi"
+    local menu = "rofi -show combi"
+    local mainMod = "SUPER"
+
+    hl.monitor({
+        output = "",
+        mode = "highres",
+        position = "auto",
+        scale = 2,
+    })
+
+    hl.env("XCURSOR_SIZE", "24")
+    hl.env("XCURSOR_THEME", "Breeze_Dark")
+    hl.env("QT_QPA_PLATFORMTHEME", "qt6ct")
+    hl.env("QT_WAYLAND_DISABLE_WINDOWDECORATION", "1")
+    hl.env("QT_IM_MODULE", "fcitx")
+    hl.env("XMODIFIERS", "@im=fcitx")
+    hl.env("SDL_IM_MODULE", "fcitx")
+
+    hl.config({
+        xwayland = {
+            force_zero_scaling = true,
+        },
+        general = {
+            gaps_in = 5,
+            gaps_out = 10,
+            border_size = 2,
+            col = {
+                active_border = "rgba(33ccffee)",
+                inactive_border = "rgba(595959aa)",
+            },
+            resize_on_border = false,
+            allow_tearing = false,
+            layout = useHy3 and "hy3" or "dwindle",
+        },
+        decoration = {
+            rounding = 5,
+            rounding_power = 2,
+            active_opacity = 1.0,
+            inactive_opacity = 1.0,
+            shadow = {
+                enabled = false,
+                range = 4,
+                render_power = 3,
+                color = "rgba(1a1a1aee)",
+            },
+            blur = {
+                enabled = false,
+                size = 3,
+                passes = 1,
+                vibrancy = 0.1696,
+            },
+        },
+        animations = {
+            enabled = true,
+        },
+        master = {
+            new_status = "master",
+        },
+        dwindle = not useHy3 and {
+            preserve_split = true,
+        } or nil,
+        misc = not useHy3 and {
+            force_default_wallpaper = -1,
+            focus_on_activate = true,
+            disable_hyprland_logo = false,
+        } or nil,
+        input = {
+            kb_layout = "us",
+            kb_variant = "",
+            kb_model = "",
+            kb_options = "caps:swapescape",
+            kb_rules = "",
+            follow_mouse = 1,
+            sensitivity = 0,
+            touchpad = {
+                natural_scroll = true,
+            },
+        },
+    })
+
+    hl.curve("easeOutQuint", { type = "bezier", points = { { 0.23, 1 }, { 0.32, 1 } } })
+    hl.curve("easeInOutCubic", { type = "bezier", points = { { 0.65, 0.05 }, { 0.36, 1 } } })
+    hl.curve("linear", { type = "bezier", points = { { 0, 0 }, { 1, 1 } } })
+    hl.curve("almostLinear", { type = "bezier", points = { { 0.5, 0.5 }, { 0.75, 1.0 } } })
+    hl.curve("quick", { type = "bezier", points = { { 0.15, 0 }, { 0.1, 1 } } })
+
+    hl.animation({ leaf = "global", enabled = true, speed = 10, bezier = "default" })
+    hl.animation({ leaf = "border", enabled = true, speed = 5.39, bezier = "easeOutQuint" })
+    hl.animation({ leaf = "windows", enabled = true, speed = 4.79, bezier = "easeOutQuint" })
+    hl.animation({ leaf = "windowsIn", enabled = true, speed = 4.1, bezier = "easeOutQuint", style = "popin 87%" })
+    hl.animation({ leaf = "windowsOut", enabled = true, speed = 1.49, bezier = "linear", style = "popin 87%" })
+    hl.animation({ leaf = "fadeIn", enabled = true, speed = 1.73, bezier = "almostLinear" })
+    hl.animation({ leaf = "fadeOut", enabled = true, speed = 1.46, bezier = "almostLinear" })
+    hl.animation({ leaf = "fade", enabled = true, speed = 3.03, bezier = "quick" })
+    hl.animation({ leaf = "layers", enabled = true, speed = 3.81, bezier = "easeOutQuint" })
+    hl.animation({ leaf = "layersIn", enabled = true, speed = 4, bezier = "easeOutQuint", style = "fade" })
+    hl.animation({ leaf = "layersOut", enabled = true, speed = 1.5, bezier = "linear", style = "fade" })
+    hl.animation({ leaf = "fadeLayersIn", enabled = true, speed = 1.79, bezier = "almostLinear" })
+    hl.animation({ leaf = "fadeLayersOut", enabled = true, speed = 1.39, bezier = "almostLinear" })
+    hl.animation({ leaf = "workspaces", enabled = true, speed = 1.94, bezier = "almostLinear", style = "fade" })
+    hl.animation({ leaf = "workspacesIn", enabled = true, speed = 1.21, bezier = "almostLinear", style = "fade" })
+    hl.animation({ leaf = "workspacesOut", enabled = true, speed = 1.94, bezier = "almostLinear", style = "fade" })
+
+    hl.workspace_rule({
+        workspace = "special:magic",
+        gaps_out = 130,
+    })
+
+    hl.window_rule({
+        name = "fix-wechat",
+        match = {
+            class = "wechat",
+            title = "negative:^(朋友圈|微信|设置|聊天文件|预览|图片和视频)\\W*",
+        },
+        no_blur = true,
+        no_shadow = true,
+        float = true,
+        border_size = 0,
+    })
+
+    hl.window_rule({
+        name = "fix-wechat-send",
+        match = {
+            class = "wechat",
+            title = "^微信发送给$",
+        },
+        no_blur = true,
+        no_shadow = true,
+        border_size = 0,
+    })
+
+    hl.window_rule({
+        name = "fix-wechat-picture-window",
+        match = {
+            class = "wechat",
+            title = "^(图片和视频|朋友圈)$",
+        },
+        float = true,
+        center = true,
+    })
+
+    hl.device({
+        name = "epic-mouse-v1",
+        sensitivity = -0.5,
+    })
+
+    local hy3 = useHy3 and hl.plugin.hy3 or nil
+    if hy3 then
+        hl.config({
+            plugin = {
+                hy3 = {
+                    node_collapse_policy = 2,
+                    group_inset = 10,
+                    tab_first_window = false,
+                    tabs = {
+                        blur = false,
+                    },
+                    autotile = {
+                        enable = true,
+                    },
+                },
+            },
+        })
+    end
+
+    if not useHy3 and hl.plugin.hyprexpo then
+        hl.config({
+            plugin = {
+                hyprexpo = {
+                    columns = 3,
+                    gap_size = 5,
+                    bg_col = "rgb(111111)",
+                    workspace_method = "center current",
+                },
+            },
+        })
+    end
+
+    hl.bind(mainMod .. " + Return", hl.dsp.exec_cmd(terminal))
+    hl.bind(mainMod .. " + SHIFT + Q", hl.dsp.window.close())
+    hl.bind(mainMod .. " + SHIFT + E", hl.dsp.exit())
+    if hy3 then
+        local changeGroup = hy3.change_group("opposite")
+        hl.bind(mainMod .. " + E", function()
+            hl.dispatch(hl.dsp.exec_cmd(fileManager))
+            changeGroup()
+        end)
+    else
+        hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(fileManager))
+    end
+    hl.bind(mainMod .. " + SHIFT + Space", hl.dsp.window.float())
+    hl.bind(mainMod .. " + F", hl.dsp.window.fullscreen())
+    hl.bind(mainMod .. " + d", hl.dsp.exec_cmd(menu))
+    hl.bind(mainMod .. " + space", hl.dsp.exec_cmd("rofi -show window"))
+
+    if hy3 then
+        hl.bind(mainMod .. " + h", hy3.move_focus("l"))
+        hl.bind(mainMod .. " + l", hy3.move_focus("r"))
+        hl.bind(mainMod .. " + j", hy3.move_focus("d"))
+        hl.bind(mainMod .. " + k", hy3.move_focus("u"))
+        hl.bind(mainMod .. " + SHIFT + h", hy3.move_window("l"))
+        hl.bind(mainMod .. " + SHIFT + j", hy3.move_window("d"))
+        hl.bind(mainMod .. " + SHIFT + k", hy3.move_window("u"))
+        hl.bind(mainMod .. " + SHIFT + l", hy3.move_window("r"))
+        hl.bind(mainMod .. " + W", hy3.change_group("toggletab"))
+    else
+        hl.bind(mainMod .. " + h", hl.dsp.focus({ direction = "l" }))
+        hl.bind(mainMod .. " + l", hl.dsp.focus({ direction = "r" }))
+        hl.bind(mainMod .. " + j", hl.dsp.focus({ direction = "d" }))
+        hl.bind(mainMod .. " + k", hl.dsp.focus({ direction = "u" }))
+        hl.bind(mainMod .. " + SHIFT + h", hl.dsp.window.move({ direction = "l" }))
+        hl.bind(mainMod .. " + SHIFT + j", hl.dsp.window.move({ direction = "d" }))
+        hl.bind(mainMod .. " + SHIFT + k", hl.dsp.window.move({ direction = "u" }))
+        hl.bind(mainMod .. " + SHIFT + l", hl.dsp.window.move({ direction = "r" }))
+        hl.bind(mainMod .. " + W", hl.dsp.group.toggle())
+    end
+
+    hl.bind(mainMod .. " + x", hl.dsp.focus({ last = true }))
+    hl.bind(mainMod .. " + Tab", function()
+        if not hy3 then
+            hl.dispatch(hl.dsp.group.next())
+        end
+        hl.dispatch(hl.dsp.window.cycle_next({ next = true }))
+        hl.dispatch(hl.dsp.window.bring_to_top())
+    end)
+
+    for workspace = 1, 10 do
+        local key = workspace % 10
+        hl.bind(mainMod .. " + " .. key, hl.dsp.focus({ workspace = workspace }))
+        hl.bind(mainMod .. " + SHIFT + " .. key, hl.dsp.window.move({ workspace = workspace }))
+    end
+
+    hl.bind(mainMod .. " + minus", hl.dsp.workspace.toggle_special("magic"))
+    hl.bind(mainMod .. " + SHIFT + minus", hl.dsp.window.move({ workspace = "special:magic" }))
+    hl.bind(mainMod .. " + mouse_down", hl.dsp.focus({ workspace = "e+1" }))
+    hl.bind(mainMod .. " + mouse_up", hl.dsp.focus({ workspace = "e-1" }))
+    hl.bind(mainMod .. " + mouse:272", hl.dsp.window.drag(), { mouse = true })
+    hl.bind(mainMod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
+
+    local repeatWhileLocked = { locked = true, repeating = true }
+    hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+"), repeatWhileLocked)
+    hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"), repeatWhileLocked)
+    hl.bind("XF86AudioMute", hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"), repeatWhileLocked)
+    hl.bind("XF86AudioMicMute", hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"), repeatWhileLocked)
+    hl.bind("XF86MonBrightnessUp", hl.dsp.exec_cmd("brightnessctl s 10%+"), repeatWhileLocked)
+    hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("brightnessctl s 10%-"), repeatWhileLocked)
+
+    local whileLocked = { locked = true }
+    hl.bind("XF86AudioNext", hl.dsp.exec_cmd("playerctl next"), whileLocked)
+    hl.bind("XF86AudioPause", hl.dsp.exec_cmd("playerctl play-pause"), whileLocked)
+    hl.bind("XF86AudioPlay", hl.dsp.exec_cmd("playerctl play-pause"), whileLocked)
+    hl.bind("XF86AudioPrev", hl.dsp.exec_cmd("playerctl previous"), whileLocked)
+
+    hl.bind(mainMod .. " + V", hl.dsp.exec_cmd("copyq toggle"))
+    hl.bind(mainMod .. " + N", hl.dsp.exec_cmd("swaync-client --toggle-panel"))
+    hl.bind("Print", hl.dsp.exec_cmd("sh -c 'if pgrep -x slurp; then pkill slurp; else slurp | grim -g - - | wl-copy; fi'"))
+    hl.bind(mainMod .. " + SHIFT + escape", hl.dsp.exec_cmd("hyprlock"))
+    hl.bind(mainMod .. " + SHIFT + I", hl.dsp.exec_cmd("~/dotfile/script/toggle-inhibit-lid-sleep.sh"))
+    hl.bind(mainMod .. " + P", hl.dsp.exec_cmd("hyprctl activewindow | wl-copy"))
+
+    hl.window_rule({
+        match = { class = ".*copyq.*" },
+        float = true,
+        size = "500 600",
+        move = "985 385",
+    })
+    hl.window_rule({
+        match = { title = ".*Photos and Videos.*" },
+        float = true,
+        size = "1000 800",
+        center = true,
+    })
+    hl.window_rule({
+        match = { title = ".*Volume Control.*" },
+        float = true,
+        size = "45% 35%",
+        center = true,
+    })
+    hl.window_rule({
+        match = { float = true },
+        persistent_size = true,
+        max_size = "1300 800",
+    })
+    hl.window_rule({
+        name = "special-workspace-rule",
+        match = {
+            class = "negative:(com.mitchellh.ghostty|GTK Application|hyprpolkitagent|com.github.hluk.copyq)",
+            workspace = "special:magic",
+        },
+        workspace = "+0",
+    })
+
+    hl.gesture({
+        fingers = 3,
+        direction = "horizontal",
+        action = "workspace",
+    })
+
+    hl.on("hyprland.start", function()
+        hl.exec_cmd(terminal)
+        hl.exec_cmd("nm-applet & matebook-applet")
+        hl.exec_cmd("waybar")
+        hl.exec_cmd("hyprpm reload -n && hyprctl reload")
+        hl.exec_cmd("systemctl --user start hyprpolkitagent")
+        hl.exec_cmd("fcitx5 -d")
+        hl.exec_cmd("copyq --start-server")
+        hl.exec_cmd("awww-daemon")
+        hl.exec_cmd("hypridle")
+        hl.exec_cmd("swaync")
+        hl.exec_cmd("gammastep")
+        hl.exec_cmd("onedrive --monitor")
+        hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP")
+        hl.exec_cmd("hyprctl setcursor \"Breeze Dark\" 24")
+    end)
+
+    hl.on("config.reloaded", function()
+        hl.exec_cmd("xrdb ~/.Xresources")
+    end)
+end

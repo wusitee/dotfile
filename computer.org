@@ -57,6 +57,9 @@ sudo ufw enable
 
 ** Hyprland (Primary)
 [[https://wiki.archlinux.org/title/Hyprland][Hyprland]] is a dynamic tiling Wayland compositor.
+The active config is =~/.config/hypr/hyprland.lua=. Hyprland prefers it over
+=hyprland.conf= after a full session restart; =hyprctl reload= cannot switch
+the running session from one config format to the other.
 
 Using xdg desktop portal:
 #+begin_src shell
@@ -75,9 +78,9 @@ Using rofi as application launcher:
 sudo pacman -S rofi-wayland
 #+end_src
 
-And in hyprland.conf:
-#+begin_src conf
-$menu = rofi -show combi
+And in =hyprland_common.lua=:
+#+begin_src lua
+local menu = "rofi -show combi"
 #+end_src
 
 *** Clipboard (copyq)
@@ -110,9 +113,11 @@ Using awww (successor to swww) for animated wallpapers:
 yay -S awww
 #+end_src
 
-Add to hyprland.conf autostart:
-#+begin_src conf
-exec-once = awww-daemon
+Add to the =hyprland_common.lua= startup hook:
+#+begin_src lua
+hl.on("hyprland.start", function()
+    hl.exec_cmd("awww-daemon")
+end)
 #+end_src
 
 *** Theming (GTK, Qt)
