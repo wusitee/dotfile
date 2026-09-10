@@ -1,1 +1,1 @@
-require("hyprland_common")({ use_hy3 = false })
+require("hyprland_common")({ layout = "dwindle" })

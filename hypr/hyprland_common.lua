@@ -1,5 +1,6 @@
 return function(options)
-    local useHy3 = options.use_hy3
+    local layout = options.layout
+    local useScrolling = layout == "scrolling"
     local terminal = "ghostty"
     local fileManager = "yazi"
     local menu = "rofi -show combi"
@@ -34,7 +35,7 @@ return function(options)
             },
             resize_on_border = false,
             allow_tearing = false,
-            layout = useHy3 and "hy3" or "dwindle",
+            layout = layout,
         },
         decoration = {
             rounding = 5,
@@ -60,10 +61,14 @@ return function(options)
         master = {
             new_status = "master",
         },
-        dwindle = not useHy3 and {
+        dwindle = layout == "dwindle" and {
             preserve_split = true,
         } or nil,
-        misc = not useHy3 and {
+        scrolling = useScrolling and {
+            fullscreen_on_one_column = true,
+            follow_min_visible = 0.75,
+        } or nil,
+        misc = layout == "dwindle" and {
             force_default_wallpaper = -1,
             focus_on_activate = true,
             disable_hyprland_logo = false,
@@ -78,6 +83,7 @@ return function(options)
             sensitivity = 0,
             touchpad = {
                 natural_scroll = true,
+                tap_and_drag = true,
             },
         },
     })
@@ -148,26 +154,7 @@ return function(options)
         sensitivity = -0.5,
     })
 
-    local hy3 = useHy3 and hl.plugin.hy3 or nil
-    if hy3 then
-        hl.config({
-            plugin = {
-                hy3 = {
-                    node_collapse_policy = 2,
-                    group_inset = 10,
-                    tab_first_window = false,
-                    tabs = {
-                        blur = false,
-                    },
-                    autotile = {
-                        enable = true,
-                    },
-                },
-            },
-        })
-    end
-
-    if not useHy3 and hl.plugin.hyprexpo then
+    if hl.plugin.hyprexpo then
         hl.config({
             plugin = {
                 hyprexpo = {
@@ -183,47 +170,30 @@ return function(options)
     hl.bind(mainMod .. " + Return", hl.dsp.exec_cmd(terminal))
     hl.bind(mainMod .. " + SHIFT + Q", hl.dsp.window.close())
     hl.bind(mainMod .. " + SHIFT + E", hl.dsp.exit())
-    if hy3 then
-        local changeGroup = hy3.change_group("opposite")
-        hl.bind(mainMod .. " + E", function()
-            hl.dispatch(hl.dsp.exec_cmd(fileManager))
-            changeGroup()
-        end)
-    else
-        hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(fileManager))
-    end
+    hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(fileManager))
     hl.bind(mainMod .. " + SHIFT + Space", hl.dsp.window.float())
     hl.bind(mainMod .. " + F", hl.dsp.window.fullscreen())
     hl.bind(mainMod .. " + d", hl.dsp.exec_cmd(menu))
     hl.bind(mainMod .. " + space", hl.dsp.exec_cmd("rofi -show window"))
 
-    if hy3 then
-        hl.bind(mainMod .. " + h", hy3.move_focus("l"))
-        hl.bind(mainMod .. " + l", hy3.move_focus("r"))
-        hl.bind(mainMod .. " + j", hy3.move_focus("d"))
-        hl.bind(mainMod .. " + k", hy3.move_focus("u"))
-        hl.bind(mainMod .. " + SHIFT + h", hy3.move_window("l"))
-        hl.bind(mainMod .. " + SHIFT + j", hy3.move_window("d"))
-        hl.bind(mainMod .. " + SHIFT + k", hy3.move_window("u"))
-        hl.bind(mainMod .. " + SHIFT + l", hy3.move_window("r"))
-        hl.bind(mainMod .. " + W", hy3.change_group("toggletab"))
+    hl.bind(mainMod .. " + h", hl.dsp.focus({ direction = "l" }))
+    hl.bind(mainMod .. " + l", hl.dsp.focus({ direction = "r" }))
+    hl.bind(mainMod .. " + j", hl.dsp.focus({ direction = "d" }))
+    hl.bind(mainMod .. " + k", hl.dsp.focus({ direction = "u" }))
+    hl.bind(mainMod .. " + SHIFT + h", hl.dsp.window.move({ direction = "l" }))
+    hl.bind(mainMod .. " + SHIFT + j", hl.dsp.window.move({ direction = "d" }))
+    hl.bind(mainMod .. " + SHIFT + k", hl.dsp.window.move({ direction = "u" }))
+    hl.bind(mainMod .. " + SHIFT + l", hl.dsp.window.move({ direction = "r" }))
+    if useScrolling then
+        hl.bind(mainMod .. " + W", hl.dsp.layout("colresize +conf"))
+        hl.bind(mainMod .. " + SHIFT + W", hl.dsp.layout("colresize -conf"))
     else
-        hl.bind(mainMod .. " + h", hl.dsp.focus({ direction = "l" }))
-        hl.bind(mainMod .. " + l", hl.dsp.focus({ direction = "r" }))
-        hl.bind(mainMod .. " + j", hl.dsp.focus({ direction = "d" }))
-        hl.bind(mainMod .. " + k", hl.dsp.focus({ direction = "u" }))
-        hl.bind(mainMod .. " + SHIFT + h", hl.dsp.window.move({ direction = "l" }))
-        hl.bind(mainMod .. " + SHIFT + j", hl.dsp.window.move({ direction = "d" }))
-        hl.bind(mainMod .. " + SHIFT + k", hl.dsp.window.move({ direction = "u" }))
-        hl.bind(mainMod .. " + SHIFT + l", hl.dsp.window.move({ direction = "r" }))
         hl.bind(mainMod .. " + W", hl.dsp.group.toggle())
     end
 
     hl.bind(mainMod .. " + x", hl.dsp.focus({ last = true }))
     hl.bind(mainMod .. " + Tab", function()
-        if not hy3 then
-            hl.dispatch(hl.dsp.group.next())
-        end
+        hl.dispatch(hl.dsp.group.next())
         hl.dispatch(hl.dsp.window.cycle_next({ next = true }))
         hl.dispatch(hl.dsp.window.bring_to_top())
     end)
@@ -294,17 +264,29 @@ return function(options)
         workspace = "+0",
     })
 
-    hl.gesture({
-        fingers = 3,
-        direction = "horizontal",
-        action = "workspace",
-    })
+    if useScrolling then
+        hl.gesture({
+            fingers = 3,
+            direction = "horizontal",
+            action = "workspace",
+        })
+        hl.gesture({
+            fingers = 3,
+            direction = "vertical",
+            action = "scroll_move",
+        })
+    else
+        hl.gesture({
+            fingers = 3,
+            direction = "horizontal",
+            action = "workspace",
+        })
+    end
 
     hl.on("hyprland.start", function()
         hl.exec_cmd(terminal)
         hl.exec_cmd("nm-applet & matebook-applet")
         hl.exec_cmd("waybar")
-        hl.exec_cmd("hyprpm reload -n && hyprctl reload")
         hl.exec_cmd("systemctl --user start hyprpolkitagent")
         hl.exec_cmd("fcitx5 -d")
         hl.exec_cmd("copyq --start-server")
