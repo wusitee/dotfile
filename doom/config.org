@@ -112,6 +112,18 @@ Set the spelling check to en-US
 #+end_src
 
 ** lsp
+*** Client startup workaround
+The installed =lsp-ts-query= default calls =nil= as a function, aborting
+startup for all language servers. Initialize its parser paths with the
+correct predicate before the client loads.
+#+begin_src emacs-lisp
+(after! lsp-mode
+  (defvar lsp-ts-query-parser-install-directories
+    (cl-remove-if #'null
+                  (vector (expand-file-name (locate-user-emacs-file "tree-sitter"))
+                          (and (featurep 'tree-sitter-langs)
+                               (tree-sitter-langs--bin-dir))))))
+#+end_src
 *** Performance
 Follow the [[https://emacs-lsp.github.io/lsp-mode/page/performance/][Performance page]]:
 #+begin_src emacs-lisp
@@ -203,6 +215,49 @@ Use copilot when needed.
 ;;   (add-hook 'find-file-hook 'cns-auto-enable))
 #+end_src
 * lang
+** C++
+Use four spaces for indentation in both C++ modes.
+#+begin_src emacs-lisp
+(defun my/c++-indentation-h ()
+  (setq-local c-basic-offset 4
+              c-ts-mode-indent-offset 4
+              tab-width 4
+              indent-tabs-mode nil))
+(add-hook 'c++-mode-hook #'my/c++-indentation-h)
+(add-hook 'c++-ts-mode-hook #'my/c++-indentation-h)
+#+end_src
+Pair angle brackets for includes and likely templates, not arbitrary variables.
+Lowercase custom template names may need a manually typed closing bracket.
+#+begin_src emacs-lisp
+(defun my/c++-template-angle-p (id action context)
+  "Pair ID after common template names without treating i< as a template."
+  (and (sp-in-code-p id action context)
+       (or (eq action 'autoskip)
+           (and (eq action 'insert)
+                (save-excursion
+                  (backward-char (length id))
+                  (skip-chars-backward " \t")
+                  (let ((end (point)))
+                    (skip-syntax-backward "w_")
+                    (let ((name (buffer-substring-no-properties (point) end))
+                          (case-fold-search nil))
+                      (or (string-match-p "\\`[A-Z][[:alnum:]_]*\\'" name)
+                          (member name
+                                  '("vector" "array" "deque" "list" "forward_list"
+                                    "map" "multimap" "unordered_map" "unordered_multimap"
+                                    "set" "multiset" "unordered_set" "unordered_multiset"
+                                    "stack" "queue" "priority_queue" "pair" "tuple"
+                                    "optional" "variant" "span" "basic_string"
+                                    "basic_string_view" "unique_ptr" "shared_ptr" "weak_ptr"
+                                    "function" "template" "static_cast" "dynamic_cast"
+                                    "const_cast" "reinterpret_cast"))))))))))
+
+(after! (cc-mode smartparens)
+  (sp-local-pair '(c++-mode c++-ts-mode) "<" ">"
+                 :actions '(wrap insert autoskip navigate)
+                 :when '(my/c++-template-angle-p
+                         +default-cc-sp-point-after-include-p)))
+#+end_src
 ** Org
 *** Latex preview
 \(Latex\)

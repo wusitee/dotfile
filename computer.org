@@ -317,6 +317,13 @@ The custom =n= agenda command shows the 10-day agenda with a lower TODO list.
 The TODO list ignores entries with dates, so scheduled tasks, deadlines, habits,
 and timestamped items do not repeat below the agenda.
 
+*** C++ language server
+The =cc +lsp= module uses =clangd=. Start or reconnect it with =M-x lsp=;
+enabling =lsp-mode= alone does not start a server.
+If startup reports =Symbol's function definition is void: nil= from
+=lsp-ts-query=, =doom/config.org= initializes its parser-directory setting
+before client loading to work around the installed package's broken default.
+
 * Troubleshooting Reference
 Cross-cutting issues that don't fit in specific sections:
 
