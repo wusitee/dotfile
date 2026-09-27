@@ -3,18 +3,15 @@
     { on = "<C-n>", run = "shell -- ripdrag %s -xan 2>/dev/null &", desc = "Drag and drop selected files" },
     { on = "<C-y>", run = "plugin ucp -- copy notify", desc = "Copy selected files to clipboard" },
 
+    # Keep "d" free as a single key (trash) and "D" (permanent delete).
+    # Binding chords like ["d", "u"] turns "d" into a prefix and breaks trash.
     { on = "u", run = "plugin restore", desc = "Restore last deleted files/folders" },
-    # or use "d + u" like me
-    { on = ["d", "u"], run = "plugin restore", desc = "Restore last deleted files/folders" },
 
     # Select files/folders to restore. Input item index or range separated by comma:
     # - Restore a trashed file:
     #      What file to restore [0..4]: 4
     # - Restore multiple trashed files separated by comma, also support range:
     #      What file to restore [0..3]: 0-2, 3
-
-    # This will throw error when there is existed file/folder
-    { on = [ "d", "U" ], run = "plugin restore -- --interactive", desc = "Restore deleted files/folders (Interactive)" },
-    # Or auto overwrite existed file/folder
-    { on = [ "d", "U" ], run = "plugin restore -- --interactive --interactive-overwrite", desc = "Restore deleted files/folders (Interactive overwrite)" },
+    # Errors if the file/folder already exists; add --interactive-overwrite to overwrite instead.
+    { on = "U", run = "plugin restore -- --interactive", desc = "Restore deleted files/folders (Interactive)" },
   ]
