@@ -154,9 +154,10 @@ The repository is hosted at `git@github.com:wusitee/dotfile.git`.
 
 - Plugins live under `yazi/plugins/` and include `restore`, `clipboard`, and `ucp`.
 - `yazi/package.toml` pins those plugin dependencies.
-- Keymap binds `u` and `d u` to `plugin restore`, with an interactive `d U`
-  variant.
-- The opener uses `xdg-open` via `parallel`.
+- Keymap binds `u` to `plugin restore` and `U` to its interactive variant; keep
+  `d` unbound as a chord prefix so it stays the default trash action.
+- `yazi/init.lua` enables the built-in zoxide plugin's `update_db` so Yazi
+  navigation updates zoxide frecency.
 
 ### Fcitx5
 

@@ -293,7 +293,8 @@ ya pkg add simla33/ucp
 Key features:
 - Press =C-n= in Yazi to drag and drop selected files
 - Press =C-y= in Yazi to copy selected files to system clipboard (Wayland + XWayland via =ucp.yazi=)
-- Files open via =xdg-open= using GNU Parallel for batch opening
+- Press =d= to trash, =D= to delete permanently, =u= / =U= to restore (last / interactive)
+- Directories visited in Yazi update zoxide frecency (=yazi/init.lua=)
 - Fish integration: =y= command changes cwd on exit
 
 *** Cloud Sync (onedrive)
