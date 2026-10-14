@@ -1,246 +1,179 @@
 # AGENTS.md
 
-This file is the canonical guidance for AI coding agents working in this repository.
-`CLAUDE.md` and `.claude/` are part of the repo history and tooling, but this file
-should be treated as the primary source of truth for repo-specific instructions.
+## Scope and instruction layout
 
-## Project Overview
+This is the canonical repository-wide policy for agents maintaining this
+personal dotfiles repository. `CLAUDE.md` remains a compatibility entry point
+that directs Claude Code here; do not duplicate this policy there.
 
-This is a personal dotfiles repository for a daily Arch Linux environment on a
-Huawei MateBook X Pro 2021. It contains configuration files, shell scripts, and
-system documentation for the user's desktop setup. Claude Code has been used to
-manage this repo and the surrounding configuration, so keep existing Claude-era
-conventions in mind instead of flattening them away.
+Read `doom/AGENTS.md` before Doom work. Read relevant repo-local skill
+instructions when using those skills. Preserve existing Claude tooling and
+configuration unless the task explicitly changes them.
 
-The repository is hosted at `git@github.com:wusitee/dotfile.git`.
+Keep this policy focused on durable maintenance rules. Application inventories,
+themes, keybindings, hardware details, deployment mappings, and usage belong in
+system documentation or the relevant configuration. Do not turn task-specific
+choices into standing rules without explicit authorization.
 
-## Technology Stack
+## Working approach
 
-- Operating System: Arch Linux
-- Window Manager / Compositor: Hyprland primary, with Sway and i3 fallbacks
-- Terminal Emulator: Ghostty primary, Alacritty secondary
-- Text Editors: Doom Emacs primary, Neovim secondary
-- Shell: Fish primary, with Nushell and PowerShell profiles
-- Status Bar: Waybar
-- Application Launcher: Rofi
-- File Manager: Yazi
-- Notification Center: Swaync
-- Screen Lock / Idle: Hyprlock + Hypridle
-- Wallpaper Daemon: awww
-- Input Method: Fcitx5 + Pinyin
-- Prompt: Starship
-- Clipboard Manager: CopyQ
-- Desktop Theming: GTK 3/4 settings, Qt via `qt6ct`
+Before editing, inspect `git status --short`, the diff for target files, and
+relevant source, documentation, and live configuration. Preserve existing edits
+and untracked files; do not reset, overwrite, stage, or clean unrelated work.
 
-## Repository Structure
+State material assumptions. Resolve routine implementation choices from the
+repository and task context. Ask when ambiguity changes scope, intended
+behavior, or whether a conflicting file may be replaced.
 
-```
-├── hypr/                    # Hyprland configuration
-│   ├── hyprland.lua         # Main compositor config
-│   ├── hyprland_common.lua  # Shared compositor settings
-│   ├── hyprland_without_hy3.lua  # Native-layout fallback config
-│   ├── hyprland.conf        # Legacy Hyprlang fallback (ignored when Lua exists)
-│   ├── hypridle.conf        # Idle management (lock / dpms off / suspend)
-│   └── hyprlock.conf        # Screen lock UI config
-├── doom/                    # Doom Emacs configuration
-│   ├── config.org           # Primary literate config (edit this)
-│   ├── config.el            # Tangled output (do not edit directly)
-│   ├── init.el              # Doom module selection
-│   └── packages.el          # Third-party package declarations
-├── nvim/                    # Neovim configuration
-│   ├── init.lua
-│   └── lua/
-│       ├── config/lazy.lua
-│       └── plugins/which-key.lua
-├── fish/                    # Fish shell configuration
-│   ├── config.fish
-│   └── functions/
-├── ghostty/                 # Ghostty terminal config
-│   ├── config
-│   └── keybinds
-├── alacritty/               # Alacritty configs
-│   ├── alacritty.toml
-│   └── alacritty.yml
-├── waybar/                  # Status bar config + style
-├── rofi/                    # Launcher config + themes
-├── yazi/                    # File manager config, plugins, package manifest
-├── starship/                # Prompt configuration
-├── swaync/                  # Notification center config + style
-├── fcitx5/                  # Input method config, profile, and module settings
-├── gtk-3.0/                 # GTK 3 settings
-├── gtk-4.0/                 # GTK 4 settings
-├── script/                  # Custom utility scripts
-├── dotfiles-huawei-wmi/     # Huawei battery threshold restore hook
-├── computer.org             # System documentation and install notes
-├── CLAUDE.md                # Legacy Claude Code guidance
-└── .claude/                 # Claude Code local settings
-```
+For multi-step work, give a short plan with verifiable outcomes. Make the
+smallest complete change, match existing style, and avoid speculative features,
+unrelated refactoring, formatting, or cleanup.
 
-## Editing Conventions
+## Repository hygiene
 
-### Doom Emacs
+Use Git-ignored `tmp/` for drafts, plans, work logs, experiments, temporary
+reproductions, and one-off validation artifacts. Create it only when needed.
+Maintained configuration, scripts, tests, documentation, and workflows must not
+depend on it. Do not relocate existing content to impose a new directory layout.
 
-- For Doom-only maintenance, AI coding agents should read `doom/AGENTS.md`
-  before making changes. It contains the focused Doom workflow, custom Org-stack
-  notes, agenda behavior, and validation steps so Codex, Claude Code, and other
-  tools do not need to re-read unrelated dotfile sections.
-- Always edit `doom/config.org`, not `doom/config.el`.
-- `config.el` is tangled from `config.org` and is generated output.
-- Run `doom sync` after changing `doom/init.el` or `doom/packages.el`.
-- Current Doom config includes `chinese`, `japanese`, `corfu`, `vertico`, `doom`,
-  `treemacs`, `evil`, `lsp`, `magit`, `pdf`, `org` with `+roam2 +pretty`, `python`,
-  `rust`, `llm`, and related modules.
-- The config currently carries AI-related setup for `gptel`, `claude-code-ide`,
-  `claude-code-ide-extras`, `kimi-code-ide`, `copilot`, and `org-roam-ui`.
-- The active editor theme is `doom-horizon`; the font is Maple Mono Normal NF CN
-  at size 15 with alpha background 90.
+Changes intended for Git must be complete, maintainable, and validated. Keep
+generated output, application state, credentials, backups, reject files, and
+bundled third-party code separate from configuration sources. Do not remove
+existing snapshots or state merely because they are already tracked.
 
-### Fish Shell
+This repository intentionally maintains personal and machine-specific dotfiles.
+Keep settings that are part of the requested setup in their appropriate tracked
+configuration. Keep agent-only local preferences and secrets in ignored,
+tool-supported local configuration or external credential storage. Do not add
+credentials to the repository; retain Emacs `auth-source` integration.
 
-- Add new functions as separate files under `fish/functions/`.
-- `fish/config.fish` currently keeps shared shell init plus the inline `y`
-  function for Yazi cwd integration.
-- The standalone `ff` helper lives in `fish/functions/ff.fish`.
+## Source and deployment
 
-### Hyprland
+There is no repository-wide installer or Stow manifest. `docs/computer.org`
+records deployment relationships, but its dated inventory must be checked
+against the current machine before use.
 
-- Config uses Lua locals for reusable values.
-- `hyprland.lua` is the active entry point; `hyprland_without_hy3.lua` selects
-  the native `dwindle` layout, and `hyprland.conf` remains only as a legacy
-  fallback.
-- Monitor scale is `2` for the laptop panel.
-- Autostart is registered with `hl.on("hyprland.start", ...)` in
-  `hyprland_common.lua`.
-- Primary layout is `hy3`; native Hyprland bindings remain available in the
-  main config when the plugin is temporarily incompatible.
-- The config also uses `hyprexpo` and `hyprpm reload -n` at startup.
-- Keybindings use `SUPER` as the main modifier.
+Identify both the repository source and live destination. Inspect destinations
+with `ls -ld` and `readlink -f`; compare independent files before copying or
+linking them. An edit through a deployed symlink can immediately change the live
+configuration. Preserve independent live edits and existing link arrangements.
+Use relative targets for new symlinks where practical.
 
-### Neovim
+Deploy only the intended files within the task's authorized scope. Do not
+bulk-copy directories or overwrite a conflicting destination without resolving
+its contents and replacement authorization. Preserve unrelated provider settings,
+plugins, runtime state, and user data.
 
-- The Neovim setup is intentionally minimal.
-- `nvim/lua/plugins/which-key.lua` currently holds the plugin specs.
-- Active plugins include `tokyonight`, `which-key`, `neorg`, `nvim-cmp`,
-  `treesj`, `dial.nvim`, `nvim-web-devicons`, `dressing.nvim`, and
-  `vim-startuptime`.
+Respect these source boundaries:
 
-### Ghostty
+- Doom: edit `doom/config.org`; tangle to the ignored `doom/config.el`.
+  Follow `doom/AGENTS.md` for module, package, Org-stack, and validation work.
+- Fish: place new functions in `fish/functions/`. Do not overwrite live
+  universal variables when deploying a function or `config.fish`.
+- Rime: manage `rime/default.custom.yaml` as a single-file customization;
+  preserve generated dictionaries and user data. Compare the older Fcitx5
+  snapshot before deploying it over a live profile.
+- Vim: manage `vim/vimrc`; preserve the live plugin and runtime directories.
+- systemd: manage user units individually. Keep the lid and idle hold services
+  on demand; do not enable them at login as routine deployment.
+- External integrations: verify referenced executables and settings; changes to
+  dotfiles do not authorize modifying the external application's implementation.
 
-- Active config is `ghostty/config`.
-- Font: `Maple Mono Normal NF CN` at size 13.
-- Window decoration is disabled, theme is dark, and `focus-follows-mouse = true`.
-- `ghostty/keybinds` defines the tab/split/window shortcuts.
+## Documentation
 
-### Alacritty
+Project documentation language is English, following `docs/computer.org`. This
+setting does not require translating policy files, source, identifiers,
+comments, commit messages, logs, or existing content outside the task.
 
-- `alacritty/alacritty.toml` is the active config.
-- `alacritty/alacritty.yml` is a legacy config kept for reference.
+Keep durable system documentation in `docs/`. Start with `docs/computer.org`
+as the main system guide; add focused pages only when the content benefits from
+separation. Preserve Org format unless a format change is requested. Create
+documentation files and directories only when there is maintained content.
 
-### Waybar
+Keep one canonical copy of each guide. Update references and relative links
+when moving documentation. Retain component READMEs and scoped agent policies
+in place unless their relocation is part of the task. Keep task briefs,
+implementation plans, and work logs in `tmp/`.
 
-- Height is 22px and the bar is positioned at the top.
-- Left modules: `hyprland/workspaces`, `tray`.
-- Center module: `clock`.
-- Right modules: `pulseaudio`, `backlight`, `cpu`, `memory`, `battery`.
-- Styling currently uses a Maple Mono NF font stack and a dark palette.
+Review documentation impact with each change. Update setup, dependencies,
+deployment, usage, troubleshooting, or reload instructions when they become
+inaccurate or insufficient. Describe the current system, not the request or work
+history. Leave accurate documentation unchanged; restoring documented behavior
+alone does not require a documentation edit.
 
-### Rofi
+If a root README is added or changed, prioritize first-time understanding and
+setup, and link to `docs/` from a dedicated documentation section. Include
+necessary documentation changes with the implementation in the same commit.
 
-- Modes: `window`, `drun`, `ssh`, `combi`, `run`.
-- Terminal: `ghostty`.
-- Theme: `Arc-Dark`.
+## Tests and validation
 
-### Yazi
+There is no unified build or test suite. Use existing component-specific checks
+and any applicable scoped instructions. Keep maintained regression tests in the
+relevant component, respecting existing or framework-required layouts; do not
+create a root test directory solely to satisfy this policy.
 
-- Plugins live under `yazi/plugins/` and include `restore`, `clipboard`, and `ucp`.
-- `yazi/package.toml` pins those plugin dependencies.
-- Keymap binds `u` to `plugin restore` and `U` to its interactive variant; keep
-  `d` unbound as a chord prefix so it stays the default trash action.
-- `yazi/init.lua` enables the built-in zoxide plugin's `update_db` so Yazi
-  navigation updates zoxide frecency.
+Add or extend tests only to cover meaningful behavior or a concrete regression
+gap. Keep one-off reproductions in `tmp/`. Within the affected test area,
+consolidate redundant cases when justified while preserving distinct failure
+modes; do not weaken or skip tests to hide failures.
 
-### Fcitx5
+Run the checks relevant to changed files:
 
-- Default group: `Default` with `keyboard-us` and `pinyin`.
-- Trigger key: `Control+space`.
-- Alternative trigger: `Shift_L`.
-- Theme: `Nord-Dark`.
+- Fish: `fish -n <file.fish>`.
+- Lua: `luac -p <file.lua>`; syntax checks do not validate application APIs.
+- Shell: `sh -n <file.sh>` or `bash -n <file.sh>`, matching the shebang.
+- systemd user units: `systemd-analyze --user verify <file.service>`.
+- TOML / JSON: parse with Python `tomllib` / `json`; use a comment-aware parser
+  for JSONC such as Waybar's configuration.
+- Doom: follow tangling, Lisp, sync, and behavior checks in `doom/AGENTS.md`.
+- Vim: use the existing noninteractive check in `docs/computer.org`, followed by
+  terminal behavior verification when affected.
+- Documentation: verify referenced files and commands.
 
-## Configuration Reload Commands
+For deployed changes, apply the relevant reload or restart from
+`docs/computer.org` and verify affected behavior. Static checks alone do not
+establish runtime correctness. Do not execute startup hooks, power-management
+scripts, or suspend actions merely as syntax checks. Documentation-only edits
+need no service reload.
 
-This repository has no build/test commands. Apply changes by reloading the
-relevant service or restarting the app:
+Run mandated checks and the minimum targeted validation needed for concrete
+risks. Reuse still-valid results; repeat or broaden checks only for failures,
+uncovered risks, or subsequent changes that invalidate them.
 
-| Component | Reload Command |
-| --- | --- |
-| Hyprland | `hyprctl reload` |
-| Doom Emacs | `doom sync` after `init.el` or `packages.el` changes |
-| Fish | `source ~/.config/fish/config.fish` |
-| Waybar | `killall waybar && waybar` |
-| Swaync | `killall swaync && swaync` |
-| Ghostty | Restart Ghostty |
-| Yazi | Restart Yazi |
+## GitHub Flow
 
-## Commit Guidelines
+For repository updates, create a focused branch from the default branch rather
+than committing directly to it. Preserve pending work when preparing the branch.
+Use signed, scoped commits and keep related implementation and documentation
+together. Push the branch and open a pull request describing the resulting
+behavior, validation, and any unresolved limitations.
 
-This repository requires GPG-signed commits. Do not bypass signing with
-`--no-gpg-sign`; if signing fails, ask the user to check their GPG agent or
-password manager.
+Address review feedback on the same branch. Merge only when requested and after
+required checks pass. Do not force-push or delete branches unless authorized.
 
-Use Conventional Commits:
+## Completion and commits
 
-```text
-<type>(<scope>): <description>
+Review the scoped diff and run `git diff --check`. Ensure intended changes are
+complete, affected documentation is current, and no temporary artifacts or
+dependencies on `tmp/` enter Git. Report what changed, what was verified, and
+any unresolved failures, unavailable checks, or pending deployment/reload steps.
 
-- Details about what changed
-- Why it changed
-```
+When a commit is requested, stage only explicit intended paths. Use GPG-signed
+Conventional Commits: `feat`, `fix`, or `docs`, with a relevant component scope
+such as `doom`, `hyprland`, `fish`, or `computer`. Never bypass signing with
+`--no-gpg-sign`; if signing fails, ask the user to fix their GPG agent or password
+manager.
 
-Types: `feat`, `fix`, `docs`
-Scopes: `doom`, `hyprland`, `fish`, `ghostty`, `yazi`, `waybar`, `nvim`,
-`rofi`, `swaync`, `fcitx5`, `computer`, and similar.
+## Policy changes
 
-## Hardware-Specific Notes
+Modify this policy or its compatibility entry point only when explicitly
+requested. Documentation language settings and broad editing or translation
+requests do not authorize policy changes. Prefer revising or removing redundant
+rules over accumulating instructions.
 
-This setup is tailored for a Huawei MateBook X Pro 2021.
-
-- `dotfiles-huawei-wmi/install.sh` installs the systemd-sleep hook to
-  `/usr/lib/systemd/system-sleep/`.
-- `dotfiles-huawei-wmi/huawei-wmi-thresholds.sh` restores battery thresholds
-  after suspend/resume from `/etc/default/huawei-wmi/charge_control_thresholds`.
-- `matebook-applet` runs at startup from `hyprland_common.lua`.
-- `sof-firmware` is required; sound-after-suspend notes live in `computer.org`.
-
-## System Documentation
-
-`computer.org` is the main system documentation. It covers:
-
-- Arch Linux and AUR package installation commands
-- Firewall setup
-- Desktop environment setup notes
-- GTK, Qt, and app theming
-- Firefox CSS tweaks
-- Application-specific configuration
-- Troubleshooting references
-- Dotfiles management notes
-
-Keep `computer.org` in sync when configuration directories are added, removed,
-or materially changed.
-
-## Security Considerations
-
-- GPG signing is enforced for commits.
-- API keys for AI integrations are stored through Emacs `auth-source` and are
-  not present in this repository.
-- The Huawei battery restore installer must be run with `sudo`.
-- Custom scripts in `script/` interact with `systemd-inhibit` and
-  `systemctl --user`; verify paths before editing.
-
-## Notes for AI Assistants
-
-- Prefer `cat` or shell reads for files with encoding quirks.
-- The Neovim config is intentionally small; do not assume a full IDE setup.
-- `CLAUDE.md` is legacy guidance, but the repo still carries Claude-specific
-  tooling and settings.
-- Avoid touching unrelated user changes.
-- Keep directory-level documentation and the actual configs aligned.
+When installing a replacement policy, first present its concrete diff and the
+disposition of existing project-specific rules. Obtain explicit approval before
+replacing a conflicting file or link unless that replacement was already
+authorized. Preserve the canonical `AGENTS.md` / `CLAUDE.md` redirect arrangement
+and scoped guidance unless a layout change is requested. Verify references and
+ignore rules, then tell the user to start a new agent session to load the policy.

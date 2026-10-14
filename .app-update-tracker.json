@@ -1,0 +1,902 @@
+{
+  "schema_version": 1,
+  "last_snapshot_at": "2026-07-12T10:15:34Z",
+  "applications": {
+    "hyprland": {
+      "name": "Hyprland",
+      "tracker": {
+        "type": "pacman",
+        "packages": [
+          "hyprland"
+        ]
+      },
+      "upstream": {
+        "type": "github-releases",
+        "repo": "hyprwm/Hyprland"
+      },
+      "config_paths": [
+        "hypr/hyprland.lua",
+        "hypr/hyprland_common.lua",
+        "hypr/hyprland_without_hy3.lua"
+      ],
+      "observed": {
+        "config_fingerprint": "5286edbf3f1004cf1d22387d9a35c1e0b5a56a38fbf5a57f8a2554831c2f8dae",
+        "config_paths": [
+          "hypr/hyprland.conf"
+        ],
+        "errors": [],
+        "installed": {
+          "package": "hyprland",
+          "source": "pacman",
+          "version": "0.55.4-1"
+        },
+        "missing_paths": [],
+        "name": "Hyprland",
+        "captured_at": "2026-07-12T10:15:34Z"
+      },
+      "review": {
+        "through": "0.55.4-1",
+        "reminders": [
+          {
+            "id": "hyprland-v0.55.3-fallback-movefocus-order",
+            "status": "resolved",
+            "severity": "review",
+            "introduced_in": "v0.55.3",
+            "summary": "Directional focus now prefers windows on the current workspace; test the fallback movefocus bindings across workspaces and monitors after upgrading.",
+            "config_matches": [
+              "hypr/hyprland_without_hy3.conf:297",
+              "hypr/hyprland_without_hy3.conf:298",
+              "hypr/hyprland_without_hy3.conf:299",
+              "hypr/hyprland_without_hy3.conf:300"
+            ],
+            "source": "https://github.com/hyprwm/Hyprland/releases/tag/v0.55.3",
+            "created_at": "2026-07-12T05:47:06Z",
+            "resolved_at": "2026-07-12T10:10:16Z",
+            "resolution": "The fallback Hyprland config was removed, so these bindings are no longer tracked."
+          },
+          {
+            "id": "hyprland-0.55.4-hy3-compatibility-blocked",
+            "status": "resolved",
+            "severity": "action-required",
+            "introduced_in": "0.55.4-1",
+            "summary": "Do not rely on hy3 with Hyprland 0.55.4: the current official hy3 HyprPM manifest has no compatibility pin for the v0.55.4 release commit.",
+            "config_matches": [
+              "hypr/hyprland.conf:59",
+              "hypr/hyprland.conf:120",
+              "hypr/hyprland.conf:438"
+            ],
+            "source": "https://github.com/outfoxxed/hy3/blob/master/hyprpm.toml",
+            "related_source": "https://github.com/outfoxxed/hy3#stability",
+            "created_at": "2026-07-12T10:10:16Z",
+            "resolved_at": "2026-10-14T17:09:13Z",
+            "resolution": "The active Lua config uses native scrolling and the fallback uses native dwindle; neither loads hy3. Recheck compatibility before re-enabling hy3."
+          },
+          {
+            "id": "hyprland-0.56.2-hy3-compatibility-blocked",
+            "status": "resolved",
+            "severity": "action-required",
+            "introduced_in": "0.56.2-1",
+            "summary": "Do not rely on hy3 with Hyprland 0.56.2: the current official hy3 HyprPM manifest has no compatibility pin for the v0.56.2 release commit.",
+            "config_matches": [
+              "hypr/hyprland.lua:1",
+              "hypr/hyprland_common.lua:37",
+              "hypr/hyprland_common.lua:151",
+              "hypr/hyprland_common.lua:307"
+            ],
+            "source": "https://github.com/outfoxxed/hy3/blob/master/hyprpm.toml",
+            "related_source": "https://github.com/outfoxxed/hy3#stability",
+            "created_at": "2026-09-04T15:56:00+08:00",
+            "resolved_at": "2026-10-14T17:09:13Z",
+            "resolution": "The active Lua config uses native scrolling and the fallback uses native dwindle; neither loads hy3. Recheck compatibility before re-enabling hy3."
+          }
+        ]
+      }
+    },
+    "hy3": {
+      "name": "hy3",
+      "tracker": {
+        "type": "toml",
+        "path": "~/.local/share/hyprpm/hy3/state.toml",
+        "key": "repository.hash"
+      },
+      "upstream": {
+        "type": "github-commits",
+        "repo": "outfoxxed/hy3"
+      },
+      "host_compatibility": {
+        "host_application": "hyprland",
+        "required_before_host_update": false,
+        "method": "hyprpm-commit-pin",
+        "manifest": "hyprpm.toml",
+        "last_check": {
+          "target_version": "0.56.2-1",
+          "target_release": "0.56.2",
+          "target_commit": "efb50993780079460b0cbed1363e2166a2de1d9f",
+          "plugin_head": "12a73ab0adddbc39f839da320dcc2b028769fc58",
+          "compatible_plugin_commit": null,
+          "status": "blocked",
+          "reason": "The current official hy3 HyprPM manifest has no commit pin for the Hyprland v0.56.2 release commit.",
+          "checked_at": "2026-09-04T15:56:00+08:00"
+        }
+      },
+      "config_paths": [
+        "hypr/hyprland.lua",
+        "hypr/hyprland_common.lua"
+      ],
+      "observed": {
+        "config_fingerprint": "5286edbf3f1004cf1d22387d9a35c1e0b5a56a38fbf5a57f8a2554831c2f8dae",
+        "config_paths": [
+          "hypr/hyprland.conf"
+        ],
+        "errors": [],
+        "installed": {
+          "key": "repository.hash",
+          "path": "/home/wste/.local/share/hyprpm/hy3/state.toml",
+          "source": "toml",
+          "version": "74a17a83c97cf332501c7f2be64381ddb9a1c679"
+        },
+        "missing_paths": [],
+        "name": "hy3",
+        "captured_at": "2026-07-12T10:15:34Z"
+      },
+      "review": {
+        "through": "ded5e168f3a8d1290b34d696930098e8c141404d",
+        "reminders": [
+          {
+            "id": "hy3-d7e0c58a-tabs-color-examples",
+            "status": "resolved",
+            "severity": "review",
+            "introduced_in": "d7e0c58a",
+            "summary": "The commented tab color examples use obsolete col.* keys; update them to tabs.colors names before reusing them.",
+            "config_matches": [
+              "hypr/hyprland.conf:490",
+              "hypr/hyprland.conf:513"
+            ],
+            "source": "https://github.com/outfoxxed/hy3/commit/d7e0c58a1116df3d79f24a225f17b988112ca1ad",
+            "created_at": "2026-07-12T05:47:06Z",
+            "resolved_at": "2026-09-04T15:56:00+08:00",
+            "resolution": "The Lua migration removed the obsolete commented tab-color examples."
+          },
+          {
+            "id": "hy3-e385b262-remove-no-gaps-when-only",
+            "status": "resolved",
+            "severity": "action-required",
+            "introduced_in": "e385b262",
+            "summary": "Remove no_gaps_when_only before updating hy3; the option was removed in favor of workspace rules.",
+            "config_matches": [
+              "hypr/hyprland_common.lua:156"
+            ],
+            "source": "https://github.com/outfoxxed/hy3/commit/e385b2625912202861c24ff4e37c51c7a6e6dcac",
+            "created_at": "2026-07-12T05:47:06Z",
+            "resolved_at": "2026-09-04T15:56:00+08:00",
+            "resolution": "The Lua migration removed the explicit default; hy3 now inherits its default behavior."
+          }
+        ]
+      }
+    },
+    "hypridle": {
+      "name": "hypridle",
+      "tracker": {
+        "type": "pacman",
+        "packages": [
+          "hypridle"
+        ]
+      },
+      "upstream": {
+        "type": "github-releases",
+        "repo": "hyprwm/hypridle"
+      },
+      "config_paths": [
+        "hypr/hypridle.conf"
+      ],
+      "observed": {
+        "config_fingerprint": "4f3d194f2bc431740313226dd2cbd2819ea5c796a44a0790c9ebd4a790a43b8b",
+        "config_paths": [
+          "hypr/hypridle.conf"
+        ],
+        "errors": [],
+        "installed": {
+          "package": "hypridle",
+          "source": "pacman",
+          "version": "0.1.7-9"
+        },
+        "missing_paths": [],
+        "name": "hypridle",
+        "captured_at": "2026-07-12T10:15:34Z"
+      },
+      "review": {
+        "through": "0.1.7-9",
+        "reminders": []
+      }
+    },
+    "hyprlock": {
+      "name": "hyprlock",
+      "tracker": {
+        "type": "pacman",
+        "packages": [
+          "hyprlock"
+        ]
+      },
+      "upstream": {
+        "type": "github-releases",
+        "repo": "hyprwm/hyprlock"
+      },
+      "config_paths": [
+        "hypr/hyprlock.conf"
+      ],
+      "observed": {
+        "config_fingerprint": "0c824fc5b9626fcd69669da90369ade1a2b526cc0b47e5a866ddf19c073573ab",
+        "config_paths": [
+          "hypr/hyprlock.conf"
+        ],
+        "errors": [],
+        "installed": {
+          "package": "hyprlock",
+          "source": "pacman",
+          "version": "0.9.5-4"
+        },
+        "missing_paths": [],
+        "name": "hyprlock",
+        "captured_at": "2026-07-12T10:15:34Z"
+      },
+      "review": {
+        "through": "0.9.5-4",
+        "reminders": []
+      }
+    },
+    "waybar": {
+      "name": "Waybar",
+      "tracker": {
+        "type": "pacman",
+        "packages": [
+          "waybar"
+        ]
+      },
+      "upstream": {
+        "type": "github-releases",
+        "repo": "Alexays/Waybar"
+      },
+      "config_paths": [
+        "waybar/config.jsonc",
+        "waybar/style.css"
+      ],
+      "observed": {
+        "config_fingerprint": "cc270e45e16aca1e28a4a08fdf66849a150db7562238698e58806f52b25a5d32",
+        "config_paths": [
+          "waybar/config.jsonc",
+          "waybar/style.css"
+        ],
+        "errors": [],
+        "installed": {
+          "package": "waybar",
+          "source": "pacman",
+          "version": "0.15.0-2"
+        },
+        "missing_paths": [],
+        "name": "Waybar",
+        "captured_at": "2026-07-12T10:15:34Z"
+      },
+      "review": {
+        "through": "0.15.0-2",
+        "reminders": []
+      }
+    },
+    "rofi": {
+      "name": "Rofi",
+      "tracker": {
+        "type": "pacman",
+        "packages": [
+          "rofi",
+          "rofi-wayland"
+        ]
+      },
+      "upstream": {
+        "type": "github-releases",
+        "repo": "davatorium/rofi"
+      },
+      "config_paths": [
+        "rofi/config.rasi",
+        "rofi/themes/Arc-Dark.rasi"
+      ],
+      "observed": {
+        "config_fingerprint": "3714f9dcb8c17b00833da4f940793269fba95959807408254ebaba2bc57043b6",
+        "config_paths": [
+          "rofi/config.rasi",
+          "rofi/themes/Arc-Dark.rasi"
+        ],
+        "errors": [],
+        "installed": {
+          "package": "rofi",
+          "source": "pacman",
+          "version": "2.0.0-1"
+        },
+        "missing_paths": [],
+        "name": "Rofi",
+        "captured_at": "2026-07-12T10:15:34Z"
+      },
+      "review": {
+        "through": "2.0.0-1",
+        "reminders": []
+      }
+    },
+    "swaync": {
+      "name": "SwayNotificationCenter",
+      "tracker": {
+        "type": "pacman",
+        "packages": [
+          "swaync"
+        ]
+      },
+      "upstream": {
+        "type": "github-releases",
+        "repo": "ErikReider/SwayNotificationCenter"
+      },
+      "config_paths": [
+        "swaync/config.json",
+        "swaync/style.css"
+      ],
+      "observed": {
+        "config_fingerprint": "a26ff3506d860c3cb36884fbbe455f2ccc448fe59b4dc5b432ec77bb59157ec6",
+        "config_paths": [
+          "swaync/config.json",
+          "swaync/style.css"
+        ],
+        "errors": [],
+        "installed": {
+          "package": "swaync",
+          "source": "pacman",
+          "version": "0.12.6-1"
+        },
+        "missing_paths": [],
+        "name": "SwayNotificationCenter",
+        "captured_at": "2026-07-12T10:15:34Z"
+      },
+      "review": {
+        "through": "0.12.6-1",
+        "reminders": []
+      }
+    },
+    "awww": {
+      "name": "awww",
+      "tracker": {
+        "type": "pacman",
+        "packages": [
+          "awww"
+        ]
+      },
+      "upstream": {
+        "type": "release-notes-url",
+        "url": "https://codeberg.org/LGFae/awww/releases"
+      },
+      "config_paths": [
+        "hypr/hyprland_common.lua"
+      ],
+      "observed": {
+        "config_fingerprint": "5286edbf3f1004cf1d22387d9a35c1e0b5a56a38fbf5a57f8a2554831c2f8dae",
+        "config_paths": [
+          "hypr/hyprland.conf"
+        ],
+        "errors": [],
+        "installed": {
+          "package": "awww",
+          "source": "pacman",
+          "version": "0.12.1-1"
+        },
+        "missing_paths": [],
+        "name": "awww",
+        "captured_at": "2026-07-12T10:15:34Z"
+      },
+      "review": {
+        "through": "0.12.1-1",
+        "reminders": []
+      }
+    },
+    "hyprshot": {
+      "name": "Hyprshot",
+      "tracker": {
+        "type": "pacman",
+        "packages": [
+          "hyprshot"
+        ]
+      },
+      "upstream": {
+        "type": "github-releases",
+        "repo": "Gustash/Hyprshot"
+      },
+      "config_paths": [
+        "hypr/hyprland_common.lua"
+      ],
+      "observed": {
+        "config_fingerprint": "5286edbf3f1004cf1d22387d9a35c1e0b5a56a38fbf5a57f8a2554831c2f8dae",
+        "config_paths": [
+          "hypr/hyprland.conf"
+        ],
+        "errors": [],
+        "installed": {
+          "package": "hyprshot",
+          "source": "pacman",
+          "version": "1.3.0-4"
+        },
+        "missing_paths": [],
+        "name": "Hyprshot",
+        "captured_at": "2026-07-12T10:15:34Z"
+      },
+      "review": {
+        "through": "1.3.0-4",
+        "reminders": []
+      }
+    },
+    "ghostty": {
+      "name": "Ghostty",
+      "tracker": {
+        "type": "pacman",
+        "packages": [
+          "ghostty"
+        ]
+      },
+      "upstream": {
+        "type": "github-releases",
+        "repo": "ghostty-org/ghostty"
+      },
+      "config_paths": [
+        "ghostty/config",
+        "ghostty/keybinds"
+      ],
+      "observed": {
+        "config_fingerprint": "56436ac30bc631a0aaac10bb98d4d3ef9b808029067b244958b44d4013e3957f",
+        "config_paths": [
+          "ghostty/config",
+          "ghostty/keybinds"
+        ],
+        "errors": [],
+        "installed": {
+          "package": "ghostty",
+          "source": "pacman",
+          "version": "1.3.1-2"
+        },
+        "missing_paths": [],
+        "name": "Ghostty",
+        "captured_at": "2026-07-12T10:15:34Z"
+      },
+      "review": {
+        "through": "1.3.1-2",
+        "reminders": []
+      }
+    },
+    "fish": {
+      "name": "Fish",
+      "tracker": {
+        "type": "pacman",
+        "packages": [
+          "fish"
+        ]
+      },
+      "upstream": {
+        "type": "github-releases",
+        "repo": "fish-shell/fish-shell"
+      },
+      "config_paths": [
+        "fish/config.fish",
+        "fish/functions"
+      ],
+      "observed": {
+        "config_fingerprint": "8ced62b82794efcb04f5d516f6c7ce5cb1039064e7261b9040ce0227e36fdad8",
+        "config_paths": [
+          "fish/config.fish",
+          "fish/functions"
+        ],
+        "errors": [],
+        "installed": {
+          "package": "fish",
+          "source": "pacman",
+          "version": "4.8.0-1"
+        },
+        "missing_paths": [],
+        "name": "Fish",
+        "captured_at": "2026-07-12T10:15:34Z"
+      },
+      "review": {
+        "through": "4.8.0-1",
+        "reminders": []
+      }
+    },
+    "starship": {
+      "name": "Starship",
+      "tracker": {
+        "type": "pacman",
+        "packages": [
+          "starship"
+        ]
+      },
+      "upstream": {
+        "type": "github-releases",
+        "repo": "starship/starship"
+      },
+      "config_paths": [
+        "starship/starship.toml"
+      ],
+      "observed": {
+        "config_fingerprint": "be0a63368e12f21bde434c12f37ed3d9525f4c5dfe25689bb42d3a7bf8a07e71",
+        "config_paths": [
+          "starship/starship.toml"
+        ],
+        "errors": [],
+        "installed": {
+          "package": "starship",
+          "source": "pacman",
+          "version": "1.26.0-1"
+        },
+        "missing_paths": [],
+        "name": "Starship",
+        "captured_at": "2026-07-12T10:15:34Z"
+      },
+      "review": {
+        "through": "1.26.0-1",
+        "reminders": []
+      }
+    },
+    "yazi": {
+      "name": "Yazi",
+      "tracker": {
+        "type": "pacman",
+        "packages": [
+          "yazi"
+        ]
+      },
+      "upstream": {
+        "type": "github-releases",
+        "repo": "sxyazi/yazi"
+      },
+      "config_paths": [
+        "yazi/yazi.toml",
+        "yazi/keymap.toml",
+        "yazi/package.toml",
+        "yazi/plugins"
+      ],
+      "observed": {
+        "config_fingerprint": "fd23feba1c9a51c58a51ed6a13f0faba1ef56ce3a8c8a57769b5de59880ea61d",
+        "config_paths": [
+          "yazi/keymap.toml",
+          "yazi/package.toml",
+          "yazi/plugins",
+          "yazi/yazi.toml"
+        ],
+        "errors": [],
+        "installed": {
+          "package": "yazi",
+          "source": "pacman",
+          "version": "26.5.6-4"
+        },
+        "missing_paths": [],
+        "name": "Yazi",
+        "captured_at": "2026-07-12T10:15:34Z"
+      },
+      "review": {
+        "through": "26.5.6-4",
+        "reminders": []
+      }
+    },
+    "neovim": {
+      "name": "Neovim",
+      "tracker": {
+        "type": "command",
+        "channel": "nightly",
+        "argv": [
+          "nvim",
+          "--version"
+        ],
+        "regex": "^NVIM\\s+v?(\\S+)",
+        "group": 1
+      },
+      "upstream": {
+        "type": "github-commits",
+        "repo": "neovim/neovim",
+        "branch": "master"
+      },
+      "config_paths": [
+        "nvim/init.lua",
+        "nvim/lua",
+        "nvim/lazy-lock.json"
+      ],
+      "observed": {
+        "config_fingerprint": "617ae5556753ba9b6d8efcadc15e5431d5bdb42ca5d36d6be5116affa2e9796b",
+        "config_paths": [
+          "nvim/init.lua",
+          "nvim/lazy-lock.json",
+          "nvim/lua"
+        ],
+        "errors": [],
+        "installed": {
+          "argv": [
+            "nvim",
+            "--version"
+          ],
+          "raw": "NVIM v0.12.0-dev-1108+g19f2e5c3eb",
+          "source": "command",
+          "version": "0.12.0-dev-1108+g19f2e5c3eb"
+        },
+        "missing_paths": [],
+        "name": "Neovim",
+        "captured_at": "2026-07-12T10:15:34Z"
+      },
+      "review": {
+        "through": "68ea43cd0c28af25cd47731308c94fedfcfd1b0b",
+        "reminders": [
+          {
+            "id": "neovim-fd51fb3-neorg-removed-table-apis",
+            "status": "open",
+            "severity": "action-required",
+            "introduced_in": "fd51fb3",
+            "summary": "Switch the stale Bob nightly to stable v0.12.4 instead of current nightly HEAD; HEAD removes vim.tbl_* APIs still used by the pinned Neorg revision.",
+            "config_matches": [
+              "nvim/lazy-lock.json:7",
+              "nvim/lua/plugins/which-key.lua:18"
+            ],
+            "source": "https://github.com/neovim/neovim/commit/fd51fb3fa0356d0f8eef7630e085c8f0b3964c69",
+            "related_source": "https://github.com/neovim/neovim/releases/tag/v0.12.4",
+            "created_at": "2026-07-12T05:47:06Z"
+          },
+          {
+            "id": "neovim-v0.12-treesj-missing-parser",
+            "status": "open",
+            "severity": "review",
+            "introduced_in": "v0.12.0",
+            "summary": "Test the global Treesj J mapping in filetypes without a parser; Neovim 0.12 returns nil instead of throwing and the pinned Treesj revision may dereference it.",
+            "config_matches": [
+              "nvim/lazy-lock.json:11",
+              "nvim/lua/plugins/which-key.lua:63"
+            ],
+            "source": "https://github.com/neovim/neovim/blob/41294e42533daf937410b6285e20a7c0a898f9a8/runtime/doc/news-0.12.txt#L461-L463",
+            "created_at": "2026-07-12T05:47:06Z"
+          }
+        ]
+      }
+    },
+    "emacs": {
+      "name": "Emacs",
+      "tracker": {
+        "type": "pacman",
+        "packages": [
+          "emacs-wayland",
+          "emacs",
+          "emacs-nativecomp"
+        ]
+      },
+      "upstream": {
+        "type": "release-notes-url",
+        "url": "https://git.savannah.gnu.org/cgit/emacs.git/tree/etc/NEWS"
+      },
+      "config_paths": [
+        "doom/config.org",
+        "doom/init.el",
+        "doom/packages.el"
+      ],
+      "observed": {
+        "config_fingerprint": "72195891af7da95a526ad804c88fb6380731f46247dcd5f0235254c1e5003363",
+        "config_paths": [
+          "doom/config.org",
+          "doom/init.el",
+          "doom/packages.el"
+        ],
+        "errors": [],
+        "installed": {
+          "package": "emacs-wayland",
+          "source": "pacman",
+          "version": "30.2-3"
+        },
+        "missing_paths": [],
+        "name": "Emacs",
+        "captured_at": "2026-07-12T10:15:34Z"
+      },
+      "review": {
+        "through": "30.2-3",
+        "reminders": []
+      }
+    },
+    "doom-emacs": {
+      "name": "Doom Emacs",
+      "tracker": {
+        "type": "git",
+        "path": "~/.config/emacs"
+      },
+      "upstream": {
+        "type": "github-commits",
+        "repo": "doomemacs/doomemacs",
+        "branch": "master"
+      },
+      "config_paths": [
+        "doom/config.org",
+        "doom/init.el",
+        "doom/packages.el"
+      ],
+      "observed": {
+        "config_fingerprint": "72195891af7da95a526ad804c88fb6380731f46247dcd5f0235254c1e5003363",
+        "config_paths": [
+          "doom/config.org",
+          "doom/init.el",
+          "doom/packages.el"
+        ],
+        "errors": [],
+        "installed": {
+          "describe": "38d94da6",
+          "dirty": false,
+          "path": "/home/wste/.config/emacs",
+          "source": "git",
+          "version": "38d94da67dc84897a4318714dcc48494c016d8c4"
+        },
+        "missing_paths": [],
+        "name": "Doom Emacs",
+        "captured_at": "2026-07-12T10:15:34Z"
+      },
+      "review": {
+        "through": "0d1b06408720e7642bde537083ffb267a838256c",
+        "reminders": [
+          {
+            "id": "doom-45dfc8f6-dashboard-module-rename",
+            "status": "open",
+            "severity": "review",
+            "introduced_in": "45dfc8f6",
+            "summary": "Rename doom-dashboard to dashboard and test the rewritten module before Doom v3 removes the compatibility mapping.",
+            "config_matches": [
+              "doom/init.el:37"
+            ],
+            "source": "https://github.com/doomemacs/doomemacs/commit/45dfc8f60cf432ddfdc1a91547447b1cb2059f15",
+            "created_at": "2026-07-12T05:47:06Z"
+          },
+          {
+            "id": "doom-a628ef34-org-recipe-post-build",
+            "status": "open",
+            "severity": "action-required",
+            "introduced_in": "a628ef34",
+            "summary": "Port or validate Doom's new org-autoloads post-build merge before upgrading; the custom Org recipe replaces the upstream recipe and does not inherit the fix.",
+            "config_matches": [
+              "doom/packages.el:52",
+              "doom/packages.el:74"
+            ],
+            "source": "https://github.com/doomemacs/doomemacs/commit/a628ef3466339abcd6da97fef62d4ab428d0dcb0",
+            "created_at": "2026-07-12T05:47:06Z"
+          }
+        ]
+      }
+    },
+    "fcitx5": {
+      "name": "Fcitx5",
+      "tracker": {
+        "type": "pacman",
+        "packages": [
+          "fcitx5"
+        ]
+      },
+      "upstream": {
+        "type": "github-releases",
+        "repo": "fcitx/fcitx5"
+      },
+      "config_paths": [
+        "fcitx5/config",
+        "fcitx5/profile",
+        "fcitx5/conf",
+        "rime/default.custom.yaml"
+      ],
+      "observed": {
+        "config_fingerprint": "c474b75f9439d1330e41d05766ee180f3a708bd38a1c381689f2517775f47eab",
+        "config_paths": [
+          "fcitx5/conf",
+          "fcitx5/config",
+          "fcitx5/profile"
+        ],
+        "errors": [],
+        "installed": {
+          "package": "fcitx5",
+          "source": "pacman",
+          "version": "5.1.21-1"
+        },
+        "missing_paths": [],
+        "name": "Fcitx5",
+        "captured_at": "2026-07-12T10:15:34Z"
+      },
+      "review": {
+        "through": "5.1.21-1",
+        "reminders": [
+          {
+            "id": "fcitx5-5.1.20-quote-quickphrase-regex",
+            "status": "open",
+            "severity": "action-required",
+            "introduced_in": "5.1.20",
+            "summary": "Quote QuickPhraseTriggerRegex entry 1 before upgrading; Fcitx5 5.1.20+ no longer decodes backslash escapes in unquoted values.",
+            "config_matches": [
+              "fcitx5/conf/pinyin.conf:98"
+            ],
+            "source": "https://github.com/fcitx/fcitx5/commit/ffad9391add7d21b31d36210bd8081a6edc634b6",
+            "created_at": "2026-07-12T05:47:06Z"
+          }
+        ]
+      }
+    },
+    "copyq": {
+      "name": "CopyQ",
+      "tracker": {
+        "type": "pacman",
+        "packages": [
+          "copyq"
+        ]
+      },
+      "upstream": {
+        "type": "github-releases",
+        "repo": "hluk/CopyQ"
+      },
+      "config_paths": [
+        "hypr/hyprland_common.lua"
+      ],
+      "observed": {
+        "config_fingerprint": "5286edbf3f1004cf1d22387d9a35c1e0b5a56a38fbf5a57f8a2554831c2f8dae",
+        "config_paths": [
+          "hypr/hyprland.conf"
+        ],
+        "errors": [],
+        "installed": {
+          "package": "copyq",
+          "source": "pacman",
+          "version": "16.0.0-1"
+        },
+        "missing_paths": [],
+        "name": "CopyQ",
+        "captured_at": "2026-07-12T10:15:34Z"
+      },
+      "review": {
+        "through": "16.0.0-1",
+        "reminders": []
+      }
+    },
+    "firefox": {
+      "name": "Firefox",
+      "tracker": {
+        "type": "pacman",
+        "packages": [
+          "firefox"
+        ]
+      },
+      "upstream": {
+        "type": "release-notes-url",
+        "url": "https://www.mozilla.org/firefox/releases/"
+      },
+      "config_paths": [
+        "docs/computer.org"
+      ],
+      "observed": {
+        "config_fingerprint": "888cd63d32b8dcbacc7c12d03998ac27691ce1a5f50fb8cb445f2cd805899ad5",
+        "config_paths": [
+          "computer.org"
+        ],
+        "errors": [],
+        "installed": {
+          "package": "firefox",
+          "source": "pacman",
+          "version": "152.0.5-1"
+        },
+        "missing_paths": [],
+        "name": "Firefox",
+        "captured_at": "2026-07-12T10:15:34Z"
+      },
+      "review": {
+        "through": "152.0.5-1",
+        "reminders": [
+          {
+            "id": "firefox-152-sidebar-css-smoke-test",
+            "status": "open",
+            "severity": "review",
+            "introduced_in": "152.0",
+            "summary": "Firefox 152 changes sidebar behavior; smoke-test the documented Sideberry CSS hover and hidden-toolbar selectors after upgrading.",
+            "config_matches": [
+              "docs/computer.org:276",
+              "docs/computer.org:279",
+              "docs/computer.org:282",
+              "docs/computer.org:292"
+            ],
+            "source": "https://www.firefox.com/en-US/firefox/152.0/releasenotes/",
+            "created_at": "2026-07-12T05:47:06Z"
+          }
+        ]
+      }
+    }
+  }
+}

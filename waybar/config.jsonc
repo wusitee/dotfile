@@ -7,7 +7,19 @@
   // Choose the order of the modules
   "modules-left": ["hyprland/workspaces", "tray"],
   "modules-center": ["clock"],
-  "modules-right": ["pulseaudio", "backlight", "cpu", "memory", "battery"],
+  "modules-right": [
+    "pulseaudio",
+    "backlight",
+    "cpu",
+    "memory",
+    "battery",
+    "custom/dayline"
+  ],
+  "custom/dayline": {
+    "format": "󰃭",
+    "tooltip-format": "Toggle Dayline compact agenda",
+    "on-click": "/home/wste/code/Dayline/.venv/bin/dayline ui toggle-widget"
+  },
   // Modules configuration
   "hyprland/workspaces": {
     "disable-scroll": true,

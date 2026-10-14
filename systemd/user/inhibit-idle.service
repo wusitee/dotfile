@@ -1,0 +1,9 @@
+[Unit]
+Description=Hold automatic locking, screen-off and idle suspend until released
+Documentation=man:systemd-inhibit(1)
+
+[Service]
+Type=notify
+NotifyAccess=all
+# Restore the notify socket cleared by systemd-inhibit; report ready after acquisition.
+ExecStart=/usr/bin/systemd-inhibit --what=idle --who="Idle hold" --why="Idle timers held by user" --mode=block /usr/bin/env NOTIFY_SOCKET=${NOTIFY_SOCKET} /usr/bin/sh -c '/usr/bin/systemd-notify --ready && exec /usr/bin/sleep infinity'

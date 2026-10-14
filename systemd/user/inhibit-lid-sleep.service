@@ -1,0 +1,9 @@
+[Unit]
+Description=Hold lid sleep and suspend until released
+Documentation=man:systemd-inhibit(1)
+
+[Service]
+Type=notify
+NotifyAccess=all
+# Restore the notify socket cleared by systemd-inhibit; report ready after acquisition.
+ExecStart=/usr/bin/systemd-inhibit --what=handle-lid-switch:sleep --who="Lid sleep hold" --why="Lid sleep and suspend held by user" --mode=block /usr/bin/env NOTIFY_SOCKET=${NOTIFY_SOCKET} /usr/bin/sh -c '/usr/bin/systemd-notify --ready && exec /usr/bin/sleep infinity'
