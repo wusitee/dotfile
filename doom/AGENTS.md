@@ -9,7 +9,7 @@ For non-Emacs dotfile tasks, use the repo root guidance instead.
 - Module selection: `doom/init.el`.
 - Package declarations: `doom/packages.el`.
 - Generated output: `doom/config.el`, tangled from `config.org`.
-- System notes: update `../computer.org` when a Doom change materially affects
+- System notes: update `../docs/computer.org` when a Doom change materially affects
   setup, usage, troubleshooting, or reload steps.
 
 ## Working Rules

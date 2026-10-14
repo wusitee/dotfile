@@ -68,11 +68,11 @@ return function(options)
             fullscreen_on_one_column = true,
             follow_min_visible = 0.75,
         } or nil,
-        misc = layout == "dwindle" and {
+        misc = {
             force_default_wallpaper = -1,
             focus_on_activate = true,
             disable_hyprland_logo = false,
-        } or nil,
+        },
         input = {
             kb_layout = "us",
             kb_variant = "",
@@ -174,7 +174,7 @@ return function(options)
     hl.bind(mainMod .. " + SHIFT + Space", hl.dsp.window.float())
     hl.bind(mainMod .. " + F", hl.dsp.window.fullscreen())
     hl.bind(mainMod .. " + d", hl.dsp.exec_cmd(menu))
-    hl.bind(mainMod .. " + space", hl.dsp.exec_cmd("rofi -show window"))
+    hl.bind(mainMod .. " + space", hl.dsp.exec_cmd("~/dotfile/script/hypr-window-switcher.sh"))
 
     hl.bind(mainMod .. " + h", hl.dsp.focus({ direction = "l" }))
     hl.bind(mainMod .. " + l", hl.dsp.focus({ direction = "r" }))
@@ -226,10 +226,13 @@ return function(options)
     hl.bind("XF86AudioPrev", hl.dsp.exec_cmd("playerctl previous"), whileLocked)
 
     hl.bind(mainMod .. " + V", hl.dsp.exec_cmd("copyq toggle"))
+    hl.bind(mainMod .. " + T", hl.dsp.exec_cmd("/home/wste/code/Dayline/.venv/bin/dayline ui toggle-widget"))
+    hl.bind(mainMod .. " + A", hl.dsp.exec_cmd("/home/wste/code/Dayline/.venv/bin/dayline ui toggle"))
     hl.bind(mainMod .. " + N", hl.dsp.exec_cmd("swaync-client --toggle-panel"))
     hl.bind("Print", hl.dsp.exec_cmd("sh -c 'if pgrep -x slurp; then pkill slurp; else slurp | grim -g - - | wl-copy; fi'"))
     hl.bind(mainMod .. " + SHIFT + escape", hl.dsp.exec_cmd("hyprlock"))
     hl.bind(mainMod .. " + SHIFT + I", hl.dsp.exec_cmd("~/dotfile/script/toggle-inhibit-lid-sleep.sh"))
+    hl.bind(mainMod .. " + I", hl.dsp.exec_cmd("~/dotfile/script/toggle-inhibit.sh idle"))
     hl.bind(mainMod .. " + P", hl.dsp.exec_cmd("hyprctl activewindow | wl-copy"))
 
     hl.window_rule({
@@ -293,10 +296,12 @@ return function(options)
         hl.exec_cmd("awww-daemon")
         hl.exec_cmd("hypridle")
         hl.exec_cmd("swaync")
+        hl.exec_cmd("/home/wste/code/Dayline/.venv/bin/dayline ui")
         hl.exec_cmd("gammastep")
         hl.exec_cmd("onedrive --monitor")
         hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP")
         hl.exec_cmd("hyprctl setcursor \"Breeze Dark\" 24")
+        hl.exec_cmd("xrdb ~/.Xresources")
     end)
 
     hl.on("config.reloaded", function()

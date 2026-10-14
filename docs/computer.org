@@ -1,0 +1,644 @@
+#+title: Computer Setup Guide
+
+* Overview
+This document contains the complete setup guide for a personal Arch Linux system running on a Huawei MateBook X Pro 2021. It covers hardware-specific configurations, system setup, desktop environment configuration, and application installation.
+
+The system uses Hyprland as the primary window manager with a suite of Wayland-native tools for daily computing.
+
+* Hardware-Specific Configuration
+
+** Battery Management (MateBook)
+TLP is the power management tool of choice:
+#+begin_src shell
+systemctl enable tlp --now
+#+end_src
+
+In addition to TLP, we also use matebook-applet and huawei-wmi for battery threshold control:
+#+begin_src shell
+yay -S matebook-applet huawei-wmi
+#+end_src
+
+Additionally, use the script in dotfiles-huawei-wmi to restore battery threshold after suspension.
+
+** Sound (MateBook)
+Install the firmware:
+#+begin_src shell
+sudo pacman -S sof-firmware
+#+end_src
+
+*** Troubleshooting
+**** No sound after suspend (MateBook specific)
+Follow [[https://github.com/codepayne/linux-sound-huawei/issues/15][this GitHub issue]] to fix sound issues on Huawei MateBook devices.
+
+** Fingerprint Reader (MateBook)
+The built-in sensor is a Goodix =27c6:5125= (USB, power button). As of
+2026-09 it is *not supported* by libfprint and has no Linux driver; Goodix
+does not publish one. Verified locally: with =fprintd= / =libfprint
+1.94.100= installed, =fprintd-enroll= reports "No devices available" (only
+the match-on-chip =goodixmoc= driver exists upstream; 5125 is a
+match-on-host CDC device). The community reverse-engineering effort at
+[[https://github.com/goodix-fp-linux-dev/goodix-fp-dump][goodix-fp-linux-dev]]
+is still at the protocol-dump stage for this chip, and the proprietary
+Ubuntu/Lenovo Goodix driver only covers =27c6:550a=.
+
+The standard stack (=fprintd=, pulls in =libfprint=) is installed so it
+starts working automatically once a driver lands. To re-check after a
+system update:
+#+begin_src shell
+fprintd-enroll   # succeeds once a driver exists; until then: "No devices available"
+#+end_src
+
+If it ever gets detected, enroll with =fprintd-enroll= and enable
+=pam_fprintd.so= in PAM for sudo / hyprlock.
+
+* Base System
+
+** Boot
+intel-ucode for Intel processors:
+#+begin_src shell
+sudo pacman -S intel-ucode
+#+end_src
+
+** Firewall
+Using nftables and ufw:
+#+begin_src shell
+sudo pacman -S iptables-nft ufw
+#+end_src
+
+Default configuration for [[https://wiki.archlinux.org/title/Uncomplicated_Firewall][ufw]]:
+#+begin_src shell
+sudo ufw default deny
+sudo ufw allow from 192.168.0.0/24
+sudo ufw allow Deluge
+sudo ufw limit ssh
+sudo ufw enable
+#+end_src
+
+* Desktop Environment
+
+** Hyprland (Primary)
+[[https://wiki.archlinux.org/title/Hyprland][Hyprland]] is a dynamic tiling Wayland compositor.
+The active config is =~/.config/hypr/hyprland.lua=. Hyprland prefers it over
+=hyprland.conf= after a full session restart; =hyprctl reload= cannot switch
+the running session from one config format to the other.
+
+=hypr/hyprland.lua= selects the native =scrolling= layout and loads shared
+settings, bindings, and autostart from =hypr/hyprland_common.lua=.
+=hyprland_without_hy3.lua= selects =dwindle=; its filename is retained from
+the earlier hy3 setup. The Lua entry points do not currently require hy3.
+=SUPER + Space= runs =script/hypr-window-switcher.sh=, which uses =hyprctl=,
+=jq=, and Rofi to select and focus a window across scrolling workspaces.
+
+=misc.focus_on_activate= is enabled in the shared Lua config for both layouts.
+This lets applications bring their windows into focus when they request
+activation, such as after opening a link or clicking a notification action.
+Apply changes with =hyprctl reload= and check
+=hyprctl getoption misc:focus_on_activate=; it should report =bool: true=.
+
+Using xdg desktop portal:
+#+begin_src shell
+sudo pacman -S xdg-desktop-portal-hyprland xdg-desktop-portal-gtk
+#+end_src
+
+*** Status Bar (waybar)
+Using waybar for status bar:
+#+begin_src shell
+sudo pacman -S waybar
+#+end_src
+
+The right side includes =custom/dayline=. Its click action, Hyprland startup,
+and =SUPER + T= / =SUPER + A= use
+=/home/wste/code/Dayline/.venv/bin/dayline= from an external project.
+That executable is a local dependency, not part of this dotfiles repository.
+
+*** Launcher (rofi)
+Using rofi as application launcher:
+#+begin_src shell
+sudo pacman -S rofi-wayland
+#+end_src
+
+And in =hyprland_common.lua=:
+#+begin_src lua
+local menu = "rofi -show combi"
+#+end_src
+
+*** Clipboard (copyq)
+Using copyq as clipboard manager:
+#+begin_src shell
+sudo pacman -S copyq
+#+end_src
+
+*** Screenshots (hyprshot)
+Use hyprshot for screenshots:
+#+begin_src shell
+yay -S hyprshot
+#+end_src
+
+The active =Print= binding selects a region with =slurp=, captures it with
+=grim=, and sends the result to the clipboard with =wl-copy=.
+
+*** Notifications (swaync)
+Notification center:
+#+begin_src shell
+sudo pacman -S swaync
+#+end_src
+
+*** Idle/Lock (hypridle/hyprlock)
+Screen lock and idle management:
+#+begin_src shell
+sudo pacman -S hyprlock hypridle
+#+end_src
+
+Manual controls are separate:
+
+| Shortcut | Action |
+|----------+--------|
+| =SUPER + SHIFT + I= | Toggle the lid sleep hold (also blocks suspend, as before) |
+| =SUPER + I= | Toggle the idle hold: pause automatic locking, screen-off, and idle suspend |
+| =SUPER + SHIFT + Esc= | Lock immediately, including while either hold is active |
+
+The holds use =systemd-inhibit= through two user services in =systemd/user/=.
+=script/toggle-inhibit.sh lid= and =script/toggle-inhibit.sh idle= toggle them
+independently; =script/toggle-inhibit-lid-sleep.sh= keeps the existing lid entry
+point. Notifications keep the earlier =Toggled … Inhibition= title and service
+=started=/=stopped= wording, reporting success only after the inhibitor is acquired.
+Repeated shortcut presses are serialized with =flock= from =util-linux=.
+
+The lid service retains =--what=handle-lid-switch:sleep=; idle locking and
+screen-off remain active. The idle service uses =--what=idle=, which Hypridle
+respects by default (=general.ignore_systemd_inhibit = false=). Hypridle stays
+running, so manual locking and locking before sleep still work. Idle hold alone
+allows lid sleep and manual suspend; use both holds to pause both behaviors.
+Existing media-player checks remain in place. See the
+[[https://wiki.hypr.land/Hypr-Ecosystem/hypridle/][Hypridle configuration]] and
+[[https://systemd.io/INHIBITOR_LOCKS/][systemd inhibitor documentation]].
+
+Compare existing units and back up separate files before creating these links:
+#+begin_src shell
+mkdir -p ~/.config/systemd/user
+ln -s ~/dotfile/systemd/user/inhibit-lid-sleep.service ~/.config/systemd/user/inhibit-lid-sleep.service
+ln -s ~/dotfile/systemd/user/inhibit-idle.service ~/.config/systemd/user/inhibit-idle.service
+systemctl --user daemon-reload
+hyprctl reload
+#+end_src
+Start these services on demand; do not enable them at login. A hold lasts until
+toggled off or the user service manager stops. After editing a unit, run
+=systemctl --user daemon-reload=; an active hold uses the new unit on its next
+start. Toggle a hold and inspect =systemd-inhibit --list= to verify it, or check
+=systemctl --user is-active inhibit-lid-sleep.service inhibit-idle.service=.
+No Hypridle restart is needed to toggle a hold.
+
+*** Wallpaper (awww)
+Using awww (successor to swww) for animated wallpapers:
+#+begin_src shell
+yay -S awww
+#+end_src
+
+Add to the =hyprland_common.lua= startup hook:
+#+begin_src lua
+hl.on("hyprland.start", function()
+    hl.exec_cmd("awww-daemon")
+end)
+#+end_src
+
+*** Theming (GTK, Qt)
+GTK theme is managed via config files in the dotfiles repository:
+- =gtk-3.0/settings.ini= — Uses =Adwaita-dark= (GTK3)
+- =gtk-4.0/settings.ini= — Uses =Adwaita= with =prefer-dark-theme= (GTK4)
+
+Copy these to =~/.config/= to apply:
+#+begin_src shell
+cp gtk-3.0/settings.ini ~/.config/gtk-3.0/settings.ini
+cp gtk-4.0/settings.ini ~/.config/gtk-4.0/settings.ini
+#+end_src
+
+Qt theming is set via =qt6ct=:
+#+begin_src shell
+sudo pacman -S qt6ct
+#+end_src
+
+*** Default Applications
+Use xdg-mime to change the default program that opens a specific type. For example to set default PDF reader to okular:
+#+begin_src shell
+xdg-mime default okularApplication_pdf.desktop application/pdf
+xdg-mime query default application/pdf  # should be "okularApplication_pdf.desktop"
+#+end_src
+
+** i3                                                                   :HOLD:
+Used previously on X11. Configuration is preserved but not actively maintained.
+
+** Sway                                                                 :HOLD:
+Wayland port of i3. Not currently in use.
+
+** KDE                                                                  :HOLD:
+Previously used for testing. Configuration no longer actively maintained.
+
+* Input & Localization
+
+** Input Method (Fcitx5 + Rime)
+Using [[https://wiki.archlinuxcn.org/wiki/Fcitx5][fcitx5]] with [[https://wiki.archlinux.org/title/Rime][rime]] and [[https://github.com/iDvel/rime-ice][雾凇拼音]]:
+#+begin_src shell
+yay -S fcitx5-im fcitx5-rime rime-ice-git
+#+end_src
+
+Using theme [[https://github.com/tonyfettes/fcitx5-nord][Nord-Dark]].
+
+The live Fcitx5 profile selects =keyboard-us= and =rime=. The repository's
+=fcitx5/profile= is an older Pinyin snapshot; compare it with the live profile
+before deploying it. Rime customization is in =rime/default.custom.yaml=,
+linked to =~/.local/share/fcitx5/rime/default.custom.yaml=. After changing
+the schema or bindings, use the Rime menu's Deploy action. Keep generated
+dictionaries and user data in the surrounding live directory.
+
+** Chinese Fonts
+Install Japanese/Chinese font support:
+#+begin_src shell
+sudo pacman -S ttf-hanamin
+#+end_src
+
+* Applications
+
+** GUI Applications
+
+*** Firefox
+#+begin_src shell
+sudo pacman -S firefox
+#+end_src
+
+**** Hide the horizontal tabs (Sideberry CSS)
+:PROPERTIES:
+:ID:       95658cd2-b982-4efb-a472-bea9a70870ea
+:END:
+Do [[https://github.com/FirefoxCSS-Store/FirefoxCSS-Store.github.io/blob/main/README.md#generic-installation][the following]], and in userChrome.css:
+#+begin_src css
+/* hide the tabs on the top of the window */
+:root{
+    --sidebar-hover-width: 22px;
+    --sidebar-visible-width: 140px;
+}
+#TabsToolBar {
+    visibility: collapse;
+}
+#TabsToolbar, #sidebar-header{
+    display: none !important;
+}
+
+#sidebar-box {
+    position: relative !important;
+    overflow: hidden;
+    max-width: var(--sidebar-hover-width) !important;
+}
+
+#sidebar-box:hover {
+    transition: all 200ms !important;
+    max-width: var(--sidebar-visible-width) !important;
+}
+#+end_src
+
+**** Chinese Language Pack
+#+begin_src shell
+sudo pacman -S firefox-i18n-zh-cn
+#+end_src
+
+**** Troubleshooting: When Firefox is laggy
+You can choose to refresh Firefox and redo the above configuration.
+
+**** Troubleshooting: Firefox extension popups are oversized on Wayland
+On Firefox 150 with Wayland/HiDPI, extension popups such as uBlock Origin can
+render extremely large and stop registering clicks correctly. The workaround
+from this [[https://bbs.archlinux.org/viewtopic.php?id=313261][Arch Linux forum thread]] is:
+
+- Open =about:config=.
+- Set =widget.wayland.fractional-scale.enabled= to =false=.
+
+*** Okular
+A PDF reader:
+#+begin_src shell
+sudo pacman -S okular
+#+end_src
+
+*** GoldenDict
+A dictionary tool:
+#+begin_src shell
+sudo pacman -S golden-dict-ng
+#+end_src
+
+[[https://acytoo.com/ladder/goldendict/][Configuration guide]]
+
+*** Zotero
+A citation manager:
+#+begin_src shell
+sudo pacman -S zotero
+#+end_src
+
+*** rnote
+Note-taking application. To make rnote or other GTK applications have a proper view, we have to use default GTK config file. Adding this to the .desktop file may solve the problem:
+#+begin_src shell
+env XDG_CONFIG_HOME=/tmp/empty-config
+#+end_src
+
+*** Clash Verge Rev
+Proxy client:
+#+begin_src shell
+yay -S clash-verge-rev-bin
+#+end_src
+
+*** Ghostty
+Fast, native terminal emulator written in Zig:
+#+begin_src shell
+sudo pacman -S ghostty
+#+end_src
+
+Configuration is at =~/.config/ghostty/config=. See the Ghostty documentation for configuration options.
+
+** CLI Applications
+
+*** Shell (Fish)
+Using fish as the interactive shell:
+#+begin_src shell
+sudo pacman -S fish
+#+end_src
+
+The separate live =~/.config/fish/config.fish= also initializes Kimi's bin
+directory. Its path setup skips =fish_add_path= when the directory is already
+in =$fish_user_paths=, so repeated =source= calls return success rather than
+=fish_add_path='s "nothing added" status 1.
+
+*** Claude Code network guard
+=fish/functions/claude.fish= wraps the =claude= command in Fish. Its shared
+checker is =script/clash-network-check.fish=. It requires
+Clash Verge Rev's running API at =/tmp/verge/verge-mihomo.sock= to report
+TUN enabled, =global= mode and a selected Taiwan proxy. Manual selector groups are followed;
+automatic/fallback/load-balancing groups and direct routes are rejected.
+The Taiwan check uses the selected node's name. Failed or unverifiable checks
+block startup; there is no external exit-country request.
+
+Dependencies are Fish, =curl= and =jq=. The function is linked individually into
+=~/.config/fish/functions/claude.fish=; other live Fish files stay independent.
+On another machine, inspect any existing destination before creating the link:
+#+begin_src fish
+ln -s ~/dotfile/fish/functions/claude.fish ~/.config/fish/functions/claude.fish
+source ~/.config/fish/functions/claude.fish
+claude --proxy-check  # check only; does not start Claude
+claude               # check, then start; normal Claude arguments are forwarded
+#+end_src
+
+New Fish shells autoload it. The wrapper only checks the running configuration
+before launching Claude with the existing environment. It does not set proxy
+variables or change Clash settings; network routing stays under Clash TUN.
+This guards terminal startup only: it does not monitor later Clash changes,
+existing/background sessions or launches from other apps.
+
+*** T3 Code network guard
+The T3 desktop launcher and its Claude provider use the same TUN/Global/Taiwan
+startup check. No wrapper sets proxy variables or changes Clash settings.
+=script/t3code-guard.sh= launches the installed =/usr/bin/t3code-nightly= after
+the check, and shows a notification if blocked. The launcher override
+=t3code/t3code.desktop= is linked at
+=~/.local/share/applications/t3code.desktop=; =~/.local/bin/t3code-nightly=
+links to the guarded script. =fish/functions/t3.fish= is linked at
+=~/.config/fish/functions/t3.fish= and guards the app-owned =t3= CLI in Fish.
+Use =t3 --proxy-check= to check without launching the CLI.
+
+T3's =claudeAgent= provider has Binary path set to
+=/home/wste/dotfile/script/claude-guard.sh= in
+=~/.t3/userdata/settings.json=. The wrapper checks before each Claude process
+spawn, including SDK sessions and provider probes, then executes the existing
+=~/.local/bin/claude=. It preserves the SDK's standard input/output protocol.
+The previous settings file is backed up under
+=~/.local/state/dotfile/backups/t3code/=. Other provider settings are preserved.
+See [[https://github.com/pingdotgg/t3code/blob/main/docs/user/providers-claude.md][T3's Claude provider settings]].
+
+Restart T3 after changing its provider Binary path so existing sessions use the
+guard. New Fish shells load =t3.fish= automatically; an existing shell can run
+=source ~/.config/fish/functions/t3.fish=. The installed app and T3's generated
+CLI/URL-handler files are unchanged. Direct launches of the installed app and
+its generated URL handler can bypass the desktop startup check, while the
+configured Claude provider still checks on process spawn. These are startup
+checks, not monitoring of existing connections or restrictions on local files.
+
+*** Autojump (zoxide + fzf)
+Using zoxide for directory jumping:
+#+begin_src shell
+sudo pacman -S zoxide fzf
+zoxide init fish
+#+end_src
+
+*** File Manager (yazi)
+Terminal file manager with drag-and-drop and clipboard support:
+#+begin_src shell
+sudo pacman -S yazi parallel ripdrag xclip
+#+end_src
+
+Plugins (managed via =ya pkg=):
+#+begin_src shell
+ya pkg add boydaihungst/restore
+ya pkg add simla33/ucp
+#+end_src
+
+Key features:
+- Press =C-n= in Yazi to drag and drop selected files
+- Press =C-y= in Yazi to copy selected files to system clipboard (Wayland + XWayland via =ucp.yazi=)
+- Press =d= to trash, =D= to delete permanently, =u= / =U= to restore (last / interactive)
+- Directories visited in Yazi update zoxide frecency (=yazi/init.lua=)
+- Fish integration: =y= command changes cwd on exit
+
+*** Cloud Sync (onedrive)
+#+begin_src shell
+yay -S onedrive-abraunegg
+#+end_src
+
+[[https://github.com/abraunegg/onedrive][onedrive GitHub repository]]
+
+* Development Environment
+
+** Doom Emacs
+Using Doom Emacs as the primary text editor:
+#+begin_src shell
+git clone --depth 1 https://github.com/doomemacs/doomemacs ~/.config/emacs
+~/.config/emacs/bin/doom install
+#+end_src
+
+Maintenance instructions are in [[file:../doom/AGENTS.md][doom/AGENTS.md]]. Edit
+=doom/config.org= and tangle it to the ignored =doom/config.el=.
+Module/package changes also require =doom sync= and an Emacs reload or restart.
+The Markdown checker style is =doom/mdl-style.rb=, referenced by =config.org=.
+The Python formatter is Ruff for both =python-mode= and =python-ts-mode=;
+install it with =sudo pacman -S ruff=.
+
+*** Org agenda
+The custom =n= agenda command shows the 10-day agenda with a lower TODO list.
+The TODO list ignores entries with dates, so scheduled tasks, deadlines, habits,
+and timestamped items do not repeat below the agenda.
+
+*** C++ language server
+The =cc +lsp= module uses =clangd=. Start or reconnect it with =M-x lsp=;
+enabling =lsp-mode= alone does not start a server.
+If startup reports =Symbol's function definition is void: nil= from
+=lsp-ts-query=, =doom/config.org= initializes its parser-directory setting
+before client loading to work around the installed package's broken default.
+
+** Vim
+The existing Vim settings are managed in =vim/vimrc=, linked from =~/.vimrc=.
+Terminal Vim uses a steady block cursor in normal mode and a thin vertical bar
+in insert mode. It restores the terminal's default cursor when exiting.
+Restart Vim or run =:source ~/.vimrc= after editing the config.
+
+To deploy on another machine, compare any existing =~/.vimrc= first and move it
+to a backup before creating the link:
+#+begin_src shell
+ln -s ~/dotfile/vim/vimrc ~/.vimrc
+#+end_src
+This manages only the vimrc. The existing =auto-pairs.vim= plugin stays under
+=~/.vim/plugin/=; plugins and runtime state such as =.netrwhist= are kept outside
+the repository. The original vimrc was backed up before linking on 2026-10-07.
+
+* Troubleshooting Reference
+Cross-cutting issues that don't fit in specific sections:
+
+- Firefox performance: See [[Firefox]] section for refresh instructions
+- Sound after suspend: See [[Sound (MateBook)]] section
+
+* Dotfiles Management
+This repository contains active desktop configs, separately deployed snapshots,
+and preserved utilities. Deployment differs by component; editing a repository
+file only changes the live setup when the destination points to that file.
+
+** Maintenance Workflow
+1. Inspect =git status --short= and =git diff -- <target-files>=. Preserve
+   existing changes and untracked additions. AI agents follow [[file:../AGENTS.md][AGENTS.md]];
+   Doom work also follows [[file:../doom/AGENTS.md][doom/AGENTS.md]].
+2. Locate the source and its live destination. Use =ls -ld= and =readlink -f=
+   to check links; compare independent files before copying or linking them.
+   There is no general installer or Stow manifest in this repository.
+3. Make a focused source change. Tangle Doom's literate config when needed;
+   leave unrelated snapshots, application state, and bundled plugins alone.
+4. Check the affected file, deploy it if needed, then reload and verify the
+   changed behavior. Documentation-only changes need no desktop reload.
+5. Keep this guide aligned with setup/usage changes. Change =AGENTS.md= only
+   when a policy update is explicitly requested. Review the scoped diff and
+   =git diff --check=.
+   Use a focused branch, stage explicit paths, and create GPG-signed
+   Conventional Commits. Push the branch and open a pull request with the
+   relevant validation. Obtain an independent subagent review, address findings,
+   and merge after required checks pass unless the request calls for an
+   unmerged pull request.
+
+For example, compare Fish before deploying a change:
+#+begin_src shell
+readlink -f ~/.config/fish/config.fish
+diff -u fish/config.fish ~/.config/fish/config.fish
+fish -n fish/config.fish
+#+end_src
+The =diff= command returns status 1 when the files differ. Resolve the intended
+changes on both sides before deployment; a whole-directory copy can overwrite
+newer live configuration and shell state.
+
+** Deployment Inventory
+Verified locally on 2026-10-05; re-check these relationships when moving the
+repository or configuring another machine. These live destinations are
+symlinked to their counterparts in this repository:
+
+| Repository directories                                      | Live location                 |
+|-------------------------------------------------------------+-------------------------------|
+| =hypr=, =doom=, =ghostty=, =waybar=, =rofi=, =yazi=, =swaync= | =~/.config/<directory>=       |
+| =gtk-3.0=, =gtk-4.0=                                       | =~/.config/<directory>=       |
+| =rime/default.custom.yaml=                                  | =~/.local/share/fcitx5/rime/default.custom.yaml= (single-file link) |
+
+Added on 2026-10-07: =vim/vimrc= is linked to =~/.vimrc= as a single file.
+
+The remaining checked destinations have different deployment behavior:
+
+| Repository source          | Local finding                                               |
+|----------------------------+-------------------------------------------------------------|
+| =fish/=                    | Independent live files under =~/.config/fish/=; =config.fish= differs |
+| =nvim/=                    | Independent live config; =init.lua= differs; the repository's Lua loader/spec files are absent |
+| =fcitx5/=                  | Independent live files; config, profile, and theme file differ; live profile uses Rime |
+| =sway/=                    | Independent live config; differs from the preserved repository copy |
+| =starship/starship.toml=    | Separate matching copy under =~/.config/starship/=; =~/.config/starship.toml= is absent, so verify =STARSHIP_CONFIG= before deployment |
+| =alacritty/=, =i3/=, =nushell/= | No corresponding directory under =~/.config/= on this machine |
+
+One runtime dependency lives outside the repository:
+
+- Dayline: =/home/wste/code/Dayline/.venv/bin/dayline=, called by Hyprland and Waybar.
+
+Added on 2026-10-08: =systemd/user/inhibit-lid-sleep.service= and
+=systemd/user/inhibit-idle.service= are linked individually under
+=~/.config/systemd/user/=. The previous separate lid unit was backed up before
+linking. Both holds are controlled by =script/toggle-inhibit.sh=.
+
+** Validation
+There is no unified test suite. Use checks suited to the edited file:
+
+- Fish: =fish -n <file.fish>=.
+- Lua: =luac -p <file.lua>= for syntax, followed by application-specific checks.
+- Shell: =sh -n <file.sh>= or =bash -n <file.sh>= according to its shebang.
+- systemd user units: =systemd-analyze --user verify <file.service>=.
+- TOML/JSON: parse with Python =tomllib= / =json=. Waybar's =config.jsonc=
+  contains comments and needs a JSONC-aware parser, such as =json5=.
+- Doom: tangle and check Lisp as described in =doom/AGENTS.md=; sync module
+  or package changes.
+- Vim: =vim -N -n -i NONE -es -u vim/vimrc '+if !empty(v:errmsg) | cquit | endif' '+qall!'=,
+  then check the cursor when entering insert mode and returning to normal mode.
+- Hyprland: after a deployed config change, inspect =hyprctl configerrors=
+  and exercise the affected binding/layout.
+- Docs: verify file references and run =git diff --check=.
+
+** Applying Configuration Changes
+Apply these steps after checking deployment:
+
+| Component      | Reload / Apply Step                         |
+|----------------+---------------------------------------------|
+| Hyprland       | =hyprctl reload= for the current format; session restart for Hyprlang/Lua migration |
+| Doom Emacs     | Tangle =config.org=; =doom sync= after =init.el= / =packages.el= changes; reload or restart Emacs |
+| Fish           | In Fish, =source ~/.config/fish/config.fish= after deployment |
+| Waybar         | =killall waybar && waybar=                   |
+| Swaync         | =swaync-client --reload-config= / =swaync-client --reload-css= |
+| Ghostty / Yazi / Neovim | Restart the application after deployment |
+| Vim            | Restart Vim or run =:source ~/.vimrc=       |
+| Rime           | Use the Deploy action in the Fcitx5 Rime menu |
+| Rofi           | The next launch reads the config            |
+| Lid / idle hold units | =systemctl --user daemon-reload=; toggle an active hold off/on to use an edited unit |
+
+** Application Update Tracking
+The repo-local Codex skill at =.agents/skills/check-application-updates/= tracks
+installed application versions and reviews available updates against the config
+files declared in =.app-update-tracker.json=. Invoke the skill when an update
+check is needed; it does not run in the background or install packages.
+When hy3 is enabled, Hyprland updates are blocked until hy3's current HyprPM
+manifest contains a compatibility pin for the exact target release commit.
+
+** Repository Structure
+- =README.md= - Introduction and getting started
+- =docs/computer.org= - System setup, deployment, usage, and troubleshooting
+- =AGENTS.md= - Shared agent maintenance workflow; =CLAUDE.md= redirects to it
+- =.agents/skills/= - Repo-local Codex skills
+- =.app-update-tracker.json= - Application version baseline and update reminders
+- =hypr/= - Hyprland window manager configuration
+- =doom/= - Doom Emacs configuration (edit =config.org=, not =config.el=)
+- =fish/= - Fish shell configuration
+- =ghostty/= - Ghostty terminal configuration
+- =nvim/=, =alacritty/= - Secondary editor/terminal configuration snapshots
+- =vim/= - Vim settings linked to =~/.vimrc=
+- =waybar/= - Status bar configuration
+- =rofi/= - Application launcher configuration
+- =yazi/= - Terminal file manager configuration
+- =fcitx5/= - Older Pinyin settings; =rime/= - Current Rime customization
+- =swaync/=, =starship/= - Notification center and shell prompt configuration
+- =gtk-3.0/= - GTK3 theme configuration
+- =gtk-4.0/= - GTK4 theme configuration
+- =script/= - Hyprland window switcher and sleep-inhibition helpers
+- =systemd/user/= - On-demand lid sleep and idle hold services
+- =dotfiles-huawei-wmi/= - Battery threshold restore hook and its installer
+- =sway/=, =i3/= - Preserved fallback desktop configurations
+- =nushell/=, =pwsh/=, =scoop/= - Alternate shell and Windows setup snapshots
+- =clang-format/= - C/C++ formatting settings; =a9/= - Standalone utility/data
+
+** Source, State, and Backup Files
+- =doom/config.el= is generated and ignored by Git; edit =config.org=.
+- =fish/fish_variables= is shell-managed state. =nushell/history.txt= is saved
+  history, not shell configuration. Review these separately from source changes.
+- =fish/fish_variables.rej= and =waybar/style.css.bac= are preserved reject/backup
+  files; they are not normal editing entry points.
+- =yazi/plugins/= contains bundled third-party code, including local edits.
+  Inspect its diff before updating dependencies with =ya pkg=.

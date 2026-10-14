@@ -72,3 +72,9 @@ window#waybar {
 #battery.warning:not(.charging) {
     color: @alert;
 }
+
+/* Load the calendar icon from a symbol font so its full width is preserved. */
+#custom-dayline {
+  font-family: "Symbols Nerd Font";
+  padding: 0 10px;
+}

@@ -39,6 +39,13 @@ Set the spelling check to en-US
 (after! langtool
   (setq langtool-default-language "en-US"))
 #+end_src
+** Markdown lint
+Use a relaxed Markdown style for the installed =mdl= checker.
+#+begin_src emacs-lisp
+(after! flycheck
+  (setq flycheck-markdown-mdl-style
+        (expand-file-name "mdl-style.rb" doom-user-dir)))
+#+end_src
 ** gptel
 #+begin_src emacs-lisp :tangle no
 ;; vveai offers an instant OpenAI compatible API
@@ -735,6 +742,11 @@ Set default latex viewer to Okular.
 (setq +latex-viewers '(okular))
 #+end_src
 ** python
+*** Formatter
+Use the installed Ruff formatter for Python files.
+#+begin_src emacs-lisp
+(set-formatter! 'ruff :modes '(python-mode python-ts-mode))
+#+end_src
 *** uv
 #+begin_src emacs-lisp :tangle no
 (add-hook! 'python-mode 'uv-edit-pyproject-toml)

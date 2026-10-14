@@ -1,0 +1,4 @@
+interface:
+  display_name: "Check Application Updates"
+  short_description: "Track app versions and config-impacting updates"
+  default_prompt: "Use $check-application-updates to record current application versions, check available updates, and flag changes that affect this dotfiles configuration."
