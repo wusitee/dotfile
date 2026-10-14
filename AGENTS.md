@@ -148,8 +148,12 @@ Use signed, scoped commits and keep related implementation and documentation
 together. Push the branch and open a pull request describing the resulting
 behavior, validation, and any unresolved limitations.
 
-Address review feedback on the same branch. Merge only when requested and after
-required checks pass. Do not force-push or delete branches unless authorized.
+For user-requested repository changes, completion includes an independent
+subagent review. Address actionable findings on the same branch and obtain
+review of the final changes. Once review is clear and required checks pass,
+merge the pull request without asking for another confirmation. Respect any
+request to stop at a draft, review, or unmerged pull request, and do not bypass
+GitHub protections. Do not force-push or delete branches unless authorized.
 
 ## Completion and commits
 
@@ -158,7 +162,7 @@ complete, affected documentation is current, and no temporary artifacts or
 dependencies on `tmp/` enter Git. Report what changed, what was verified, and
 any unresolved failures, unavailable checks, or pending deployment/reload steps.
 
-When a commit is requested, stage only explicit intended paths. Use GPG-signed
+Stage only explicit intended paths. Use GPG-signed
 Conventional Commits: `feat`, `fix`, or `docs`, with a relevant component scope
 such as `doom`, `hyprland`, `fish`, or `computer`. Never bypass signing with
 `--no-gpg-sign`; if signing fails, ask the user to fix their GPG agent or password

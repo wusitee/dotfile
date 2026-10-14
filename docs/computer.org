@@ -520,7 +520,9 @@ file only changes the live setup when the destination points to that file.
    =git diff --check=.
    Use a focused branch, stage explicit paths, and create GPG-signed
    Conventional Commits. Push the branch and open a pull request with the
-   relevant validation; merge after review and required checks when requested.
+   relevant validation. Obtain an independent subagent review, address findings,
+   and merge after required checks pass unless the request calls for an
+   unmerged pull request.
 
 For example, compare Fish before deploying a change:
 #+begin_src shell

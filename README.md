@@ -23,4 +23,6 @@ dated and should be checked against the current machine.
   maintenance.
 
 Use a focused branch and signed Conventional Commits for updates, then open a
-pull request with relevant validation. Keep temporary work in Git-ignored `tmp/`.
+pull request with relevant validation. Obtain an independent subagent review,
+address findings, and merge after required checks pass unless the request calls
+for an unmerged pull request. Keep temporary work in Git-ignored `tmp/`.
