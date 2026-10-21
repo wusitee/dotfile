@@ -65,7 +65,8 @@ return function(options)
             preserve_split = true,
         } or nil,
         scrolling = useScrolling and {
-            fullscreen_on_one_column = true,
+            fullscreen_on_one_column = false,
+            column_width = 1.0,
             follow_min_visible = 0.75,
         } or nil,
         misc = {
