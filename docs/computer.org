@@ -5,6 +5,10 @@ This document contains the complete setup guide for a personal Arch Linux system
 
 The system uses Hyprland as the primary window manager with a suite of Wayland-native tools for daily computing.
 
+For a second machine that keeps Windows and runs Arch as a dorm development
+host, follow [[file:remote-dev.org][the remote development laptop guide]]. It covers NVIDIA,
+remote access, and migration separately from this MateBook-specific setup.
+
 * Hardware-Specific Configuration
 
 ** Battery Management (MateBook)

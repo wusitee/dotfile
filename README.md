@@ -18,6 +18,8 @@ dated and should be checked against the current machine.
 
 - [System setup and maintenance](docs/computer.org): installation, deployment,
   usage, validation, reload steps, and troubleshooting.
+- [Arch remote development laptop](docs/remote-dev.org): Windows dual boot,
+  NVIDIA, private SSH and desktop access, and selective configuration migration.
 - [Agent policy](AGENTS.md): repository-wide maintenance and GitHub Flow rules.
 - [Doom agent guidance](doom/AGENTS.md): literate configuration and Org-stack
   maintenance.
