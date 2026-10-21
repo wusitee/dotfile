@@ -66,7 +66,7 @@ return function(options)
         } or nil,
         scrolling = useScrolling and {
             fullscreen_on_one_column = false,
-            column_width = 1.0,
+            column_width = 0.75,
             follow_min_visible = 0.75,
         } or nil,
         misc = {
@@ -88,6 +88,17 @@ return function(options)
             },
         },
     })
+
+    if useScrolling then
+        hl.on("window.open_early", function(window)
+            local workspace = window.workspace
+            if not window.floating and workspace.tiled_layout == "scrolling" then
+                hl.config({
+                    scrolling = { column_width = workspace.windows == 0 and 1.0 or 0.75 },
+                })
+            end
+        end)
+    end
 
     hl.curve("easeOutQuint", { type = "bezier", points = { { 0.23, 1 }, { 0.32, 1 } } })
     hl.curve("easeInOutCubic", { type = "bezier", points = { { 0.65, 0.05 }, { 0.36, 1 } } })
