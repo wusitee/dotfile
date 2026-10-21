@@ -90,11 +90,6 @@ Scrolling columns start at full width (=column_width = 1.0=), and
 =fullscreen_on_one_column= is disabled so opening or closing another column
 does not change an existing column's width. =SUPER + W= and
 =SUPER + SHIFT + W= cycle the focused column through the configured widths.
-=SUPER + SHIFT + Minus= and =SUPER + SHIFT + Equal= decrease and increase
-the column width in 5% steps without cycling (the latter produces =+= on the
-US layout).
-=SUPER + `= toggles the =magic= special workspace; =SUPER + SHIFT + `= moves
-the focused window there.
 =SUPER + Space= runs =script/hypr-window-switcher.sh=, which uses =hyprctl=,
 =jq=, and Rofi to select and focus a window across scrolling workspaces.
 
