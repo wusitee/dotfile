@@ -188,8 +188,6 @@ return function(options)
     if useScrolling then
         hl.bind(mainMod .. " + W", hl.dsp.layout("colresize +conf"))
         hl.bind(mainMod .. " + SHIFT + W", hl.dsp.layout("colresize -conf"))
-        hl.bind(mainMod .. " + SHIFT + minus", hl.dsp.layout("colresize -0.05"))
-        hl.bind(mainMod .. " + SHIFT + equal", hl.dsp.layout("colresize +0.05"))
     else
         hl.bind(mainMod .. " + W", hl.dsp.group.toggle())
     end
@@ -207,8 +205,8 @@ return function(options)
         hl.bind(mainMod .. " + SHIFT + " .. key, hl.dsp.window.move({ workspace = workspace }))
     end
 
-    hl.bind(mainMod .. " + grave", hl.dsp.workspace.toggle_special("magic"))
-    hl.bind(mainMod .. " + SHIFT + grave", hl.dsp.window.move({ workspace = "special:magic" }))
+    hl.bind(mainMod .. " + minus", hl.dsp.workspace.toggle_special("magic"))
+    hl.bind(mainMod .. " + SHIFT + minus", hl.dsp.window.move({ workspace = "special:magic" }))
     hl.bind(mainMod .. " + mouse_down", hl.dsp.focus({ workspace = "e+1" }))
     hl.bind(mainMod .. " + mouse_up", hl.dsp.focus({ workspace = "e-1" }))
     hl.bind(mainMod .. " + mouse:272", hl.dsp.window.drag(), { mouse = true })
