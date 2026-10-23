@@ -10,21 +10,36 @@ case $1 in
         # Nothing to do before sleep
         ;;
     post)
-        # Restore battery thresholds after resume
-        # Wait for EC to be ready
-        sleep 2
-
-        if [ -f "$PERSIST_FILE" ]; then
-            read -r start end < "$PERSIST_FILE"
-            # Try multiple times with delays
-            for i in 1 2 3; do
-                if echo "$start $end" > "$PLATFORM_SYSFS" 2>/dev/null; then
-                    logger "Huawei-WMI: Restored battery thresholds to $start $end (attempt $i)"
-                    exit 0
-                fi
-                sleep 1
-            done
-            logger "Huawei-WMI: Failed to restore thresholds after 3 attempts"
+        if ! saved=$(cat "$PERSIST_FILE" 2>/dev/null); then
+            logger -p user.err "Huawei-WMI: Cannot read saved thresholds from $PERSIST_FILE"
+            exit 1
         fi
+        if [[ ! $saved =~ ^([0-9]{1,3})[[:blank:]]+([0-9]{1,3})[[:blank:]]*$ ]]; then
+            logger -p user.err "Huawei-WMI: Invalid saved thresholds in $PERSIST_FILE"
+            exit 1
+        fi
+        start=$((10#${BASH_REMATCH[1]}))
+        end=$((10#${BASH_REMATCH[2]}))
+        if (( start > end || end > 100 )); then
+            logger -p user.err "Huawei-WMI: Invalid threshold range: $start $end"
+            exit 1
+        fi
+
+        # Wait for the EC, then allow delayed resets to settle before read-back.
+        sleep 2
+        actual="unavailable"
+        for i in 1 2 3 4 5; do
+            if ! { [ -e "$PLATFORM_SYSFS" ] && printf '%s %s\n' "$start" "$end" > "$PLATFORM_SYSFS"; } 2>/dev/null; then
+                sleep 1
+                continue
+            fi
+            sleep 1
+            if actual=$(cat "$PLATFORM_SYSFS" 2>/dev/null) && [[ $actual == "$start $end" ]]; then
+                logger "Huawei-WMI: Verified battery thresholds $start $end (attempt $i)"
+                exit 0
+            fi
+        done
+        logger -p user.err "Huawei-WMI: Failed to restore thresholds $start $end after 5 attempts (last read: $actual)"
+        exit 1
         ;;
 esac

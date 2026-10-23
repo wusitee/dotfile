@@ -22,7 +22,11 @@ In addition to TLP, we also use matebook-applet and huawei-wmi for battery thres
 yay -S matebook-applet huawei-wmi
 #+end_src
 
-Additionally, use the script in dotfiles-huawei-wmi to restore battery threshold after suspension.
+The Huawei applet owns the saved charging thresholds. Install the resume hook
+with =sudo ./dotfiles-huawei-wmi/install.sh= from the repository root. Its TLP
+drop-in disables TLP's native battery control so the two resume hooks cannot
+overwrite each other's settings; TLP still manages power saving. See
+[[file:../dotfiles-huawei-wmi/README.md][the Huawei threshold guide]] for installation, verification, and troubleshooting.
 
 ** Sound (MateBook)
 Install the firmware:
