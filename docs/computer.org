@@ -453,9 +453,10 @@ ya pkg add simla33/ucp
 Key features:
 - Press =C-n= in Yazi to drag and drop selected files
 - Press =C-y= in Yazi to copy selected files to system clipboard (Wayland + XWayland via =ucp.yazi=)
-- Press =C-v= to paste the system clipboard into the current directory: an image
-  is saved as =pasted_<timestamp>.<ext>=, copied files are pasted, and text
-  prompts for a new file name. Pending Yazi cut (=x=) files take precedence.
+- Press =C-v= to paste clipboard content from outside Yazi into the current
+  directory: an image is saved as =pasted_<timestamp>.<ext>=, copied files are
+  pasted, and text prompts for a new file name. Pending Yazi cut (=x=) files take
+  precedence, and =C-v= clears Yazi's yank list; use =p= for files yanked in Yazi.
 - Press =d= to trash, =D= to delete permanently, =u= / =U= to restore (last / interactive)
 - Directories visited in Yazi update zoxide frecency (=yazi/init.lua=)
 - Fish integration: =y= command changes cwd on exit
