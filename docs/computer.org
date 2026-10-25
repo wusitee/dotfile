@@ -441,7 +441,7 @@ zoxide init fish
 *** File Manager (yazi)
 Terminal file manager with drag-and-drop and clipboard support:
 #+begin_src shell
-sudo pacman -S yazi parallel ripdrag xclip
+sudo pacman -S yazi parallel ripdrag wl-clipboard xclip
 #+end_src
 
 Plugins (managed via =ya pkg=):
@@ -453,6 +453,9 @@ ya pkg add simla33/ucp
 Key features:
 - Press =C-n= in Yazi to drag and drop selected files
 - Press =C-y= in Yazi to copy selected files to system clipboard (Wayland + XWayland via =ucp.yazi=)
+- Press =C-v= to paste the system clipboard into the current directory: an image
+  is saved as =pasted_<timestamp>.<ext>=, copied files are pasted, and text
+  prompts for a new file name. Pending Yazi cut (=x=) files take precedence.
 - Press =d= to trash, =D= to delete permanently, =u= / =U= to restore (last / interactive)
 - Directories visited in Yazi update zoxide frecency (=yazi/init.lua=)
 - Fish integration: =y= command changes cwd on exit
