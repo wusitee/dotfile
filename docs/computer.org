@@ -120,10 +120,14 @@ Using waybar for status bar:
 sudo pacman -S waybar
 #+end_src
 
-The right side includes =custom/dayline=. Its click action, Hyprland startup,
-and =SUPER + T= / =SUPER + A= use
-=/home/wste/code/Dayline/.venv/bin/dayline= from an external project.
-That executable is a local dependency, not part of this dotfiles repository.
+The right side starts with =custom/dayline-focus= and ends with =custom/dayline=.
+The focus module runs =dayline waybar-focus= to show the recorded time of the
+current focus session (blue dot while running, amber while paused; the tooltip
+names the task). Left-click toggles the Dayline widget; right-click toggles the
+focus session. =custom/dayline=, Hyprland startup, and =SUPER + T= /
+=SUPER + A= also use =/home/wste/code/Dayline/.venv/bin/dayline= from an
+external project. That executable is a local dependency, not part of this
+dotfiles repository.
 
 *** Launcher (rofi)
 Using rofi as application launcher:
