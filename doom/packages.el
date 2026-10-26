@@ -101,4 +101,7 @@
   :recipe (:host github :repo "acmorrow/claude-code-ide-extras"))
 (package! kimi-code-ide
   :recipe (:host github :repo "wusitee/kimi-code-ide.el"))
-(package! web-server)
+;; web-server and simple-httpd (org-roam-ui) both default to the
+;; emacs-web-server local repo; keep web-server's checkout separate.
+(package! web-server
+  :recipe (:host github :repo "eschulte/emacs-web-server" :local-repo "web-server"))
