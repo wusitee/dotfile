@@ -209,8 +209,11 @@ into it, matching the laptop's deployment inventory in [[file:computer.org][the 
 
 The Fcitx5 profile and configuration, the Nord themes, Fish's frozen theme and
 key bindings, and the wallpaper are copies from the laptop, not links. Doom
-Emacs is checked out at the laptop's Doom commit; follow
-[[file:../doom/AGENTS.md][doom/AGENTS.md]] before upgrading it.
+Emacs is checked out at the laptop's Doom commit, and packages without a Doom
+pin are checked out at the laptop's commits where upstream still has them;
+=doom sync -u= would move them. Follow [[file:../doom/AGENTS.md][doom/AGENTS.md]] before upgrading.
+No =auth-source= credentials are provisioned, so AI packages that read them
+need separate setup.
 
 [[file:../remote-dev/pacman-packages.txt][remote-dev/pacman-packages.txt]] lists the explicitly installed desktop and
 application packages, and [[file:../remote-dev/aur-packages.txt][remote-dev/aur-packages.txt]] the AUR packages
