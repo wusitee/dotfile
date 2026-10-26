@@ -359,9 +359,10 @@ yay -S clash-verge-rev-bin
 #+end_src
 
 *** Moonlight
-Client for the streamed =dorm-dev= desktop:
+Client for the streamed =dorm-dev= desktop. =intel-media-driver= provides
+the VAAPI driver for hardware video decoding; check it with =vainfo=.
 #+begin_src shell
-sudo pacman -S moonlight-qt
+sudo pacman -S moonlight-qt intel-media-driver libva-utils
 #+end_src
 
 Pairing and usage are in [[file:remote-dev.org][the dorm-dev guide]].

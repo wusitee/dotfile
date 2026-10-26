@@ -28,7 +28,7 @@ laptop.
 | =nvme1n1= UMIS 1 TB    | Arch: =p1= 1 GiB ESP at =/boot=, =p2= 128 GiB swap, =p3= ext4 root |
 
 systemd-boot on the Linux ESP boots =/boot/loader/entries/arch.conf= with
-=resume=UUID=<swap>= for hibernation; the firmware lists it as Linux Boot
+~resume=UUID=<swap>~ for hibernation; the firmware lists it as Linux Boot
 Manager next to Windows Boot Manager. Secure Boot is disabled for the official
 Arch image; keep UEFI mode and do not clear the firmware keys. Keep the Arch USB
 installer for recovery.
@@ -158,7 +158,42 @@ Dayline, Gammastep, and OneDrive — start only on the laptop. Unlock with
 =wste='s password, locally or through Moonlight.
 
 ** Sunshine and Moonlight
-SUNSHINE_DETAILS
+Sunshine (=sunshine= from archlinuxcn) runs as the user unit
+=app-dev.lizardbyte.app.Sunshine.service=. Hyprland imports its environment
+into the user manager and starts the unit; it is not enabled, because this
+session does not activate =graphical-session.target=.
+
+| Repository source              | Live copy                           |
+|--------------------------------+-------------------------------------|
+| =remote-dev/sunshine.conf=     | =~/.config/sunshine/sunshine.conf=  |
+| =remote-dev/sunshine-apps.json= | =~/.config/sunshine/apps.json=      |
+
+=capture = kms= reads the panel directly; the package grants Sunshine
+=cap_sys_admin= for this. Automatic capture selection otherwise stalls on the
+desktop portal, which has no RemoteDesktop interface under Hyprland. Because the
+Intel iGPU drives the panel, Sunshine encodes H.264/HEVC with VAAPI rather than
+NVENC. The only app is Desktop; its preparation command turns the screen back
+on in case Hypridle has blanked it. =~/.config/sunshine/= (mode 700) also holds
+the TLS identity, web UI credentials, and paired clients.
+
+The web UI listens on localhost only. From the laptop, run
+=ssh -N -L 47990:127.0.0.1:47990 dorm-dev= and open =https://localhost:47990=;
+the login is stored privately on the laptop in
+=~/.local/state/dorm-dev/sunshine-web-ui=.
+
+On the laptop, Moonlight (see [[file:computer.org][the system guide]]) is paired with
+=100.81.184.110=. Start the desktop from Moonlight's host list, or with:
+#+begin_src bash
+moonlight stream 100.81.184.110 Desktop
+#+end_src
+Moonlight decodes in hardware only when VAAPI works on the laptop, which needs
+=intel-media-driver=; without it, Moonlight falls back to software decoding.
+To pair another client, run =moonlight pair 100.81.184.110 --pin NNNN= on it,
+then enter the PIN under PIN in the web UI.
+
+Sunshine needs PipeWire for audio; its sockets are enabled for the user. A
+user manager that started before PipeWire was installed needs
+=systemctl --user daemon-reload= and a socket start, or a reboot.
 
 * Dotfiles on dorm-dev
 The repository is cloned over HTTPS at =~/dotfile=. These destinations link
@@ -189,7 +224,7 @@ key is provisioned on this host. Import or create one before committing here.
 | Area      | Command                                                         | Expected                         |
 |-----------+-----------------------------------------------------------------+----------------------------------|
 | Access    | =ssh dorm-dev true= from the laptop                             | Succeeds with the key            |
-| Passwords | =ssh -o PubkeyAuthentication=no dorm-dev true=                  | =Permission denied (publickey)=  |
+| Passwords | ~ssh -o PubkeyAuthentication=no dorm-dev true~                  | =Permission denied (publickey)=  |
 | Proxy     | =python /usr/local/libexec/mihomo-route.py check=               | TUN, Global, Taiwan node         |
 | Agents    | =sh -lc 'command -v claude codex t3'=                           | =~/.local/guarded-bin/...=       |
 | GPU       | =nvidia-smi=                                                    | RTX 4090 Laptop GPU              |
