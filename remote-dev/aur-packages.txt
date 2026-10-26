@@ -1,0 +1,5 @@
+bibata-cursor-theme-bin
+ttf-hanamin
+visual-studio-code-bin
+basedpyright-bin
+qimgv
