@@ -100,5 +100,5 @@
 (package! claude-code-ide-extras
   :recipe (:host github :repo "acmorrow/claude-code-ide-extras"))
 (package! kimi-code-ide
-  :recipe (:host github :repo "wusitee/kimi-code-ide.el" :branch "token-mode-line"))
+  :recipe (:host github :repo "wusitee/kimi-code-ide.el"))
 (package! web-server)
