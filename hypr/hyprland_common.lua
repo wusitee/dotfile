@@ -321,7 +321,7 @@ return function(options)
         hl.exec_cmd(remoteHost and "hypridle -c ~/.config/hypr/hypridle-remote.conf" or "hypridle")
         hl.exec_cmd("swaync")
         if remoteHost then
-            hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP HYPRLAND_INSTANCE_SIGNATURE && systemctl --user start sunshine.service")
+            hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP HYPRLAND_INSTANCE_SIGNATURE && systemctl --user start app-dev.lizardbyte.app.Sunshine.service")
         else
             hl.exec_cmd("/home/wste/code/Dayline/.venv/bin/dayline ui")
             hl.exec_cmd("gammastep")

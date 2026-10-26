@@ -5,9 +5,10 @@ This document contains the complete setup guide for a personal Arch Linux system
 
 The system uses Hyprland as the primary window manager with a suite of Wayland-native tools for daily computing.
 
-For a second machine that keeps Windows and runs Arch as a dorm development
-host, follow [[file:remote-dev.org][the remote development laptop guide]]. It covers NVIDIA,
-remote access, and migration separately from this MateBook-specific setup.
+The dorm development host =dorm-dev= dual-boots Windows and Arch, and this
+laptop reaches it over Tailscale for SSH, T3 Code, and a streamed Hyprland
+desktop. See [[file:remote-dev.org][the dorm-dev guide]] for its NVIDIA, proxy, access, and desktop
+setup, which differ from this MateBook-specific setup.
 
 * Hardware-Specific Configuration
 
@@ -357,6 +358,14 @@ Proxy client:
 yay -S clash-verge-rev-bin
 #+end_src
 
+*** Moonlight
+Client for the streamed =dorm-dev= desktop:
+#+begin_src shell
+sudo pacman -S moonlight-qt
+#+end_src
+
+Pairing and usage are in [[file:remote-dev.org][the dorm-dev guide]].
+
 *** Ghostty
 Fast, native terminal emulator written in Zig:
 #+begin_src shell
@@ -651,6 +660,7 @@ manifest contains a compatibility pin for the exact target release commit.
 - =script/= - Hyprland window switcher and sleep-inhibition helpers
 - =systemd/user/= - On-demand lid sleep and idle hold services
 - =dotfiles-huawei-wmi/= - Battery threshold restore hook and its installer
+- =remote-dev/= - System files and package lists for the =dorm-dev= host
 - =sway/=, =i3/= - Preserved fallback desktop configurations
 - =nushell/=, =pwsh/=, =scoop/= - Alternate shell and Windows setup snapshots
 - =clang-format/= - C/C++ formatting settings; =a9/= - Standalone utility/data
