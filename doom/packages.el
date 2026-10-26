@@ -75,6 +75,7 @@
 (unpin! org)
 (unpin! org-roam)
 (package! org-roam-ui)
+(package! openwith)
 (package! lsp-dart)
 (package! anki-editor
   :recipe (:host github :repo "anki-editor/anki-editor"))

@@ -33,6 +33,18 @@ Make client transparent.
 (setq doom-theme 'doom-horizon)
 #+end_src
 * Tools
+** PDF files
+Open PDFs with the system's default viewer.
+#+begin_src emacs-lisp
+(use-package! openwith
+  :demand t
+  :config
+  (setq openwith-associations '(("\\.[pP][dD][fF]\\'" "xdg-open" (file))))
+  (openwith-mode 1))
+
+(after! org
+  (setf (alist-get "\\.pdf\\'" org-file-apps nil nil #'equal) "xdg-open %s"))
+#+end_src
 ** Spelling check
 Set the spelling check to en-US
 #+begin_src emacs-lisp
