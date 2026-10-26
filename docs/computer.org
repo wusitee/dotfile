@@ -480,6 +480,13 @@ The Markdown checker style is =doom/mdl-style.rb=, referenced by =config.org=.
 The Python formatter is Ruff for both =python-mode= and =python-ts-mode=;
 install it with =sudo pacman -S ruff=.
 
+*** PDF files
+PDFs opened with =find-file= or Dired, and PDF file links followed in Org,
+use the system's default viewer through =xdg-open=. This requires =xdg-utils=
+and the =openwith= Emacs package; run =doom sync= after deployment, then
+reload or restart Emacs. Check the current viewer with
+=xdg-mime query default application/pdf=; see [[Default Applications]] to change it.
+
 *** Org agenda
 The custom =n= agenda command shows the 10-day agenda with a lower TODO list.
 The TODO list ignores entries with dates, so scheduled tasks, deadlines, habits,
