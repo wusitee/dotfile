@@ -9,7 +9,11 @@
       "prep-cmd": [
         {
           "do": "hyprctl dispatch \"hl.dsp.dpms({action = 'on'})\"",
-          "undo": ""
+          "undo": "hyprctl dispatch \"hl.dsp.dpms({action = 'off'})\""
+        },
+        {
+          "do": "",
+          "undo": "loginctl lock-session"
         }
       ]
     }

@@ -81,6 +81,9 @@ return function(options)
             force_default_wallpaper = -1,
             focus_on_activate = true,
             disable_hyprland_logo = false,
+            -- dorm-dev blanks its panel without Hypridle; wake it locally.
+            key_press_enables_dpms = remoteHost,
+            mouse_move_enables_dpms = remoteHost,
         },
         input = {
             kb_layout = "us",
@@ -308,8 +311,10 @@ return function(options)
 
     hl.on("hyprland.start", function()
         if remoteHost and os.getenv("DORM_DEV_AUTOLOGIN") then
-            -- greetd's boot-time auto-login; lock before showing the session.
+            -- greetd's boot-time auto-login: lock, then blank the panel until a
+            -- stream starts.
             hl.exec_cmd("hyprlock")
+            hl.exec_cmd([[sh -c 'sleep 5; hyprctl dispatch "hl.dsp.dpms({action = \"off\"})"']])
         end
         hl.exec_cmd(terminal)
         hl.exec_cmd(remoteHost and "nm-applet" or "nm-applet & matebook-applet")
