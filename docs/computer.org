@@ -372,7 +372,8 @@ the VAAPI driver for hardware video decoding; check it with =vainfo=.
 sudo pacman -S moonlight-qt intel-media-driver libva-utils
 #+end_src
 
-Pairing and usage are in [[file:remote-dev.org][the dorm-dev guide]].
+Pairing, usage, and the clipboard sync service that replaces Moonlight's paste
+shortcut are in [[file:remote-dev.org][the dorm-dev guide]].
 
 *** Ghostty
 Fast, native terminal emulator written in Zig:
@@ -665,8 +666,8 @@ manifest contains a compatibility pin for the exact target release commit.
 - =swaync/=, =starship/= - Notification center and shell prompt configuration
 - =gtk-3.0/= - GTK3 theme configuration
 - =gtk-4.0/= - GTK4 theme configuration
-- =script/= - Hyprland window switcher and sleep-inhibition helpers
-- =systemd/user/= - On-demand lid sleep and idle hold services
+- =script/= - Hyprland window switcher, sleep-inhibition helpers, and dorm-dev clipboard sync
+- =systemd/user/= - On-demand lid sleep and idle hold services; dorm-dev clipboard sync
 - =dotfiles-huawei-wmi/= - Battery threshold restore hook and its installer
 - =remote-dev/= - System files and package lists for the =dorm-dev= host
 - =sway/=, =i3/= - Preserved fallback desktop configurations

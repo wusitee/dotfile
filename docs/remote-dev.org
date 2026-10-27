@@ -221,6 +221,22 @@ it, Moonlight falls back to software decoding.
 To pair another client, run =moonlight pair 100.81.184.110 --pin NNNN= on it,
 then enter the PIN under PIN in the web UI.
 
+Moonlight's paste shortcut (=Ctrl+Alt+Shift+V=) sends text as Unicode events,
+which Sunshine types on Linux as =Ctrl+Shift+U= hex sequences; most apps,
+including Ghostty and Fcitx5 inputs, show garbage. Use the clipboard sync
+instead: [[file:../script/dorm-dev-clipboard.sh][script/dorm-dev-clipboard.sh]] runs on the laptop as
+[[file:../systemd/user/dorm-dev-clipboard.service][systemd/user/dorm-dev-clipboard.service]] and copies text clipboard changes both
+ways over SSH, so a normal copy on one machine can be pasted with =Ctrl+V= on
+the other. Only text is synced, and entries that password managers mark with
+=x-kde-passwordManagerHint= stay on their machine. Deploy it on the laptop:
+#+begin_src bash
+ln -s ../../../dotfile/systemd/user/dorm-dev-clipboard.service ~/.config/systemd/user/dorm-dev-clipboard.service
+systemctl --user daemon-reload
+systemctl --user enable --now dorm-dev-clipboard.service
+#+end_src
+The service waits for Hyprland to export =WAYLAND_DISPLAY= and restarts if
+dorm-dev is unreachable.
+
 Sunshine needs PipeWire for audio; its sockets are enabled for the user. A
 user manager that started before PipeWire was installed needs
 =systemctl --user daemon-reload= and a socket start, or a reboot.
