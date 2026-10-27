@@ -138,7 +138,10 @@ NVENC. =nvidia-utils= blacklists nouveau. Check with =nvidia-smi=.
 The NVIDIA option keeps video memory across sleep, used by the enabled
 =nvidia-suspend=, =nvidia-hibernate=, and =nvidia-resume= services. Check it
 with =rg PreserveVideo /proc/driver/nvidia/params=. Closing the lid is ignored
-on AC power and suspends on battery. The desktop never suspends on idle.
+on AC power and suspends on battery. The desktop never suspends on idle. With
+the lid closed on AC, =eDP-1= stays enabled, so Sunshine's KMS capture and
+Moonlight streaming keep working; keep the vents clear and prefer Ethernet,
+because the Wi-Fi antennas are in the lid.
 
 =systemctl hibernate= writes memory to the swap partition. Resuming needs the
 power button: there is no remote wake, so do not hibernate the host from
