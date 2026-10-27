@@ -26,6 +26,7 @@ profile:
   store-selected: true
 dns:
   enable: true
+  respect-rules: true
   listen: 127.0.0.1:1053
   enhanced-mode: fake-ip
   fake-ip-range: 198.18.0.1/16

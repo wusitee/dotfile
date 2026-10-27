@@ -89,10 +89,23 @@ proxy. The controller listens only on =/run/mihomo/controller.sock= (group
 =wste=). =ExecStartPost= selects the fixed node in =GLOBAL=;
 =mihomo-route.py check= verifies TUN, Global mode, and that node.
 
-Check routing:
+DNS must reach the tunnel too. The TUN hijacks port 53 and answers with fake
+IPs, so the Taiwan exit resolves the real names. =respect-rules: true= sends
+Mihomo's own DNS-over-HTTPS lookups through the proxy as well. Tailscale DNS is
+off (=tailscale set --accept-dns=false=): with it on, =/etc/resolv.conf= points
+at =100.100.100.100=, which is outside the tunnel, and Tailscale forwards each
+query straight to the network's resolver, revealing the Hong Kong location.
+This also applies to the laptop. =/etc/resolv.conf= should list
+NetworkManager's resolvers, and system lookups should return =198.18.x.x=.
+
+Check routing and DNS:
 #+begin_src bash
 python /usr/local/libexec/mihomo-route.py check
 curl -s https://www.cloudflare.com/cdn-cgi/trace | rg '^loc='   # loc=TW
+getent ahostsv4 whoami.akamai.net                                # 198.18.x.x
+id=$(curl -s https://bash.ws/id)
+for i in 1 2 3 4 5 6; do curl -s -o /dev/null "http://$i.$id.bash.ws/"; done
+curl -s "https://bash.ws/dnsleak/test/$id?json"                  # Taiwan resolvers only
 #+end_src
 
 Changing the TUN or routes can cut off SSH. Arm a rollback first, restart

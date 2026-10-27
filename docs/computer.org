@@ -358,6 +358,13 @@ Proxy client:
 yay -S clash-verge-rev-bin
 #+end_src
 
+Keep Tailscale from managing DNS with =sudo tailscale set --accept-dns=false=.
+With MagicDNS, =/etc/resolv.conf= points at =100.100.100.100=, which is outside
+the TUN, and Tailscale forwards queries directly to the campus resolvers,
+leaking the Hong Kong location. Without it, system lookups go to the TUN's DNS
+hijack and return =198.18.x.x= fake IPs. The DNS leak check is in
+[[file:remote-dev.org][the dorm-dev guide]].
+
 *** Moonlight
 Client for the streamed =dorm-dev= desktop. =intel-media-driver= provides
 the VAAPI driver for hardware video decoding; check it with =vainfo=.
