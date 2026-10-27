@@ -152,11 +152,16 @@ set; after logging out, tuigreet asks for a login. =getty@tty1= is disabled in
 favor of greetd.
 
 The shared [[file:../hypr/hyprland_common.lua][Hyprland config]] reads =/etc/hostname=. On =dorm-dev= it locks
-the auto-login session with =hyprlock= at start (a tuigreet login is not locked
-again), uses scale 1.6, runs Hypridle with
-[[file:../hypr/hypridle-remote.conf][hypr/hypridle-remote.conf]] (lock after 10 minutes and screen off after 15,
-no suspend), and starts Sunshine. Laptop-only programs — the MateBook applet,
-Dayline, Gammastep, and OneDrive — start only on the laptop. Unlock with
+the auto-login session with =hyprlock= at start and blanks the panel five
+seconds later (a tuigreet login is not locked again). It uses scale 1.6 and
+starts Sunshine. Laptop-only programs — the MateBook applet, Dayline,
+Gammastep, and OneDrive — start only on the laptop.
+
+The host runs as a server rather than on idle timers: a stream turns the panel
+on, and closing it locks the session and blanks the panel again (see below).
+[[file:../hypr/hypridle-remote.conf][hypr/hypridle-remote.conf]] keeps one 30-minute timer that locks and blanks
+an idle session, which covers a dropped connection; it never suspends. A key
+press or mouse movement at the machine turns the panel on. Unlock with
 =wste='s password, locally or through Moonlight.
 
 ** Sunshine and Moonlight
@@ -175,9 +180,11 @@ because this session does not activate =graphical-session.target=.
 =cap_sys_admin= for this. Automatic capture selection otherwise stalls on the
 desktop portal, which has no RemoteDesktop interface under Hyprland. Because the
 Intel iGPU drives the panel, Sunshine encodes H.264/HEVC with VAAPI rather than
-NVENC. The only app is Desktop; its preparation command turns the screen back
-on in case Hypridle has blanked it. =~/.config/sunshine/= (mode 700) also holds
-the TLS identity, web UI credentials, and paired clients.
+NVENC. The only app is Desktop: starting it turns the panel on, and quitting it
+runs =loginctl lock-session= (handled by Hypridle) and turns the panel off.
+Sunshine has no disconnect hook, so Moonlight's "quit app after session"
+setting is what ends the app when the stream closes. =~/.config/sunshine/=
+(mode 700) also holds the TLS identity, web UI credentials, and paired clients.
 
 =origin_web_ui_allowed = pc= limits the web UI to localhost, and UFW does not
 open its port 47990 either. From the laptop, run
@@ -190,8 +197,11 @@ On the laptop, Moonlight (see [[file:computer.org][the system guide]]) is paired
 #+begin_src bash
 moonlight stream 100.81.184.110 Desktop
 #+end_src
-Moonlight decodes in hardware only when VAAPI works on the laptop, which needs
-=intel-media-driver=; without it, Moonlight falls back to software decoding.
+Moonlight's =[General]= settings stream at the host's 2560×1600 and 60 FPS,
+use absolute mouse mode for desktop use, and quit the app after the session
+(~quitAppAfter=true~), which locks the host. Moonlight decodes in hardware
+only when VAAPI works on the laptop, which needs =intel-media-driver=; without
+it, Moonlight falls back to software decoding.
 To pair another client, run =moonlight pair 100.81.184.110 --pin NNNN= on it,
 then enter the PIN under PIN in the web UI.
 
@@ -213,7 +223,13 @@ into it, matching the laptop's deployment inventory in [[file:computer.org][the 
 
 The Fcitx5 profile and configuration, the Nord themes, Fish's frozen theme and
 key bindings, and the wallpaper are copies from the laptop, not links.
-=~/.Xresources= is the laptop's copy with =Xft.dpi: 154= for scale 1.6. Doom
+=~/.Xresources= is the laptop's copy with =Xft.dpi: 154= for scale 1.6. The
+appearance also matches the laptop through copies: =dconf= keys under
+=/org/gnome/desktop/interface/= and =/org/gnome/desktop/wm/preferences/=
+(Papirus-Dark icons, Breeze-Dark GTK theme, dark scheme, Noto Sans and Hack
+fonts), the breeze cursor in =~/.icons/default/index.theme=, and
+=~/.config/qt6ct/qt6ct.conf=. Copy them again after changing the laptop's
+theme, for example with =dconf dump= and =dconf load=. Doom
 Emacs is checked out at the laptop's Doom commit, and packages without a Doom
 pin are checked out at the laptop's commits where upstream still has them;
 =doom sync -u= would move them. Follow [[file:../doom/AGENTS.md][doom/AGENTS.md]] before upgrading.
