@@ -78,3 +78,16 @@ window#waybar {
   font-family: "Symbols Nerd Font";
   padding: 0 10px;
 }
+
+#custom-dayline-focus {
+  padding: 0 10px;
+  font-feature-settings: "tnum";
+}
+
+#custom-dayline-focus.paused {
+  opacity: 0.7;
+}
+
+#custom-dayline-focus.error {
+  color: #f26083;
+}

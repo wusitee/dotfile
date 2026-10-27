@@ -8,6 +8,7 @@
   "modules-left": ["hyprland/workspaces", "tray"],
   "modules-center": ["clock"],
   "modules-right": [
+    "custom/dayline-focus",
     "pulseaudio",
     "backlight",
     "cpu",
@@ -19,6 +20,20 @@
     "format": "󰃭",
     "tooltip-format": "Toggle Dayline compact agenda",
     "on-click": "/home/wste/code/Dayline/.venv/bin/dayline ui toggle-widget"
+  },
+  // Dayline focus timer: recorded session time; the tooltip names the task.
+  "custom/dayline-focus": {
+    "exec": "/home/wste/code/Dayline/.venv/bin/dayline waybar-focus",
+    "return-type": "json",
+    // Run the timer again if its process ever exits.
+    "restart-interval": 5,
+    "format": "{icon} {text}",
+    "format-icons": {
+      "running": "<span color='#359bff'>●</span>",
+      "paused": "<span color='#f2c27b'>●</span>"
+    },
+    "on-click": "/home/wste/code/Dayline/.venv/bin/dayline ui toggle-widget",
+    "on-click-right": "/home/wste/code/Dayline/.venv/bin/dayline ui toggle-focus"
   },
   // Modules configuration
   "hyprland/workspaces": {
