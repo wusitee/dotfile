@@ -414,6 +414,14 @@ links to the guarded script. =fish/functions/t3.fish= is linked at
 =~/.config/fish/functions/t3.fish= and guards the app-owned =t3= CLI in Fish.
 Use =t3 --proxy-check= to check without launching the CLI.
 
+The desktop wrapper selects =--password-store=gnome-libsecret= so Electron uses
+KeePassXC's enabled Secret Service under Hyprland. Keep the database exposing
+the default collection unlocked before launching T3. Without this selection,
+automatic detection can leave secure storage unavailable and prevent saving
+remote connections. Fully quit T3 and reopen it through the guarded launcher
+after changing this flag; opening another window does not restart Electron.
+See [[https://www.electronjs.org/docs/latest/api/safe-storage][Electron's secure storage backends]].
+
 T3's =claudeAgent= provider has Binary path set to
 =/home/wste/dotfile/script/claude-guard.sh= in
 =~/.t3/userdata/settings.json=. The wrapper checks before each Claude process

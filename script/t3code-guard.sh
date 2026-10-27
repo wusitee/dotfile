@@ -5,4 +5,4 @@ if ! /home/wste/dotfile/script/clash-network-check.fish; then
     fi
     exit 1
 fi
-exec /usr/bin/t3code-nightly "$@"
+exec /usr/bin/t3code-nightly --password-store=gnome-libsecret "$@"
