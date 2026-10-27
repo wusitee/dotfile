@@ -1,10 +1,10 @@
 [terminal]
 vt = 1
 
-# Boot into the desktop so Sunshine has a session to stream; Hyprland locks it
-# immediately on this host.
+# Boot into the desktop so Sunshine has a session to stream. Hyprland locks
+# this session at start; later tuigreet logins are not locked again.
 [initial_session]
-command = "/usr/bin/start-hyprland"
+command = "env DORM_DEV_AUTOLOGIN=1 /usr/bin/start-hyprland"
 user = "wste"
 
 [default_session]

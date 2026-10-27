@@ -7,13 +7,13 @@ on its own SSD for games; Arch runs development tools, coding agents, and a
 Hyprland desktop that is streamed to the MateBook. Only the booted OS runs:
 Linux jobs and services stop while Windows is booted.
 
-| Item           | Value                                                          |
-|----------------+----------------------------------------------------------------|
-| Tailscale host | =dorm-dev=, =100.81.184.110=                                   |
-| Allowed client | MateBook =euphonium=, =100.71.241.9=                           |
-| Terminal/T3    | OpenSSH over Tailscale, key only                               |
-| Desktop        | greetd auto-login → locked Hyprland → Sunshine → Moonlight     |
-| Proxy          | Mihomo system service: TUN, Global, =🇨🇳 台湾 07 家宽=         |
+| Item           | Value                                                      |
+|----------------+------------------------------------------------------------|
+| Tailscale host | =dorm-dev=, =100.81.184.110=                               |
+| Allowed client | MateBook =euphonium=, =100.71.241.9=                       |
+| Terminal/T3    | OpenSSH over Tailscale, key only                           |
+| Desktop        | greetd auto-login → locked Hyprland → Sunshine → Moonlight |
+| Proxy          | Mihomo system service: TUN, Global, =🇨🇳 台湾 07 家宽=      |
 
 Repository files for this host live in [[file:../remote-dev/][remote-dev/]], except the SSH
 drop-in in [[file:../ssh/sshd-remote-dev.conf][ssh/]]. System files under =/etc= and =/usr/local= are root-owned
@@ -22,9 +22,9 @@ home-directory configuration links into the =~/dotfile= checkout as on the
 laptop.
 
 * Disks and boot
-| Disk                   | Contents                                                    |
-|------------------------+-------------------------------------------------------------|
-| =nvme0n1= Samsung 1 TB | Windows, its ESP and recovery partitions (BitLocker); untouched |
+| Disk                   | Contents                                                           |
+|------------------------+--------------------------------------------------------------------|
+| =nvme0n1= Samsung 1 TB | Windows, its ESP and recovery partitions (BitLocker); untouched    |
 | =nvme1n1= UMIS 1 TB    | Arch: =p1= 1 GiB ESP at =/boot=, =p2= 128 GiB swap, =p3= ext4 root |
 
 systemd-boot on the Linux ESP boots =/boot/loader/entries/arch.conf= with
@@ -75,19 +75,19 @@ so terminals and =ssh dorm-dev= behave like the laptop.
 All host traffic leaves through the Taiwan 家宽 node, matching the laptop's
 Clash Verge TUN/Global policy.
 
-| Repository source                      | Live copy                                  |
-|----------------------------------------+--------------------------------------------|
-| =remote-dev/mihomo.service=            | =/etc/systemd/system/mihomo.service=       |
-| =remote-dev/mihomo-route.py=           | =/usr/local/libexec/mihomo-route.py=       |
+| Repository source                       | Live copy                                              |
+|-----------------------------------------+--------------------------------------------------------|
+| =remote-dev/mihomo.service=             | =/etc/systemd/system/mihomo.service=                   |
+| =remote-dev/mihomo-route.py=            | =/usr/local/libexec/mihomo-route.py=                   |
 | =remote-dev/mihomo-config.example.yaml= | =/etc/mihomo/config.yaml= (mode 600, real node values) |
-| Mihomo release binary                  | =/usr/local/bin/mihomo=                    |
+| Mihomo release binary                   | =/usr/local/bin/mihomo=                                |
 
 The TUN device =mihomo= uses Global mode and fake-IP DNS. Its
 =route-exclude-address= list keeps the tailnet (=100.64.0.0/10=) and private
 ranges off the tunnel, so SSH, Moonlight, and Tailscale itself bypass the
 proxy. The controller listens only on =/run/mihomo/controller.sock= (group
-=wste=). =ExecStartPost= selects the fixed node in =GLOBAL=; =mihomo-route.py
-check= verifies TUN, Global mode, and that node.
+=wste=). =ExecStartPost= selects the fixed node in =GLOBAL=;
+=mihomo-route.py check= verifies TUN, Global mode, and that node.
 
 Check routing:
 #+begin_src bash
@@ -130,9 +130,9 @@ The internal 2560×1600 panel (=eDP-1=) is wired to the Intel iGPU, which is the
 boot GPU and runs Hyprland; the RTX 4090 runs =nvidia-open-dkms= for CUDA and
 NVENC. =nvidia-utils= blacklists nouveau. Check with =nvidia-smi=.
 
-| Repository source                    | Live copy                                 |
-|--------------------------------------+-------------------------------------------|
-| =remote-dev/nvidia-power.conf=       | =/etc/modprobe.d/nvidia-power.conf=       |
+| Repository source                      | Live copy                                       |
+|----------------------------------------+-------------------------------------------------|
+| =remote-dev/nvidia-power.conf=         | =/etc/modprobe.d/nvidia-power.conf=             |
 | =remote-dev/logind-60-remote-dev.conf= | =/etc/systemd/logind.conf.d/60-remote-dev.conf= |
 
 The NVIDIA option keeps video memory across sleep, used by the enabled
@@ -147,11 +147,13 @@ outside the dorm.
 * Desktop and streaming
 ** Session
 [[file:../remote-dev/greetd-config.toml][remote-dev/greetd-config.toml]] is installed as =/etc/greetd/config.toml=. At
-boot greetd logs =wste= into =start-hyprland= once; after logging out, tuigreet
-asks for a login. =getty@tty1= is disabled in favor of greetd.
+boot greetd logs =wste= into =start-hyprland= once, with ~DORM_DEV_AUTOLOGIN=1~
+set; after logging out, tuigreet asks for a login. =getty@tty1= is disabled in
+favor of greetd.
 
-The shared [[file:../hypr/hyprland_common.lua][Hyprland config]] reads =/etc/hostname=. On =dorm-dev= it starts
-=hyprlock= immediately, uses scale 1.6, runs Hypridle with
+The shared [[file:../hypr/hyprland_common.lua][Hyprland config]] reads =/etc/hostname=. On =dorm-dev= it locks
+the auto-login session with =hyprlock= at start (a tuigreet login is not locked
+again), uses scale 1.6, runs Hypridle with
 [[file:../hypr/hypridle-remote.conf][hypr/hypridle-remote.conf]] (lock after 10 minutes and screen off after 15,
 no suspend), and starts Sunshine. Laptop-only programs — the MateBook applet,
 Dayline, Gammastep, and OneDrive — start only on the laptop. Unlock with
@@ -160,13 +162,14 @@ Dayline, Gammastep, and OneDrive — start only on the laptop. Unlock with
 ** Sunshine and Moonlight
 Sunshine (=sunshine= from archlinuxcn) runs as the user unit
 =app-dev.lizardbyte.app.Sunshine.service=. Hyprland imports its environment
-into the user manager and starts the unit; it is not enabled, because this
-session does not activate =graphical-session.target=.
+into the user manager and restarts the unit, so an instance that outlived the
+previous session picks up the new Hyprland instance. The unit is not enabled,
+because this session does not activate =graphical-session.target=.
 
-| Repository source              | Live copy                           |
-|--------------------------------+-------------------------------------|
-| =remote-dev/sunshine.conf=     | =~/.config/sunshine/sunshine.conf=  |
-| =remote-dev/sunshine-apps.json= | =~/.config/sunshine/apps.json=      |
+| Repository source               | Live copy                          |
+|---------------------------------+------------------------------------|
+| =remote-dev/sunshine.conf=      | =~/.config/sunshine/sunshine.conf= |
+| =remote-dev/sunshine-apps.json= | =~/.config/sunshine/apps.json=     |
 
 =capture = kms= reads the panel directly; the package grants Sunshine
 =cap_sys_admin= for this. Automatic capture selection otherwise stalls on the
@@ -176,7 +179,8 @@ NVENC. The only app is Desktop; its preparation command turns the screen back
 on in case Hypridle has blanked it. =~/.config/sunshine/= (mode 700) also holds
 the TLS identity, web UI credentials, and paired clients.
 
-The web UI listens on localhost only. From the laptop, run
+=origin_web_ui_allowed = pc= limits the web UI to localhost, and UFW does not
+open its port 47990 either. From the laptop, run
 =ssh -N -L 47990:127.0.0.1:47990 dorm-dev= and open =https://localhost:47990=;
 the login is stored privately on the laptop in
 =~/.local/state/dorm-dev/sunshine-web-ui=.
@@ -199,37 +203,38 @@ user manager that started before PipeWire was installed needs
 The repository is cloned over HTTPS at =~/dotfile=. These destinations link
 into it, matching the laptop's deployment inventory in [[file:computer.org][the system guide]]:
 
-| Repository source                       | Live location                                  |
-|-----------------------------------------+------------------------------------------------|
-| =hypr=, =doom=, =ghostty=, =waybar=, =rofi=, =yazi=, =swaync=, =gtk-3.0=, =gtk-4.0= | =~/.config/<directory>= |
-| =vim/vimrc=                             | =~/.vimrc=                                     |
-| =git/config=, =git/ignore=              | =~/.config/git/=                               |
-| =fish/config.fish=, =fish/functions/ff.fish= | =~/.config/fish/=                         |
-| =rime/default.custom.yaml=              | =~/.local/share/fcitx5/rime/default.custom.yaml= |
+| Repository source                                                                   | Live location                                    |
+|-------------------------------------------------------------------------------------+--------------------------------------------------|
+| =hypr=, =doom=, =ghostty=, =waybar=, =rofi=, =yazi=, =swaync=, =gtk-3.0=, =gtk-4.0= | =~/.config/<directory>=                          |
+| =vim/vimrc=                                                                         | =~/.vimrc=                                       |
+| =git/config=, =git/ignore=                                                          | =~/.config/git/=                                 |
+| =fish/config.fish=, =fish/functions/ff.fish=                                        | =~/.config/fish/=                                |
+| =rime/default.custom.yaml=                                                          | =~/.local/share/fcitx5/rime/default.custom.yaml= |
 
 The Fcitx5 profile and configuration, the Nord themes, Fish's frozen theme and
-key bindings, and the wallpaper are copies from the laptop, not links. Doom
+key bindings, and the wallpaper are copies from the laptop, not links.
+=~/.Xresources= is the laptop's copy with =Xft.dpi: 154= for scale 1.6. Doom
 Emacs is checked out at the laptop's Doom commit, and packages without a Doom
 pin are checked out at the laptop's commits where upstream still has them;
 =doom sync -u= would move them. Follow [[file:../doom/AGENTS.md][doom/AGENTS.md]] before upgrading.
 No =auth-source= credentials are provisioned, so AI packages that read them
 need separate setup.
 
-[[file:../remote-dev/pacman-packages.txt][remote-dev/pacman-packages.txt]] lists the explicitly installed desktop and
-application packages, and [[file:../remote-dev/aur-packages.txt][remote-dev/aur-packages.txt]] the AUR packages
-built with =yay=. MateBook hardware tools, Clash Verge, games, and the T3
+[[file:../remote-dev/pacman-packages.txt][remote-dev/pacman-packages.txt]] is =pacman -Qqen= (explicitly installed
+repository packages) and [[file:../remote-dev/aur-packages.txt][remote-dev/aur-packages.txt]] is =pacman -Qqem= (AUR
+packages built with =yay=). MateBook hardware tools, Clash Verge, games, and the T3
 desktop app are not installed; T3 runs through SSH from the laptop.
 
 Git uses the laptop's configuration, including signed commits, but no signing
 key is provisioned on this host. Import or create one before committing here.
 
 * Checks
-| Area      | Command                                                         | Expected                         |
-|-----------+-----------------------------------------------------------------+----------------------------------|
-| Access    | =ssh dorm-dev true= from the laptop                             | Succeeds with the key            |
-| Passwords | ~ssh -o PubkeyAuthentication=no dorm-dev true~                  | =Permission denied (publickey)=  |
-| Proxy     | =python /usr/local/libexec/mihomo-route.py check=               | TUN, Global, Taiwan node         |
-| Agents    | =sh -lc 'command -v claude codex t3'=                           | =~/.local/guarded-bin/...=       |
-| GPU       | =nvidia-smi=                                                    | RTX 4090 Laptop GPU              |
-| Services  | =systemctl --failed=                                            | No failed units                  |
-| Desktop   | Moonlight → Desktop                                             | Locked Hyprland session          |
+| Area      | Command                                           | Expected                        |
+|-----------+---------------------------------------------------+---------------------------------|
+| Access    | =ssh dorm-dev true= from the laptop               | Succeeds with the key           |
+| Passwords | ~ssh -o PubkeyAuthentication=no dorm-dev true~    | =Permission denied (publickey)= |
+| Proxy     | =python /usr/local/libexec/mihomo-route.py check= | TUN, Global, Taiwan node        |
+| Agents    | =sh -lc 'command -v claude codex t3'=             | =~/.local/guarded-bin/...=      |
+| GPU       | =nvidia-smi=                                      | RTX 4090 Laptop GPU             |
+| Services  | =systemctl --failed=                              | No failed units                 |
+| Desktop   | Moonlight → Desktop                               | Locked Hyprland session         |

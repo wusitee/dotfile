@@ -307,8 +307,8 @@ return function(options)
     end
 
     hl.on("hyprland.start", function()
-        if remoteHost then
-            -- greetd logs in automatically; lock before showing the session.
+        if remoteHost and os.getenv("DORM_DEV_AUTOLOGIN") then
+            -- greetd's boot-time auto-login; lock before showing the session.
             hl.exec_cmd("hyprlock")
         end
         hl.exec_cmd(terminal)
@@ -321,7 +321,9 @@ return function(options)
         hl.exec_cmd(remoteHost and "hypridle -c ~/.config/hypr/hypridle-remote.conf" or "hypridle")
         hl.exec_cmd("swaync")
         if remoteHost then
-            hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP HYPRLAND_INSTANCE_SIGNATURE && systemctl --user start app-dev.lizardbyte.app.Sunshine.service")
+            -- Restart: with lingering, Sunshine outlives a session and would
+            -- keep the previous HYPRLAND_INSTANCE_SIGNATURE.
+            hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP HYPRLAND_INSTANCE_SIGNATURE && systemctl --user restart app-dev.lizardbyte.app.Sunshine.service")
         else
             hl.exec_cmd("/home/wste/code/Dayline/.venv/bin/dayline ui")
             hl.exec_cmd("gammastep")
