@@ -385,8 +385,12 @@ in =$fish_user_paths=, so repeated =source= calls return success rather than
 *** Claude Code network guard
 =fish/functions/claude.fish= wraps the =claude= command in Fish. Its shared
 checker is =script/clash-network-check.fish=. It requires
-Clash Verge Rev's running API at =/tmp/verge/verge-mihomo.sock= to report
-TUN enabled, =global= mode and a selected Taiwan proxy. Manual selector groups are followed;
+Clash Verge Rev's running API to report TUN enabled, =global= mode and a
+selected Taiwan proxy. The checker uses the first existing socket in this order:
+=/run/clash-verge-service/users/<uid>/verge-mihomo.sock= for service mode,
+=$XDG_DATA_HOME/io.github.clash-verge-rev.clash-verge-rev/verge-mihomo.sock=
+for app mode (default data directory: =~/.local/share=), then the legacy
+=/tmp/verge/verge-mihomo.sock=. Manual selector groups are followed;
 automatic/fallback/load-balancing groups and direct routes are rejected.
 The Taiwan check uses the selected node's name. Failed or unverifiable checks
 block startup; there is no external exit-country request.
