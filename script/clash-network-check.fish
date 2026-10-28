@@ -6,8 +6,21 @@ for dependency in curl jq
     end
 end
 
+# Prefer the service socket, then the app socket, then the legacy location.
+set -l data_home $HOME/.local/share
+if set -q XDG_DATA_HOME[1]; and test -n "$XDG_DATA_HOME"
+    set data_home $XDG_DATA_HOME
+end
+set -l socket /tmp/verge/verge-mihomo.sock
+for candidate in /run/clash-verge-service/users/(id -u)/verge-mihomo.sock $data_home/io.github.clash-verge-rev.clash-verge-rev/verge-mihomo.sock $socket
+    if test -S "$candidate"
+        set socket $candidate
+        break
+    end
+end
+
 # Clash Verge Rev exposes this local API without needing its API secret.
-set -l api --silent --show-error --fail --noproxy '*' --max-time 3 --unix-socket /tmp/verge/verge-mihomo.sock
+set -l api --silent --show-error --fail --noproxy '*' --max-time 3 --unix-socket $socket
 set -l configs (command curl -q $api http://localhost/configs | string collect)
 if test $pipestatus[1] -ne 0
     printf 'Network check failed: cannot read the running Clash configuration.\n' >&2
