@@ -414,13 +414,20 @@ existing/background sessions or launches from other apps.
 *** T3 Code network guard
 The T3 desktop launcher and its Claude provider use the same TUN/Global/Taiwan
 startup check. No wrapper sets proxy variables or changes Clash settings.
-=script/t3code-guard.sh= launches the installed =/usr/bin/t3code-nightly= after
+=script/t3code-guard.sh= launches the installed =/usr/bin/t3code= after
 the check, and shows a notification if blocked. The launcher override
 =t3code/t3code.desktop= is linked at
-=~/.local/share/applications/t3code.desktop=; =~/.local/bin/t3code-nightly=
+=~/.local/share/applications/t3code.desktop=; =~/.local/bin/t3code=
 links to the guarded script. =fish/functions/t3.fish= is linked at
 =~/.config/fish/functions/t3.fish= and guards the app-owned =t3= CLI in Fish.
 Use =t3 --proxy-check= to check without launching the CLI.
+
+The desktop owns the local server in =~/.t3=. Do not install the background
+service for this desktop-managed setup: it starts at login and prevents the
+desktop from opening with "This T3 home is unavailable". If it is installed,
+run =t3 service uninstall --base-dir ~/.t3=, then reopen the desktop. This
+removes the service registration without deleting projects, conversations or
+settings. Check with =t3 service status --base-dir ~/.t3=.
 
 The desktop wrapper selects =--password-store=gnome-libsecret= so Electron uses
 KeePassXC's enabled Secret Service under Hyprland. Keep the database exposing
