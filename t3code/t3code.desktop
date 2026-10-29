@@ -1,11 +1,11 @@
 [Desktop Entry]
-Name=T3 Code Nightly
-Comment=Nightly desktop control surface for local coding agents
+Name=T3 Code
+Comment=Desktop control surface for local coding agents
 Exec=/home/wste/dotfile/script/t3code-guard.sh %U
 TryExec=/home/wste/dotfile/script/t3code-guard.sh
 Terminal=false
 Type=Application
-Icon=t3code-nightly
+Icon=t3code
 StartupWMClass=t3code
 Categories=Development;
 MimeType=x-scheme-handler/t3code;
