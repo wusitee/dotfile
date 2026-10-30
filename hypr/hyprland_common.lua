@@ -239,7 +239,14 @@ return function(options)
 
     hl.bind(mainMod .. " + V", hl.dsp.exec_cmd("copyq toggle"))
     hl.bind(mainMod .. " + T", hl.dsp.exec_cmd("/home/wste/code/Dayline/.venv/bin/dayline ui toggle-widget"))
-    hl.bind(mainMod .. " + A", hl.dsp.exec_cmd("/home/wste/code/Dayline/.venv/bin/dayline ui toggle"))
+    -- Dayline's panel lives on special:dayline; open it there if it is not mapped yet.
+    hl.bind(mainMod .. " + A", function()
+        if #hl.get_workspace_windows("special:dayline") == 0 then
+            hl.exec_cmd("/home/wste/code/Dayline/.venv/bin/dayline ui show")
+        else
+            hl.dispatch(hl.dsp.workspace.toggle_special("dayline"))
+        end
+    end)
     hl.bind(mainMod .. " + N", hl.dsp.exec_cmd("swaync-client --toggle-panel"))
     hl.bind("Print", hl.dsp.exec_cmd("sh -c 'if pgrep -x slurp; then pkill slurp; else slurp | grim -g - - | wl-copy; fi'"))
     hl.bind(mainMod .. " + SHIFT + escape", hl.dsp.exec_cmd("hyprlock"))
@@ -269,6 +276,11 @@ return function(options)
         match = { float = true },
         persistent_size = true,
         max_size = "1300 800",
+    })
+    hl.window_rule({
+        name = "dayline-special-workspace",
+        match = { class = "^io\\.github\\.wusitee\\.Dayline$" },
+        workspace = "special:dayline",
     })
     hl.window_rule({
         name = "special-workspace-rule",
