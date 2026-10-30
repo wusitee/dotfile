@@ -127,7 +127,9 @@ names the task). Left-click toggles the Dayline widget; right-click toggles the
 focus session. =custom/dayline=, Hyprland startup, and =SUPER + T= /
 =SUPER + A= also use =/home/wste/code/Dayline/.venv/bin/dayline= from an
 external project. That executable is a local dependency, not part of this
-dotfiles repository.
+dotfiles repository. A window rule puts the Dayline panel on the special
+workspace =special:dayline=; =SUPER + A= toggles that workspace, or runs
+=dayline ui show= when the panel is closed.
 
 *** Launcher (rofi)
 Using rofi as application launcher:
