@@ -1,0 +1,64 @@
+# Template for /etc/mihomo/config.yaml (mode 600). Fill the node from the
+# subscription; never commit the real values.
+mixed-port: 7897
+allow-lan: false
+bind-address: 127.0.0.1
+mode: global
+log-level: info
+ipv6: false
+proxies:
+- name: 🇨🇳 台湾 07 家宽
+  type: trojan
+  server: SERVER_FROM_SUBSCRIPTION
+  port: PORT_FROM_SUBSCRIPTION
+  password: PASSWORD_FROM_SUBSCRIPTION
+  udp: true
+  sni: SNI_FROM_SUBSCRIPTION
+  skip-cert-verify: false
+proxy-groups:
+- name: Taiwan 家宽
+  type: select
+  proxies:
+  - 🇨🇳 台湾 07 家宽
+rules:
+- MATCH,Taiwan 家宽
+profile:
+  store-selected: true
+dns:
+  enable: true
+  respect-rules: true
+  listen: 127.0.0.1:1053
+  enhanced-mode: fake-ip
+  fake-ip-range: 198.18.0.1/16
+  ipv6: false
+  default-nameserver:
+  - 1.1.1.1
+  - 8.8.8.8
+  proxy-server-nameserver:
+  - https://1.1.1.1/dns-query
+  nameserver:
+  - https://1.1.1.1/dns-query
+  fake-ip-filter:
+  - +.ts.net
+  - localhost
+tun:
+  enable: true
+  device: mihomo
+  stack: gvisor
+  auto-route: true
+  auto-redirect: false
+  auto-detect-interface: true
+  dns-hijack:
+  - any:53
+  - tcp://any:53
+  route-exclude-address:
+  - 100.64.0.0/10
+  - fd7a:115c:a1e0::/48
+  - 10.0.0.0/8
+  - 172.16.0.0/12
+  - 192.168.0.0/16
+  - 127.0.0.0/8
+  - 169.254.0.0/16
+  - ::1/128
+  - fe80::/10
+external-controller-unix: /run/mihomo/controller.sock

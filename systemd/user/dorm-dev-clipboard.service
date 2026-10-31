@@ -1,0 +1,11 @@
+[Unit]
+Description=Sync the text clipboard with dorm-dev over SSH
+Documentation=file:///home/wste/dotfile/docs/remote-dev.org
+
+[Service]
+ExecStart=%h/dotfile/script/dorm-dev-clipboard.sh
+Restart=always
+RestartSec=15
+
+[Install]
+WantedBy=default.target

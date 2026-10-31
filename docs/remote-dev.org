@@ -1,342 +1,288 @@
-#+title: Arch Remote Development Laptop
+#+title: dorm-dev Remote Development Host
 
-* Target and availability
-This guide prepares a Lenovo Legion R9000 with an RTX 4090 Laptop GPU and
-64 GB RAM for Windows/Arch dual boot, remote development, and desktop streaming.
-The exact model suffix/year, CPU, SSD layout, and firmware options still need
-verification on the target. Commands here run in Bash; installation and =sudo=
-steps belong on the new laptop unless labelled as client/source steps.
+* Overview
+=dorm-dev= is a Lenovo Legion Y9000P IRX8H (82WQ: Intel i9-13900HX,
+RTX 4090 Laptop GPU with 16 GB VRAM, 64 GB RAM) kept in the dorm. Windows stays
+on its own SSD for games; Arch runs development tools, coding agents, and a
+Hyprland desktop that is streamed to the MateBook. Only the booted OS runs:
+Linux jobs and services stop while Windows is booted.
 
-Use Arch for development, ordinary OpenSSH over Tailscale for access, tmux for
-interactive work, and Sunshine/Moonlight for the graphical desktop. Windows
-remains available for games. Only the booted OS runs: Linux jobs and services
-stop when switching to Windows. Set Arch as the default boot after testing both.
+| Item           | Value                                                      |
+|----------------+------------------------------------------------------------|
+| Tailscale host | =dorm-dev=, =100.81.184.110=                               |
+| Allowed client | MateBook =euphonium=, =100.71.241.9=                       |
+| Terminal/T3    | OpenSSH over Tailscale, key only                           |
+| Desktop        | greetd auto-login → locked Hyprland → Sunshine → Moonlight |
+| Proxy          | Mihomo system service: TUN, Global, =🇨🇳 台湾 07 家宽=      |
 
-The [[https://www.nvidia.com/en-us/geforce/laptops/40-series/][RTX 4090 Laptop GPU]] has 16 GB VRAM; the 64 GB system RAM does not increase
-that capacity. Size ML workloads for the mobile GPU rather than a desktop 4090.
+Repository files for this host live in [[file:../remote-dev/][remote-dev/]], except the SSH
+drop-in in [[file:../ssh/sshd-remote-dev.conf][ssh/]]. System files under =/etc= and =/usr/local= are root-owned
+copies; compare them with the repository before replacing either side. The
+home-directory configuration links into the =~/dotfile= checkout as on the
+laptop.
 
-* Prepare Windows and inspect hardware
-1. Back up Windows files and recovery media to another device. Save the
-   BitLocker/device-encryption recovery key somewhere accessible without this
-   laptop. Know the Windows account password, not just its Hello PIN.
-2. Record the full Lenovo model/MTM and SSD count in firmware or Windows System
-   Information. Check firmware updates and model-specific Linux reports before
-   changing storage or GPU modes. Do not change RAID/AHCI mode casually.
-3. In an Administrator Windows terminal, =powercfg /H off= disables hibernation
-   and Fast Startup. Fully shut down Windows before installing Linux.
-4. If using one SSD, shrink Windows using Windows Disk Management, leaving
-   unallocated space for Arch. A second SSD can keep Linux partitions separate;
-   confirm its contents before using it. Budget space for repositories,
-   containers, datasets, and model caches, not just the OS.
-5. Check Secure Boot requirements for the Windows games you keep. The standard
-   Arch install image needs Secure Boot disabled; firmware/boot changes may
-   trigger BitLocker recovery, so suspend protection before those changes.
-   Re-enable protection after validating the final boot arrangement. If games
-   require Secure Boot, plan a signed Arch boot chain with Microsoft's keys
-   preserved using [[https://wiki.archlinux.org/title/Unified_Extensible_Firmware_Interface/Secure_Boot][the Secure Boot guide]]. Do not clear firmware keys blindly.
+* Disks and boot
+| Disk                   | Contents                                                           |
+|------------------------+--------------------------------------------------------------------|
+| =nvme0n1= Samsung 1 TB | Windows, its ESP and recovery partitions (BitLocker); untouched    |
+| =nvme1n1= UMIS 1 TB    | Arch: =p1= 1 GiB ESP at =/boot=, =p2= 128 GiB swap, =p3= ext4 root |
 
-See [[https://wiki.archlinux.org/title/Dual_boot_with_Windows][Arch's Windows dual-boot guidance]]. Keep Windows EFI, recovery, and reserved
-partitions. Do not format an existing Windows EFI system partition (ESP).
+systemd-boot on the Linux ESP boots =/boot/loader/entries/arch.conf= with
+~resume=UUID=<swap>~ for hibernation; the firmware lists it as Linux Boot
+Manager next to Windows Boot Manager. Secure Boot is disabled for the official
+Arch image; keep UEFI mode and do not clear the firmware keys. Keep the Arch USB
+installer for recovery.
 
-* Install Arch
-Download and verify a current image from [[https://archlinux.org/download/][Arch Linux]], write it to a USB drive,
-then boot the USB in UEFI mode. Use Ethernet if available. First inspect:
-#+begin_src bash
-lsblk -o NAME,SIZE,MODEL,FSTYPE,PARTTYPENAME,MOUNTPOINTS
-lspci -nnk
-test -d /sys/firmware/efi/efivars
-#+end_src
-Identify the Windows disk, ESP, and intended free space by size and model.
-Device names from another machine are not a partitioning plan.
+=/etc/mkinitcpio.conf= omits the =kms= hook so the NVIDIA modules load from the
+root filesystem after resume rather than from the initramfs. Rebuild with
+=sudo mkinitcpio -P= after changing hooks.
 
-Follow the [[https://wiki.archlinux.org/title/Installation_guide][installation guide]] or use =archinstall= with its
-[[https://github.com/archlinux/archinstall#how-to-dual-boot-with-windows][manual dual-boot partitioning instructions]]. Review every create/format action
-before installation; do not use an entire-disk layout on the Windows disk.
+* Network access
+** Tailscale and firewall
+UFW denies incoming traffic except from the MateBook on =tailscale0=: TCP 22
+for SSH, and TCP 47984, 47989, 48010 plus UDP 47998–48010 for Moonlight.
+Review with =sudo ufw status verbose=. Tailscale manages its own netfilter
+rules, so restrict peers in the tailnet policy as well. Disable key expiry for
+=dorm-dev= in the Tailscale admin console so the unattended host stays
+reachable.
 
-- Use GPT/UEFI to match Windows. A simple ext4 Linux root is sufficient.
-  Decide on LUKS encryption before partitioning: it protects data at rest, but
-  an ordinary passphrase-encrypted root needs local unlock after a cold boot.
-  This guide does not configure unattended disk unlock.
-- Check ESP capacity before choosing a boot loader. A small Windows ESP may
-  not fit kernels/initramfs for both =linux= and =linux-lts=. GRUB can keep
-  these under Linux =/boot= with the ESP mounted at =/efi=; systemd-boot needs
-  a suitable ESP/XBOOTLDR layout. Follow the chosen loader's instructions;
-  do not enlarge or format the Windows ESP by guesswork.
-- Install a normal user with sudo, networking, firmware, timezone/locale, and
-  the microcode package matching the actual CPU (=amd-ucode= for AMD,
-  =intel-ucode= for Intel). Do not copy the MateBook's Intel setting blindly.
-- Start with a minimal system. Use hostname =dorm-dev= and username =wste= if
-  retaining the existing paths; adapt examples if choosing different names.
-  Add Hyprland after SSH and networking work. No desktop login is needed for
-  the SSH server or GPU compute.
-- If adding =linux-lts= as a recovery kernel, ensure the boot loader actually
-  offers it. Test it locally before depending on remote recovery.
+Check the path from the client with =tailscale ping dorm-dev=; a direct
+connection is needed for a smooth desktop stream.
 
-Reboot into both Windows and Arch before moving on. Keep the USB for recovery.
-Confirm networking returns after an Arch reboot without logging into a desktop.
-For NetworkManager installations, enable =NetworkManager.service= and ensure
-the connection credentials are available at boot, outside a locked user keyring.
-
-* NVIDIA and development tools
-For the RTX 4090's Ada generation, Arch supports the open NVIDIA kernel module.
-With the standard =linux= kernel:
-#+begin_src bash
-sudo pacman -Syu --needed base-devel git openssh tailscale tmux rsync \
-    fish starship zoxide direnv ripgrep fd fzf vim \
-    linux-headers nvidia-open-dkms nvidia-utils
-#+end_src
-If also installing =linux-lts=, install =linux-lts-headers= for its DKMS build.
-Use the package-managed driver; follow [[https://wiki.archlinux.org/title/NVIDIA][Arch's NVIDIA guidance]] if hardware or
-package names differ. Do not layer NVIDIA's standalone driver installer over it.
-Reboot after installation and inspect:
-#+begin_src bash
-uname -r
-dkms status
-lspci -k -d ::03xx
-nvidia-smi
-#+end_src
-Confirm the NVIDIA driver is loaded and both installed kernels have modules.
-Hybrid graphics may render the desktop on the AMD iGPU while NVIDIA handles
-compute/encoding. Confirm actual devices before forcing GPU IDs or MUX modes.
-
-Install project runtimes separately. Recreate Python environments from lockfiles
-on Linux rather than copying virtual environments from Windows or this machine.
-Install CUDA tooling only when a project needs it; driver installation alone
-does not validate an ML framework. Run that project's GPU smoke test before
-leaving the laptop unattended.
-
-* Private access from the dorm and outside
-** Network check
-The dorm's supplied =tailscale netcheck= reported UDP available, IPv4 available,
-no IPv6, =MappingVariesByDestIP: false=, and no detected captive portal.
-These are favorable signs for NAT traversal, not proof of a direct peer link.
-No automatic port mapping was reported; none is required just to try Tailscale.
-The Singapore DERP probe was about 42 ms: this is not peer latency or a
-desktop-stream bandwidth measurement. Do not use the observed public address
-as a stable host address.
-
-Install Tailscale on both devices, sign into the same tailnet, and permit only
-the intended client/user in tailnet access controls. See [[https://tailscale.com/docs/reference/connection-types][connection types]].
-On the host:
-#+begin_src bash
-sudo systemctl enable --now tailscaled
-sudo tailscale up
-tailscale status
-tailscale ip -4
-#+end_src
-This guide uses ordinary =sshd= over the private network; do not enable
-=tailscale up --ssh= as an additional authentication mechanism.
-
-On the client, test from another network, such as a phone hotspot:
-#+begin_src bash
-tailscale ping dorm-dev
-tailscale status
-#+end_src
-Enable MagicDNS for =dorm-dev=, or use the host's =tailscale ip -4= address.
-Look for a direct connection after discovery. A relayed connection can support
-terminal work, but measure desktop performance before relying on it. Try wired
-Ethernet and inspect both peers if it remains relayed; no VPS is needed before
-this test. The initial "No DERP map" message in =netcheck= alone does not
-establish login or peer connectivity; check =tailscale status= too.
-
-** SSH keys, firewall, and authentication
-Generate a passphrase-protected client key with =ssh-keygen -t ed25519= if one
-is not already available. Copy only its public =.pub= line to the host user's
-=~/.ssh/authorized_keys=, using the host's local console for initial setup.
-Use mode 700 for =~/.ssh= and 600 for =authorized_keys=. Verify the host key
-fingerprint at the console before accepting it on the client.
-
-Use a host firewall with default-deny incoming on the dorm-facing interfaces.
-Do not reuse the MateBook guide's whole-LAN allow rule or expose SSH publicly.
-For a fresh UFW setup at the local console, replace =CLIENT_TAILSCALE_IP= below
-with the client's actual Tailscale IPv4 address:
-#+begin_src bash
-sudo pacman -S --needed ufw
-sudo ufw default deny incoming
-sudo ufw default allow outgoing
-sudo ufw allow in on tailscale0 from CLIENT_TAILSCALE_IP
-sudo ufw enable
-sudo systemctl enable ufw
-sudo systemctl enable --now sshd
-#+end_src
-That rule permits this client's desktop streaming too. Review existing firewall
-rules instead of resetting them. Tailscale manages its own netfilter rules, so
-enforce access between tailnet peers in the tailnet policy as well; UFW rules
-alone are not a tailnet authorization boundary. Check [[https://tailscale.com/docs/integrations/firewalls][Tailscale firewall guidance]].
-
-On the client, connect explicitly with public-key authentication:
-#+begin_src bash
-ssh -o PasswordAuthentication=no -o KbdInteractiveAuthentication=no wste@dorm-dev
-#+end_src
-After this succeeds, keep it open and deploy
-[[file:../ssh/sshd-remote-dev.conf][the SSH authentication drop-in]] on the host. Inspect existing files first:
-#+begin_src bash
-ls -ld /etc/ssh/sshd_config /etc/ssh/sshd_config.d
-sudo sshd -T
-#+end_src
-Ensure =/etc/ssh/sshd_config= includes =/etc/ssh/sshd_config.d/*.conf= before
-conflicting settings; OpenSSH generally uses the first value. Compare an
-existing destination before installing from the new laptop's checkout:
+** SSH
+[[file:../ssh/sshd-remote-dev.conf][ssh/sshd-remote-dev.conf]] is installed as
+=/etc/ssh/sshd_config.d/00-remote-dev.conf=: public keys only, no root login,
+and =AllowUsers wste@100.71.241.9=. After editing it:
 #+begin_src bash
 sudo install -m 644 ~/dotfile/ssh/sshd-remote-dev.conf /etc/ssh/sshd_config.d/00-remote-dev.conf
 sudo sshd -t
-sudo sshd -T | rg -i '^(permitrootlogin|pubkeyauthentication|passwordauthentication|kbdinteractiveauthentication) '
+sudo sshd -T | rg -i '^(permitrootlogin|pubkeyauthentication|passwordauthentication|kbdinteractiveauthentication|allowusers) '
+sudo systemctl reload sshd
 #+end_src
-Expect root login =no=, public keys =yes=, and both password mechanisms =no=.
-If validation fails, correct the configuration before reload. Otherwise run
-=sudo systemctl reload sshd= and verify a second client login before closing
-the first. Keep SSH TCP forwarding available for editors and local web tools.
+OpenSSH prints these keywords in CamelCase, so match case-insensitively. Keep
+an existing session open and test a second login before closing it.
 
-Optionally add a client-only host entry to =~/.ssh/config= after comparing it:
-#+begin_src conf
-Host dorm-dev
-    HostName dorm-dev
-    User wste
-    ServerAliveInterval 30
-    ServerAliveCountMax 3
+The client's =~/.ssh/config= has a =dorm-dev= entry using =~/.ssh/id_ed25519=
+with =StrictHostKeyChecking yes=. Use =tmux new-session -A -s dev= for
+terminal work that should survive disconnection, and forward development ports
+such as =ssh -N -L 8888:127.0.0.1:8888 dorm-dev=.
+
+Bash remains the login shell, so SSH commands and T3's launcher get POSIX shell
+behavior. Interactive Bash shells switch to Fish from the end of =~/.bashrc=,
+so terminals and =ssh dorm-dev= behave like the laptop.
+
+* Mihomo proxy
+All host traffic leaves through the Taiwan 家宽 node, matching the laptop's
+Clash Verge TUN/Global policy.
+
+| Repository source                       | Live copy                                              |
+|-----------------------------------------+--------------------------------------------------------|
+| =remote-dev/mihomo.service=             | =/etc/systemd/system/mihomo.service=                   |
+| =remote-dev/mihomo-route.py=            | =/usr/local/libexec/mihomo-route.py=                   |
+| =remote-dev/mihomo-config.example.yaml= | =/etc/mihomo/config.yaml= (mode 600, real node values) |
+| Mihomo release binary                   | =/usr/local/bin/mihomo=                                |
+
+The TUN device =mihomo= uses Global mode and fake-IP DNS. Its
+=route-exclude-address= list keeps the tailnet (=100.64.0.0/10=) and private
+ranges off the tunnel, so SSH, Moonlight, and Tailscale itself bypass the
+proxy. The controller listens only on =/run/mihomo/controller.sock= (group
+=wste=). =ExecStartPost= selects the fixed node in =GLOBAL=;
+=mihomo-route.py check= verifies TUN, Global mode, and that node.
+
+DNS must reach the tunnel too. The TUN hijacks port 53 and answers with fake
+IPs, so the Taiwan exit resolves the real names. =respect-rules: true= sends
+Mihomo's own DNS-over-HTTPS lookups through the proxy as well. Tailscale DNS is
+off (=tailscale set --accept-dns=false=): with it on, =/etc/resolv.conf= points
+at =100.100.100.100=, which is outside the tunnel, and Tailscale forwards each
+query straight to the network's resolver, revealing the Hong Kong location.
+This also applies to the laptop. =/etc/resolv.conf= should list
+NetworkManager's resolvers, and system lookups should return =198.18.x.x=.
+
+Check routing and DNS:
+#+begin_src bash
+python /usr/local/libexec/mihomo-route.py check
+curl -s https://www.cloudflare.com/cdn-cgi/trace | rg '^loc='   # loc=TW
+getent ahostsv4 whoami.akamai.net                                # 198.18.x.x
+id=$(curl -s https://bash.ws/id)
+for i in 1 2 3 4 5 6; do curl -s -o /dev/null "http://$i.$id.bash.ws/"; done
+curl -s "https://bash.ws/dnsleak/test/$id?json"                  # Taiwan resolvers only
 #+end_src
-Use the chosen key's =IdentityFile= if the client has several identities.
-Use =tmux new-session -A -s dev= for persistent interactive work. Bind dev
-servers/Jupyter to loopback and forward ports, for example
-=ssh -N -L 8888:127.0.0.1:8888 dorm-dev=. For jobs that must survive reboots,
-use a project-specific systemd service; tmux only survives disconnection.
 
-** Full desktop: Sunshine and Moonlight
-Install Hyprland and its dependencies using [[file:computer.org][the system guide]], after adapting
-the machine-specific items below. For desktop streaming, install the native
-Arch package using [[https://docs.lizardbyte.dev/projects/sunshine/latest/md_docs_2getting__started.html][Sunshine's current installation instructions]] and Moonlight
-on the client using its [[https://github.com/moonlight-stream/moonlight-docs/wiki/Setup-Guide][setup guide]]. Sunshine's package may require its upstream
-repository; it is not part of the base package command above.
-
-1. Start Sunshine inside the host's logged-in graphical session. Follow the
-   installed package's capture and virtual-input setup, including any required
-   permissions; test as the normal user rather than running it as root.
-2. Set credentials at =https://localhost:47990= on the host. For remote
-   administration, forward it with
-   =ssh -N -L 47990:127.0.0.1:47990 dorm-dev=, then use that local URL. Keep
-   UPnP disabled; do not publish the web UI or streaming ports on the internet.
-3. Add the host's Tailscale IP manually in Moonlight, pair the displayed PIN
-   through Sunshine, and launch Desktop. Permit the required streaming traffic
-   in tailnet policy for this client; SSH permission alone is insufficient.
-4. Begin with 1080p/60 and a modest bitrate, then measure at the actual remote
-   location. Verify hardware encoding, audio, keyboard/mouse, and acceptable
-   text clarity. Use SSH/rsync for file transfer.
-5. Enable the package's Sunshine user service only after manual streaming
-   works. Verify its installed unit name using
-   =systemctl --user list-unit-files '*sunshine*' '*Sunshine*'=. Log out/in and
-   reboot locally to test its actual startup behavior.
-
-This streams a graphical session; installing a service does not create a
-usable Hyprland session at the login screen. A cold boot may still need local
-disk unlock, desktop login, or capture approval. Test reconnecting after screen
-lock and display power-off before relying on it. Keep the lid open initially;
-lid closure can remove the captured display even if suspend is disabled.
-Unattended graphical startup or a virtual display needs a separate,
-hardware-tested setup. Do not enable automatic desktop login by assumption.
-
-* Migrate configuration selectively
-Clone the repository on the new host with HTTPS initially (no private key
-needed): =git clone https://github.com/wusitee/dotfile.git ~/dotfile=.
-Inspect each destination with =ls -ld= and =readlink -f=, and compare existing
-files. Back up independent files before replacement. Do not copy all of =~/=
-or =~/.config/= into Git or onto the new host.
-
-** Repository configuration
-- Fish: install =fish starship zoxide direnv= before using =fish/config.fish=.
-  The live config differs: it also sets an SSH-agent socket and a Kimi path.
-  Review those separately; a path to a socket does not create an SSH agent.
-  Link/copy individual functions under =fish/functions/=, preserving live
-  universal variables. The Claude/T3 wrappers depend on the local proxy check
-  and paths; inspect them before deployment.
-- Starship: the current copy is under =~/.config/starship/starship.toml=, but
-  the usual default is =~/.config/starship.toml=. On a fresh target, after
-  resolving any existing file, use
-  =ln -s ../dotfile/starship/starship.toml ~/.config/starship.toml=.
-- Vim: link only =vim/vimrc= to =~/.vimrc=. Install desired plugins separately;
-  the old =~/.vim/plugin/= is outside Git. Doom: follow =doom/AGENTS.md= and
-  the system guide to install/tangle/sync; do not copy generated =config.el=.
-- Git: [[file:../git/config][git/config]] and [[file:../git/ignore][git/ignore]] capture the source machine's identity,
-  signed-commit preference, and global ignore rule without credentials. On a
-  fresh target with no conflicting files, =mkdir -p ~/.config/git=, then use
-  =ln -s ../../dotfile/git/config ~/.config/git/config= and
-  =ln -s ../../dotfile/git/ignore ~/.config/git/ignore=. An existing =~/.gitconfig=
-  has higher precedence, so compare it too. Provision a signing key and verify
-  a signed commit before depending on Git; no signing private key is included.
-- Hyprland: adapt a separate target copy first. =hyprland_common.lua= starts
-  =matebook-applet=, Dayline, OneDrive, and other local tools; it assumes scale 2.
-  =hypridle.conf= requests suspend after 30 minutes. Remove that automatic
-  suspend action from the target copy for remote use while retaining locking.
-  Check =hyprctl configerrors= and the NVIDIA/portal setup after deployment.
-- Waybar: verify battery, backlight, network, and Dayline paths on the R9000.
-  Pending uncommitted source-machine edits are not included by cloning Git.
-- Rime: deploy only =rime/default.custom.yaml=; preserve dictionaries/user
-  data separately. The =fcitx5/= and Neovim snapshots differ from the live setup.
-  Compare them rather than treating the snapshots as current backups.
-
-** Files outside the repository
-The source-machine audit also found these categories; migrate them separately:
-
-| Item | Treatment |
-|------+-----------|
-| =~/.config/fish/config.fish=, =conf.d/=, functions | Review differences and required executables; preserve shell state separately |
-| =~/.config/nvim/= | Compare live =init.lua= and plugins with the older tracked snapshot |
-| =~/.ssh/config= and SSH identities | Review host rules; generate a separate host keypair for Git access; transfer public keys only by default |
-| =~/.gnupg/=, =.authinfo=, =.authinfo.gpg=, password databases | Encrypted backup or explicit key export/import; keep out of Git; retain Emacs auth-source |
-| CLI/provider authentication, =.npmrc=, app profiles | Reinstall and authenticate on the target; do not copy tokens into dotfiles |
-| =~/.local/bin/= | Reinstall owning tools: current entries mostly link into package/tool environments |
-| =~/code/Dayline/= and other projects | Clone repositories; transfer uncommitted/untracked work privately; recreate dependencies |
-| Org notes, datasets, databases, Rime user data | Separate private backup/sync; database-consistent export where applicable |
-| =/etc/= and user services | Inventory and recreate only understood settings; do not copy hardware config wholesale |
-
-For a private transfer, start with a targeted dry run such as
-=rsync -an --itemize-changes ~/code/PROJECT/ wste@dorm-dev:code/PROJECT/=
-after creating the target directory. Review the file list, then remove =-n=
-to copy. This includes untracked files/secrets in that project, so choose the
-scope deliberately. Do not add =--delete=. Rebuild virtualenvs, =node_modules=,
-and other machine-dependent outputs instead of transferring them.
-
-For package inventory, save =pacman -Qqen= and =pacman -Qqem= privately on the
-source. Treat them as reference lists, not bulk install scripts: MateBook
-drivers and unrelated desktop applications are not host requirements.
-
-* Power, recovery, and acceptance checks
-Keep the laptop on AC with clear airflow. Use Lenovo-supported battery
-conservation controls if available for this exact model; do not deploy
-=dotfiles-huawei-wmi/=, =huawei-wmi=, or =matebook-applet=. Avoid installing
-multiple competing power-management daemons.
-
-For AC lid behavior, a target-local =/etc/systemd/logind.conf.d/60-remote-dev.conf=
-can contain the following after comparing existing settings:
-#+begin_src conf
-[Login]
-HandleLidSwitch=suspend
-HandleLidSwitchExternalPower=ignore
-HandleLidSwitchDocked=ignore
-IdleAction=ignore
+Changing the TUN or routes can cut off SSH. Arm a rollback first, restart
+Mihomo, verify a new SSH login, then cancel the rollback:
+#+begin_src bash
+sudo systemd-run --unit=mihomo-rollback --on-active=5min /usr/bin/systemctl disable --now mihomo.service
+sudo systemctl restart mihomo.service
+sudo systemctl stop mihomo-rollback.timer
 #+end_src
-Apply with a planned local reboot. This leaves ordinary battery lid suspend
-but changes AC behavior. Desktop power managers and low-level inhibitors can
-override logind; inspect =systemd-inhibit --list= and test actual behavior.
-See [[https://www.freedesktop.org/software/systemd/man/latest/logind.conf.html][logind.conf]]. Do not enable this repository's on-demand lid/idle hold
-services at login as a substitute for a host power policy. Avoid remote
-firmware changes or first-time kernel/driver reboots without local recovery.
 
-Before leaving the dorm:
-- [ ] Windows and Arch both boot; Arch is the default; recovery media/keys work.
-- [ ] Networking, Tailscale, and SSH recover after a local reboot, accounting
-      for any encrypted-root unlock. Review Tailscale node-key expiry for an
-      unattended host using [[https://tailscale.com/docs/how-to/set-up-servers][the server guidance]].
-- [ ] A second key-only SSH login succeeds; effective sshd settings match the
-      drop-in. A non-tailnet connection cannot reach host services.
-- [ ] =tailscale ping= from outside the dorm confirms the actual path and
-      latency. Moonlight works from that location at the selected bitrate.
-- [ ] NVIDIA compute and desktop encoding work; a disconnected SSH client can
-      reattach to the tmux session.
-- [ ] Desktop reconnect after locking/display-off works; local login and
-      cold-boot limitations are understood. Lid behavior and temperatures are
-      tested locally before attempting closed-lid operation.
-- [ ] Private files are backed up off the laptop. Disk space, updates, and
-      recovery access have an owner; snapshots alone are not an off-device backup.
+Pacman's mirror list starts with NYCU (Taiwan) and xTom (Hong Kong), which were
+fastest through this route. The =[archlinuxcn]= repository (xTom, then USTC)
+provides the same extra packages as on the laptop.
 
-No target partitioning, installation, configuration deployment, or power-policy
-changes are performed merely by adding this guide to the repository.
+* Coding agents and T3 Code
+Codex and Claude Code use their native installers under =~/.local/bin=; T3's
+runtime is under =~/.t3/runtime=. =~/.local/guarded-bin/{claude,codex,t3}= link
+to [[file:../remote-dev/guarded-command.sh][remote-dev/guarded-command.sh]], which runs the Mihomo check before
+starting the real command. =~/.profile= (POSIX login shells, used by T3's SSH
+launch) and the top of =~/.bashrc= put =~/.local/guarded-bin= first in =PATH=.
+Use =codex --proxy-check= to check without starting a CLI. The laptop's
+=fish/functions/claude.fish= and =t3.fish= are not deployed here: they check
+Clash Verge's socket, which this host does not have.
+
+Sign in on this host separately rather than copying tokens from the laptop:
+=codex login --device-auth=, then =claude= and =/login=.
+
+In T3 on the laptop, add =dorm-dev= under Settings → Connections → Add
+environment → SSH. Projects, provider credentials, and agent work then stay on
+=dorm-dev=. User lingering is enabled for =wste= so user services keep running
+without a login.
+
+* NVIDIA, power, and hibernation
+The internal 2560×1600 panel (=eDP-1=) is wired to the Intel iGPU, which is the
+boot GPU and runs Hyprland; the RTX 4090 runs =nvidia-open-dkms= for CUDA and
+NVENC. =nvidia-utils= blacklists nouveau. Check with =nvidia-smi=.
+
+| Repository source                      | Live copy                                       |
+|----------------------------------------+-------------------------------------------------|
+| =remote-dev/nvidia-power.conf=         | =/etc/modprobe.d/nvidia-power.conf=             |
+| =remote-dev/logind-60-remote-dev.conf= | =/etc/systemd/logind.conf.d/60-remote-dev.conf= |
+
+The NVIDIA option keeps video memory across sleep, used by the enabled
+=nvidia-suspend=, =nvidia-hibernate=, and =nvidia-resume= services. Check it
+with =rg PreserveVideo /proc/driver/nvidia/params=. Closing the lid is ignored
+on AC power and suspends on battery. The desktop never suspends on idle. With
+the lid closed on AC, =eDP-1= stays enabled, so Sunshine's KMS capture and
+Moonlight streaming keep working; keep the vents clear and prefer Ethernet,
+because the Wi-Fi antennas are in the lid.
+
+=systemctl hibernate= writes memory to the swap partition. Resuming needs the
+power button: there is no remote wake, so do not hibernate the host from
+outside the dorm.
+
+* Desktop and streaming
+** Session
+[[file:../remote-dev/greetd-config.toml][remote-dev/greetd-config.toml]] is installed as =/etc/greetd/config.toml=. At
+boot greetd logs =wste= into =start-hyprland= once, with ~DORM_DEV_AUTOLOGIN=1~
+set; after logging out, tuigreet asks for a login. =getty@tty1= is disabled in
+favor of greetd.
+
+The shared [[file:../hypr/hyprland_common.lua][Hyprland config]] reads =/etc/hostname=. On =dorm-dev= it locks
+the auto-login session with =hyprlock= at start and blanks the panel five
+seconds later (a tuigreet login is not locked again). It uses scale 1.6 and
+starts Sunshine. Laptop-only programs — the MateBook applet, Dayline,
+Gammastep, and OneDrive — start only on the laptop.
+
+The host runs as a server rather than on idle timers: a stream turns the panel
+on, and closing it locks the session and blanks the panel again (see below).
+[[file:../hypr/hypridle-remote.conf][hypr/hypridle-remote.conf]] keeps one 30-minute timer that locks and blanks
+an idle session, which covers a dropped connection; it never suspends. A key
+press or mouse movement at the machine turns the panel on. Unlock with
+=wste='s password, locally or through Moonlight.
+
+** Sunshine and Moonlight
+Sunshine (=sunshine= from archlinuxcn) runs as the user unit
+=app-dev.lizardbyte.app.Sunshine.service=. Hyprland imports its environment
+into the user manager and restarts the unit, so an instance that outlived the
+previous session picks up the new Hyprland instance. The unit is not enabled,
+because this session does not activate =graphical-session.target=.
+
+| Repository source               | Live copy                          |
+|---------------------------------+------------------------------------|
+| =remote-dev/sunshine.conf=      | =~/.config/sunshine/sunshine.conf= |
+| =remote-dev/sunshine-apps.json= | =~/.config/sunshine/apps.json=     |
+
+=capture = kms= reads the panel directly; the package grants Sunshine
+=cap_sys_admin= for this. Automatic capture selection otherwise stalls on the
+desktop portal, which has no RemoteDesktop interface under Hyprland. Because the
+Intel iGPU drives the panel, Sunshine encodes H.264/HEVC with VAAPI rather than
+NVENC. The only app is Desktop: starting it turns the panel on, and quitting it
+runs =loginctl lock-session= (handled by Hypridle) and turns the panel off.
+Sunshine has no disconnect hook, so Moonlight's "quit app after session"
+setting is what ends the app when the stream closes. =~/.config/sunshine/=
+(mode 700) also holds the TLS identity, web UI credentials, and paired clients.
+
+=origin_web_ui_allowed = pc= limits the web UI to localhost, and UFW does not
+open its port 47990 either. From the laptop, run
+=ssh -N -L 47990:127.0.0.1:47990 dorm-dev= and open =https://localhost:47990=;
+the login is stored privately on the laptop in
+=~/.local/state/dorm-dev/sunshine-web-ui=.
+
+On the laptop, Moonlight (see [[file:computer.org][the system guide]]) is paired with
+=100.81.184.110=. Start the desktop from Moonlight's host list, or with:
+#+begin_src bash
+moonlight stream 100.81.184.110 Desktop
+#+end_src
+Moonlight's =[General]= settings stream at the host's 2560×1600 and 60 FPS,
+use absolute mouse mode for desktop use, and quit the app after the session
+(~quitAppAfter=true~), which locks the host. Moonlight decodes in hardware
+only when VAAPI works on the laptop, which needs =intel-media-driver=; without
+it, Moonlight falls back to software decoding.
+To pair another client, run =moonlight pair 100.81.184.110 --pin NNNN= on it,
+then enter the PIN under PIN in the web UI.
+
+Moonlight's paste shortcut (=Ctrl+Alt+Shift+V=) sends text as Unicode events,
+which Sunshine types on Linux as =Ctrl+Shift+U= hex sequences; most apps,
+including Ghostty and Fcitx5 inputs, show garbage. Use the clipboard sync
+instead: [[file:../script/dorm-dev-clipboard.sh][script/dorm-dev-clipboard.sh]] runs on the laptop as
+[[file:../systemd/user/dorm-dev-clipboard.service][systemd/user/dorm-dev-clipboard.service]] and copies text clipboard changes both
+ways over SSH, so a normal copy on one machine can be pasted with =Ctrl+V= on
+the other. Only text is synced, and entries that password managers mark with
+=x-kde-passwordManagerHint= stay on their machine. Deploy it on the laptop:
+#+begin_src bash
+ln -s ../../../dotfile/systemd/user/dorm-dev-clipboard.service ~/.config/systemd/user/dorm-dev-clipboard.service
+systemctl --user daemon-reload
+systemctl --user enable --now dorm-dev-clipboard.service
+#+end_src
+The service waits for Hyprland to export =WAYLAND_DISPLAY= and restarts if
+dorm-dev is unreachable.
+
+Sunshine needs PipeWire for audio; its sockets are enabled for the user. A
+user manager that started before PipeWire was installed needs
+=systemctl --user daemon-reload= and a socket start, or a reboot.
+
+* Dotfiles on dorm-dev
+The repository is cloned over HTTPS at =~/dotfile=. These destinations link
+into it, matching the laptop's deployment inventory in [[file:computer.org][the system guide]]:
+
+| Repository source                                                                   | Live location                                    |
+|-------------------------------------------------------------------------------------+--------------------------------------------------|
+| =hypr=, =doom=, =ghostty=, =waybar=, =rofi=, =yazi=, =swaync=, =gtk-3.0=, =gtk-4.0= | =~/.config/<directory>=                          |
+| =vim/vimrc=                                                                         | =~/.vimrc=                                       |
+| =git/config=, =git/ignore=                                                          | =~/.config/git/=                                 |
+| =fish/config.fish=, =fish/functions/ff.fish=                                        | =~/.config/fish/=                                |
+| =rime/default.custom.yaml=                                                          | =~/.local/share/fcitx5/rime/default.custom.yaml= |
+
+The Fcitx5 profile and configuration, the Nord themes, Fish's frozen theme and
+key bindings, and the wallpaper are copies from the laptop, not links.
+=~/.Xresources= is the laptop's copy with =Xft.dpi: 154= for scale 1.6. The
+appearance also matches the laptop through copies: =dconf= keys under
+=/org/gnome/desktop/interface/= and =/org/gnome/desktop/wm/preferences/=
+(Papirus-Dark icons, Breeze-Dark GTK theme, dark scheme, Noto Sans and Hack
+fonts), the breeze cursor in =~/.icons/default/index.theme=, and
+=~/.config/qt6ct/qt6ct.conf=. Copy them again after changing the laptop's
+theme, for example with =dconf dump= and =dconf load=. Doom
+Emacs is checked out at the laptop's Doom commit, and packages without a Doom
+pin are checked out at the laptop's commits where upstream still has them;
+=doom sync -u= would move them. Follow [[file:../doom/AGENTS.md][doom/AGENTS.md]] before upgrading.
+No =auth-source= credentials are provisioned, so AI packages that read them
+need separate setup.
+
+[[file:../remote-dev/pacman-packages.txt][remote-dev/pacman-packages.txt]] is =pacman -Qqen= (explicitly installed
+repository packages) and [[file:../remote-dev/aur-packages.txt][remote-dev/aur-packages.txt]] is =pacman -Qqem= (AUR
+packages built with =yay=). MateBook hardware tools, Clash Verge, games, and the T3
+desktop app are not installed; T3 runs through SSH from the laptop.
+
+Git uses the laptop's configuration, including signed commits, but no signing
+key is provisioned on this host. Import or create one before committing here.
+
+* Checks
+| Area      | Command                                           | Expected                        |
+|-----------+---------------------------------------------------+---------------------------------|
+| Access    | =ssh dorm-dev true= from the laptop               | Succeeds with the key           |
+| Passwords | ~ssh -o PubkeyAuthentication=no dorm-dev true~    | =Permission denied (publickey)= |
+| Proxy     | =python /usr/local/libexec/mihomo-route.py check= | TUN, Global, Taiwan node        |
+| Agents    | =sh -lc 'command -v claude codex t3'=             | =~/.local/guarded-bin/...=      |
+| GPU       | =nvidia-smi=                                      | RTX 4090 Laptop GPU             |
+| Services  | =systemctl --failed=                              | No failed units                 |
+| Desktop   | Moonlight → Desktop                               | Locked Hyprland session         |

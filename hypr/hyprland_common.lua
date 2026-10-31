@@ -6,11 +6,19 @@ return function(options)
     local menu = "rofi -show combi"
     local mainMod = "SUPER"
 
+    -- dorm-dev is the streamed remote desktop (docs/remote-dev.org).
+    local hostFile = io.open("/etc/hostname")
+    local hostname = hostFile and hostFile:read("l") or ""
+    if hostFile then
+        hostFile:close()
+    end
+    local remoteHost = hostname == "dorm-dev"
+
     hl.monitor({
         output = "",
         mode = "highres",
         position = "auto",
-        scale = 2,
+        scale = remoteHost and 1.6 or 2,
     })
 
     hl.env("XCURSOR_SIZE", "24")
@@ -73,6 +81,9 @@ return function(options)
             force_default_wallpaper = -1,
             focus_on_activate = true,
             disable_hyprland_logo = false,
+            -- dorm-dev blanks its panel without Hypridle; wake it locally.
+            key_press_enables_dpms = remoteHost,
+            mouse_move_enables_dpms = remoteHost,
         },
         input = {
             kb_layout = "us",
@@ -311,18 +322,30 @@ return function(options)
     end
 
     hl.on("hyprland.start", function()
+        if remoteHost and os.getenv("DORM_DEV_AUTOLOGIN") then
+            -- greetd's boot-time auto-login: lock, then blank the panel until a
+            -- stream starts.
+            hl.exec_cmd("hyprlock")
+            hl.exec_cmd([[sh -c 'sleep 5; hyprctl dispatch "hl.dsp.dpms({action = \"off\"})"']])
+        end
         hl.exec_cmd(terminal)
-        hl.exec_cmd("nm-applet & matebook-applet")
+        hl.exec_cmd(remoteHost and "nm-applet" or "nm-applet & matebook-applet")
         hl.exec_cmd("waybar")
         hl.exec_cmd("systemctl --user start hyprpolkitagent")
         hl.exec_cmd("fcitx5 -d")
         hl.exec_cmd("copyq --start-server")
         hl.exec_cmd("awww-daemon")
-        hl.exec_cmd("hypridle")
+        hl.exec_cmd(remoteHost and "hypridle -c ~/.config/hypr/hypridle-remote.conf" or "hypridle")
         hl.exec_cmd("swaync")
-        hl.exec_cmd("/home/wste/code/Dayline/.venv/bin/dayline ui")
-        hl.exec_cmd("gammastep")
-        hl.exec_cmd("onedrive --monitor")
+        if remoteHost then
+            -- Restart: with lingering, Sunshine outlives a session and would
+            -- keep the previous HYPRLAND_INSTANCE_SIGNATURE.
+            hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP HYPRLAND_INSTANCE_SIGNATURE && systemctl --user restart app-dev.lizardbyte.app.Sunshine.service")
+        else
+            hl.exec_cmd("/home/wste/code/Dayline/.venv/bin/dayline ui")
+            hl.exec_cmd("gammastep")
+            hl.exec_cmd("onedrive --monitor")
+        end
         hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP")
         hl.exec_cmd("hyprctl setcursor \"Breeze Dark\" 24")
         hl.exec_cmd("xrdb ~/.Xresources")

@@ -1,0 +1,21 @@
+{
+  "env": {
+    "PATH": "$(PATH):$(HOME)/.local/bin"
+  },
+  "apps": [
+    {
+      "name": "Desktop",
+      "image-path": "desktop.png",
+      "prep-cmd": [
+        {
+          "do": "hyprctl dispatch \"hl.dsp.dpms({action = 'on'})\"",
+          "undo": "hyprctl dispatch \"hl.dsp.dpms({action = 'off'})\""
+        },
+        {
+          "do": "",
+          "undo": "loginctl lock-session"
+        }
+      ]
+    }
+  ]
+}

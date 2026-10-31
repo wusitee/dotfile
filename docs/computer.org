@@ -5,9 +5,10 @@ This document contains the complete setup guide for a personal Arch Linux system
 
 The system uses Hyprland as the primary window manager with a suite of Wayland-native tools for daily computing.
 
-For a second machine that keeps Windows and runs Arch as a dorm development
-host, follow [[file:remote-dev.org][the remote development laptop guide]]. It covers NVIDIA,
-remote access, and migration separately from this MateBook-specific setup.
+The dorm development host =dorm-dev= dual-boots Windows and Arch, and this
+laptop reaches it over Tailscale for SSH, T3 Code, and a streamed Hyprland
+desktop. See [[file:remote-dev.org][the dorm-dev guide]] for its NVIDIA, proxy, access, and desktop
+setup, which differ from this MateBook-specific setup.
 
 * Hardware-Specific Configuration
 
@@ -363,6 +364,23 @@ Proxy client:
 yay -S clash-verge-rev-bin
 #+end_src
 
+Keep Tailscale from managing DNS with =sudo tailscale set --accept-dns=false=.
+With MagicDNS, =/etc/resolv.conf= points at =100.100.100.100=, which is outside
+the TUN, and Tailscale forwards queries directly to the campus resolvers,
+leaking the Hong Kong location. Without it, system lookups go to the TUN's DNS
+hijack and return =198.18.x.x= fake IPs. The DNS leak check is in
+[[file:remote-dev.org][the dorm-dev guide]].
+
+*** Moonlight
+Client for the streamed =dorm-dev= desktop. =intel-media-driver= provides
+the VAAPI driver for hardware video decoding; check it with =vainfo=.
+#+begin_src shell
+sudo pacman -S moonlight-qt intel-media-driver libva-utils
+#+end_src
+
+Pairing, usage, and the clipboard sync service that replaces Moonlight's paste
+shortcut are in [[file:remote-dev.org][the dorm-dev guide]].
+
 *** Ghostty
 Fast, native terminal emulator written in Zig:
 #+begin_src shell
@@ -673,9 +691,10 @@ manifest contains a compatibility pin for the exact target release commit.
 - =swaync/=, =starship/= - Notification center and shell prompt configuration
 - =gtk-3.0/= - GTK3 theme configuration
 - =gtk-4.0/= - GTK4 theme configuration
-- =script/= - Hyprland window switcher and sleep-inhibition helpers
-- =systemd/user/= - On-demand lid sleep and idle hold services
+- =script/= - Hyprland window switcher, sleep-inhibition helpers, and dorm-dev clipboard sync
+- =systemd/user/= - On-demand lid sleep and idle hold services; dorm-dev clipboard sync
 - =dotfiles-huawei-wmi/= - Battery threshold restore hook and its installer
+- =remote-dev/= - System files and package lists for the =dorm-dev= host
 - =sway/=, =i3/= - Preserved fallback desktop configurations
 - =nushell/=, =pwsh/=, =scoop/= - Alternate shell and Windows setup snapshots
 - =clang-format/= - C/C++ formatting settings; =a9/= - Standalone utility/data
