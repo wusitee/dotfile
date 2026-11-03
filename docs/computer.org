@@ -489,6 +489,23 @@ yay -S onedrive-abraunegg
 
 [[https://github.com/abraunegg/onedrive][onedrive GitHub repository]]
 
+The client runs as the packaged =onedrive.service= user unit in monitor mode,
+not from Hyprland autostart. The tracked drop-in
+=systemd/user/onedrive.service.d/memory.conf= caps it at 1 GiB of RAM with no
+swap, because long-running monitor sessions have grown past 10 GiB. At the cap
+the kernel kills the client and the unit's =Restart=on-failure= starts a new one.
+#+begin_src shell
+mkdir -p ~/.config/systemd/user/onedrive.service.d
+ln -s ../../../../dotfile/systemd/user/onedrive.service.d/memory.conf \
+  ~/.config/systemd/user/onedrive.service.d/memory.conf
+systemctl --user daemon-reload
+systemctl --user enable --now onedrive.service
+#+end_src
+
+Check output and restarts with =journalctl --user -u onedrive=. Each exit
+logs the run's memory peak; a =Failed with result 'oom-kill'= line means the cap
+was reached.
+
 * Development Environment
 
 ** Doom Emacs
@@ -613,6 +630,10 @@ Added on 2026-10-08: =systemd/user/inhibit-lid-sleep.service= and
 =~/.config/systemd/user/=. The previous separate lid unit was backed up before
 linking. Both holds are controlled by =script/toggle-inhibit.sh=.
 
+=systemd/user/onedrive.service.d/memory.conf= is linked individually into
+=~/.config/systemd/user/onedrive.service.d/=; =onedrive.service= itself is the
+packaged unit from =/usr/lib/systemd/user/= and is enabled at login.
+
 ** Validation
 There is no unified test suite. Use checks suited to the edited file:
 
@@ -674,7 +695,7 @@ manifest contains a compatibility pin for the exact target release commit.
 - =gtk-3.0/= - GTK3 theme configuration
 - =gtk-4.0/= - GTK4 theme configuration
 - =script/= - Hyprland window switcher and sleep-inhibition helpers
-- =systemd/user/= - On-demand lid sleep and idle hold services
+- =systemd/user/= - On-demand lid sleep and idle hold services; OneDrive memory cap drop-in
 - =dotfiles-huawei-wmi/= - Battery threshold restore hook and its installer
 - =sway/=, =i3/= - Preserved fallback desktop configurations
 - =nushell/=, =pwsh/=, =scoop/= - Alternate shell and Windows setup snapshots
