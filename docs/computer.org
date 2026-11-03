@@ -494,7 +494,10 @@ not from Hyprland autostart. The tracked drop-in
 =systemd/user/onedrive.service.d/memory.conf= caps it at 1 GiB of RAM with no
 swap, because long-running monitor sessions have grown past 10 GiB. At the cap
 the kernel kills the client and the unit's =Restart=on-failure= starts a new one.
+Stop any client started by hand or by an older autostart first, so two
+instances do not share =~/OneDrive= and its database:
 #+begin_src shell
+pkill -x onedrive
 mkdir -p ~/.config/systemd/user/onedrive.service.d
 ln -s ../../../../dotfile/systemd/user/onedrive.service.d/memory.conf \
   ~/.config/systemd/user/onedrive.service.d/memory.conf
