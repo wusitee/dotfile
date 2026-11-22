@@ -248,6 +248,35 @@ Use four spaces for indentation in C and C++ in both classic and tree-sitter mod
 (add-hook 'c++-mode-hook #'my/cc-indentation-h)
 (add-hook 'c++-ts-mode-hook #'my/cc-indentation-h)
 #+end_src
+Align C++ class braces with the declaration and use the same access-label
+offset as the default clang-format style.
+#+begin_src emacs-lisp
+(defun my/c++-class-indentation-h ()
+  (c-set-offset 'inclass '+)
+  (c-set-offset 'access-label -2))
+(add-hook 'c++-mode-hook #'my/c++-class-indentation-h)
+
+(defun my/c++-ts-class-anchor (_node parent &rest _)
+  (save-excursion
+    (goto-char (treesit-node-start (treesit-node-parent parent)))
+    (back-to-indentation)
+    (point)))
+
+(defun my/c++-ts-class-indentation-h ()
+  (when-let ((rules (assq 'cpp treesit-simple-indent-rules)))
+    (setcdr rules
+            (append
+             '(((match "^field_declaration_list$" "^\\(class\\|struct\\|union\\)_specifier$")
+                parent-bol 0)
+               ((match "^}$" "^field_declaration_list$") my/c++-ts-class-anchor 0)
+               ((match "^access_specifier$" "^field_declaration_list$")
+                my/c++-ts-class-anchor (lambda (&rest _) (- c-ts-mode-indent-offset 2)))
+               ((and (parent-is "^field_declaration_list$")
+                     (not (node-is "^\\(#\\|preproc_\\)")))
+                my/c++-ts-class-anchor c-ts-mode-indent-offset))
+             (cdr rules)))))
+(add-hook 'c++-ts-mode-hook #'my/c++-ts-class-indentation-h)
+#+end_src
 Pair angle brackets for includes and likely templates, not arbitrary variables.
 Lowercase custom template names may need a manually typed closing bracket.
 #+begin_src emacs-lisp
