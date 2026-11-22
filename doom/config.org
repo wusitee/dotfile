@@ -234,16 +234,19 @@ Use copilot when needed.
 ;;   (add-hook 'find-file-hook 'cns-auto-enable))
 #+end_src
 * lang
-** C++
-Use four spaces for indentation in both C++ modes.
+** C and C++
+Use four spaces for indentation in C and C++ in both classic and tree-sitter modes.
 #+begin_src emacs-lisp
-(defun my/c++-indentation-h ()
+(defun my/cc-indentation-h ()
   (setq-local c-basic-offset 4
-              c-ts-mode-indent-offset 4
               tab-width 4
-              indent-tabs-mode nil))
-(add-hook 'c++-mode-hook #'my/c++-indentation-h)
-(add-hook 'c++-ts-mode-hook #'my/c++-indentation-h)
+              indent-tabs-mode nil)
+  (when (derived-mode-p 'c-ts-mode 'c++-ts-mode)
+    (setq-local c-ts-mode-indent-offset 4)))
+(add-hook 'c-mode-hook #'my/cc-indentation-h)
+(add-hook 'c-ts-mode-hook #'my/cc-indentation-h)
+(add-hook 'c++-mode-hook #'my/cc-indentation-h)
+(add-hook 'c++-ts-mode-hook #'my/cc-indentation-h)
 #+end_src
 Pair angle brackets for includes and likely templates, not arbitrary variables.
 Lowercase custom template names may need a manually typed closing bracket.
